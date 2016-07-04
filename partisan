@@ -1,0 +1,155 @@
+#!/usr/bin/env php
+<?php
+date_default_timezone_set("Europe/Moscow");
+require_once __DIR__ . '/vendor/autoload.php';
+
+define('MIGRATIONS_PATH', __DIR__ . '/app/database/migrations');
+define('SEEDS_PATH', __DIR__ . '/app/database/seeds');
+define('COMMANDS_PATH', __DIR__ . '/app/src/Commands');
+
+use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Container\Container;
+use App\Commands;
+
+$config = require_once __DIR__ . '/app/settings.php';
+
+$capsule = new Capsule;
+$capsule->addConnection($config['settings']['database']['connections']['main'], 'default');
+$capsule->addConnection($config['settings']['database']['connections']['stat'], 'stats');
+$capsule->setEventDispatcher(new Dispatcher(new Container));
+$capsule->setAsGlobal();
+$capsule->bootEloquent();
+
+class Partisan
+{
+    private $args;
+    private $settings;
+    private $commands;
+
+    function __construct($args)
+    {
+        $this->args = $args;
+        $this->settings = require_once __DIR__ . '/app/settings.php';
+
+        $files = glob(COMMANDS_PATH.'/*.php');
+        $this->commands = $this->getCommandList($files);
+    }
+
+    public function exec()
+    {
+        if (count($this->args) <= 1) {
+            $this->help();
+
+            return;
+        }
+
+        switch ($this->args[1]) {
+            case "migrate":
+                $this->runMigrations();
+                if (!isset($this->args[2]) || $this->args[2] != '--seed')
+                    break;
+            case "seed":
+                $this->runSeed();
+                break;
+            case "help":
+            case "--help":
+                $this->help();
+                break;
+        }
+
+        if(in_array($this->args[1], $this->commands)){
+            $this->runCommand();
+        } else {
+            echo "command not found".PHP_EOL;
+
+            return;
+        }
+    }
+
+    private function help()
+    {
+        echo "\n";
+        echo "syntaxis: php partisan <command> [<args>]".PHP_EOL;
+        echo PHP_EOL;
+        echo "Commands: \n";
+        echo "php partisan --help                               -->   Displays the help menu.".PHP_EOL;
+        echo "php partisan generate <migrationName>             -->   Generate a new migration.".PHP_EOL;
+        echo "php partisan migrate                              -->   Migrate the database.".PHP_EOL;
+        echo "php partisan seed                                 -->   Seed the database tables.".PHP_EOL;
+        echo "php partisan migrate --seed                       -->   Migrate and seed the database.".PHP_EOL;
+        echo "php partisan down <migrationId>                   -->   Revert a specific migration.".PHP_EOL;
+        echo "php partisan <commandsName> <action> [<args>]     -->   Running a specific console commands.".PHP_EOL;
+        echo PHP_EOL;
+    }
+
+    private function runMigrations()
+    {
+        $files = glob(MIGRATIONS_PATH.'/*.php');
+        $this->run($files);
+    }
+
+    private function runSeed()
+    {
+        $files = glob(SEEDS_PATH.'/*.php');
+        $this->run($files);
+    }
+
+    private function runCommand()
+    {
+        if (!isset($this->args[2])) {
+            $action = 'index'; // default action
+        } else {
+            $action = $this->args[2];
+        }
+
+        $class = 'App\Commands\\'.ucfirst($this->args[1]).'Controller';
+        $action = 'action'.ucfirst($action);
+
+        if(is_callable([$class, $action])){
+            $obj = new $class($this->args);
+
+            call_user_func([$obj, $action]);
+        } else {
+            echo "action not found".PHP_EOL;
+        }
+    }
+
+    private function run($files)
+    {
+        foreach ($files as $file) {
+            require_once($file);
+            $fileName = explode('_', basename($file, '.php'));
+
+            $class = '';
+            foreach($fileName as $key => $item){
+                if ($key == 0) continue;
+                $class .= ucfirst($item);
+
+                echo $class;
+            }
+
+            $obj = new $class();
+            $obj->up();
+        }
+    }
+
+    private function getCommandList ($files)
+    {
+        $commands = [];
+
+        foreach ($files as $file) {
+            $commands[] = $this->getCommandName($file);
+        }
+
+        return $commands;
+    }
+
+    private function getCommandName ($file)
+    {
+        return str_replace('controller', '', strtolower(basename($file, '.php')));
+    }
+}
+
+$partisan = new Partisan($argv);
+$partisan->exec();

@@ -1,0 +1,7 @@
+<?php
+
+return [
+    'host' => 'http://localhost',
+    'allowHost' => 'http://localhost',
+    'tokenExpire' => 3600,
+];
