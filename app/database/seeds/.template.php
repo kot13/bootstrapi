@@ -1,8 +1,8 @@
 <?= "<?php";?>
 
 class <?= $className ?> {
-function run()
-{
+    function run()
+    {
 
-}
+    }
 }

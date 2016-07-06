@@ -125,9 +125,7 @@ $container['validation'] = function($c){
 // mailer
 $container['mailer'] = function($c){
     $settings = $c->get('settings');
-
     $transport = \Swift_MailTransport::newInstance();
-
     $mailer = \Swift_Mailer::newInstance($transport);
 
     return $mailer;

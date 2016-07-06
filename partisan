@@ -16,7 +16,6 @@ $config = require_once __DIR__ . '/app/settings.php';
 
 $capsule = new Capsule;
 $capsule->addConnection($config['settings']['database']['connections']['main'], 'default');
-$capsule->addConnection($config['settings']['database']['connections']['stat'], 'stats');
 $capsule->setEventDispatcher(new Dispatcher(new Container));
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
@@ -45,6 +44,18 @@ class Partisan
         }
 
         switch ($this->args[1]) {
+            case "generate":
+                if (count($this->args) < 4){
+                    echo "Missing required attributes".PHP_EOL;
+                    return;
+                }
+                if ($this->args[2] == 'seed'){
+                    $path = SEEDS_PATH;
+                } else {
+                    $path = MIGRATIONS_PATH;
+                }
+                $this->runGenerate($path, $this->args[3]);
+                break;
             case "migrate":
                 $this->runMigrations();
                 if (!isset($this->args[2]) || $this->args[2] != '--seed')
@@ -56,14 +67,13 @@ class Partisan
             case "--help":
                 $this->help();
                 break;
-        }
-
-        if(in_array($this->args[1], $this->commands)){
-            $this->runCommand();
-        } else {
-            echo "command not found".PHP_EOL;
-
-            return;
+            default:
+                if(in_array($this->args[1], $this->commands)){
+                    $this->runCommand();
+                } else {
+                      echo "Command not found".PHP_EOL;
+                }
+                break;
         }
     }
 
@@ -74,11 +84,12 @@ class Partisan
         echo PHP_EOL;
         echo "Commands: \n";
         echo "php partisan --help                               -->   Displays the help menu.".PHP_EOL;
-        echo "php partisan generate <migrationName>             -->   Generate a new migration.".PHP_EOL;
+        echo "php partisan generate migration <migrationName>   -->   Generate a new migration.".PHP_EOL;
+        echo "php partisan generate seed <seedName>             -->   Generate a new seed.".PHP_EOL;
         echo "php partisan migrate                              -->   Migrate the database.".PHP_EOL;
         echo "php partisan seed                                 -->   Seed the database tables.".PHP_EOL;
         echo "php partisan migrate --seed                       -->   Migrate and seed the database.".PHP_EOL;
-        echo "php partisan down <migrationId>                   -->   Revert a specific migration.".PHP_EOL;
+        //echo "php partisan down <migrationId>                   -->   Revert a specific migration.".PHP_EOL;
         echo "php partisan <commandsName> <action> [<args>]     -->   Running a specific console commands.".PHP_EOL;
         echo PHP_EOL;
     }
@@ -93,6 +104,41 @@ class Partisan
     {
         $files = glob(SEEDS_PATH.'/*.php');
         $this->run($files);
+    }
+
+    private function runGenerate($path, $migrationName)
+    {
+        $templatePath = $path . '/.template.php';
+
+        $className = $this->underscoreToCamelCase($migrationName, true);
+
+        if (!is_writeable($path)) {
+            echo 'The directory ' . $path . ' is not writeable'.PHP_EOL;
+            return;
+        }
+
+        if (false === file_exists($templatePath)) {
+            echo 'The template file ' . $templatePath . ' not found'.PHP_EOL;
+            return;
+        };
+
+        $baseName  = date('YmdHis') . '_' . $migrationName . '.php';
+
+        if (file_exists($baseName)) {
+            echo 'The file ' . $templatePath . ' already exists'.PHP_EOL;
+            return;
+        };
+
+        ob_start();
+        include($templatePath);
+        $contents = ob_get_clean();
+
+        if (false === file_put_contents($path . '/' . $baseName, $contents)) {
+            echo 'The file ' . $templatePath . ' could not be written to'.PHP_EOL;
+            return;
+        };
+
+        echo "Generate completed".PHP_EOL;
     }
 
     private function runCommand()
@@ -125,13 +171,16 @@ class Partisan
             foreach($fileName as $key => $item){
                 if ($key == 0) continue;
                 $class .= ucfirst($item);
-
-                echo $class;
             }
+
+            echo basename($file, '.php');
 
             $obj = new $class();
             $obj->up();
+
+            echo ' - done.'.PHP_EOL;
         }
+        echo 'Migrations completed.'.PHP_EOL;
     }
 
     private function getCommandList ($files)
@@ -148,6 +197,17 @@ class Partisan
     private function getCommandName ($file)
     {
         return str_replace('controller', '', strtolower(basename($file, '.php')));
+    }
+
+    private function underscoreToCamelCase($string, $capitalizeFirstCharacter = false)
+    {
+        $str = str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
+
+        if (!$capitalizeFirstCharacter) {
+            $str = lcfirst($str);
+        }
+
+        return $str;
     }
 }
 
