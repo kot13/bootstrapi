@@ -28,33 +28,24 @@ final class User extends BaseModel
         'password_reset_token',
     ];
 
-    public static function getSchemaName()
-    {
-        return 'App\Schema\UserSchema';
-    }
+    public static $schemaName = 'App\Schema\UserSchema';
 
-    public static function getExpand()
-    {
-        return [
-            'role' => 'App\Model\Role',
-            'role.rights' => 'App\Model\Right',
-        ];
-    }
+    public static $expand = [
+        'role' => 'App\Model\Role',
+        'role.rights' => 'App\Model\Right',
+    ];
 
-    public static function getRules()
-    {
-        return [
-            'create' => [
-                'email' => 'required|email',
-                'role_id' => 'required',
-                'password' => 'required',
-            ],
-            'update' => [
-                'email' => 'required|email',
-                'role_id' => 'required',
-            ]
-        ];
-    }
+    public static $rules = [
+        'create' => [
+            'email' => 'required|email',
+            'role_id' => 'required',
+            'password' => 'required',
+        ],
+        'update' => [
+            'email' => 'required|email',
+            'role_id' => 'required',
+        ]
+    ];
 
     public function role()
     {

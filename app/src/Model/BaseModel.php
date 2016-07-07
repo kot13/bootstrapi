@@ -3,14 +3,11 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BaseModel extends Model {
+class BaseModel extends Model
+{
 
-    public static function getExpand(){
-        return [];
-    }
+    public static $expand = [];
 
-    public static function getRules(){
-        return [];
-    }
+    public static $rules = [];
 
 }

@@ -14,6 +14,17 @@ class Helper
         return $str;
     }
 
+    public static function underscoreToCamelCase($string, $capitalizeFirstCharacter = false)
+    {
+        $str = str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
+
+        if (!$capitalizeFirstCharacter) {
+            $str = lcfirst($str);
+        }
+
+        return $str;
+    }
+
     public static function generateRandomString($length=32)
     {
         $chars = "abcdefghijkmnopqrstuvwxyz023456789";

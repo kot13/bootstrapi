@@ -13,12 +13,9 @@ final class RoleToRight extends BaseModel
 
     public $timestamps = false;
 
-    public static function getRules()
-    {
-        return [
-            'role_id' => 'required',
-            'right_id' => 'required',
-        ];
-    }
+    public static $rules = [
+        'role_id' => 'required',
+        'right_id' => 'required',
+    ];
 
 }

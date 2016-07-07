@@ -3,7 +3,8 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-final class Log extends Model {
+final class Log extends Model
+{
 
     protected $table = 'logs';
 
@@ -17,9 +18,6 @@ final class Log extends Model {
 
     public $timestamps = false;
 
-    public static function getSchemaName()
-    {
-        return 'App\Schema\LogSchema';
-    }
+    public static $schemaName = 'App\Schema\LogSchema';
 
 }

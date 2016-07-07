@@ -11,6 +11,7 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
 use App\Commands;
+use App\Common\Helper;
 
 $config = require_once __DIR__ . '/app/settings.php';
 
@@ -110,7 +111,7 @@ class Partisan
     {
         $templatePath = $path . '/.template.php';
 
-        $className = $this->underscoreToCamelCase($migrationName, true);
+        $className = Helper::underscoreToCamelCase($migrationName, true);
 
         if (!is_writeable($path)) {
             echo 'The directory ' . $path . ' is not writeable'.PHP_EOL;
@@ -197,17 +198,6 @@ class Partisan
     private function getCommandName ($file)
     {
         return str_replace('controller', '', strtolower(basename($file, '.php')));
-    }
-
-    private function underscoreToCamelCase($string, $capitalizeFirstCharacter = false)
-    {
-        $str = str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
-
-        if (!$capitalizeFirstCharacter) {
-            $str = lcfirst($str);
-        }
-
-        return $str;
     }
 }
 

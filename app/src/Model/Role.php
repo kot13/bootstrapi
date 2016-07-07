@@ -17,24 +17,15 @@ final class Role extends BaseModel
         'description',
     ];
 
-    public static function getSchemaName()
-    {
-        return 'App\Schema\RoleSchema';
-    }
+    public static $schemaName = 'App\Schema\RoleSchema';
 
-    public static function getExpand()
-    {
-        return [
-            'rights' => 'App\Model\Right',
-        ];
-    }
+    public static $expand = [
+        'rights' => 'App\Model\Right',
+    ];
 
-    public static function getRules()
-    {
-        return [
-            'name' => 'required',
-        ];
-    }
+    public static $rules = [
+        'name' => 'required',
+    ];
 
     public function rights()
     {

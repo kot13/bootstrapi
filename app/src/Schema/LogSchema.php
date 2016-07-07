@@ -1,0 +1,2 @@
+<?php
+namespace App\Schema;

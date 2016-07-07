@@ -19,21 +19,11 @@ final class Right extends BaseModel
         'description',
     ];
 
-    public static function getSchemaName()
-    {
-        return 'App\Schema\RightSchema';
-    }
+    public static $schemaName = 'App\Schema\RightSchema';
 
-    public static function getExpand()
-    {
-        return [];
-    }
+    public static $rules = [
+        'name' => 'required',
+    ];
 
-    public static function getRules()
-    {
-        return [
-            'name' => 'required',
-        ];
-    }
 
 }
