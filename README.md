@@ -81,4 +81,5 @@ server {
 7) выполнить миграции
 ```
 $ php partisan migrate up
+$ php partisan seed
 ```

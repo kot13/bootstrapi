@@ -104,7 +104,7 @@ class Partisan
     private function runSeed()
     {
         $files = glob(SEEDS_PATH.'/*.php');
-        $this->run($files);
+        $this->run($files, 'seed');
     }
 
     private function runGenerate($path, $migrationName)
@@ -162,7 +162,7 @@ class Partisan
         }
     }
 
-    private function run($files)
+    private function run($files, $type = 'migration')
     {
         foreach ($files as $file) {
             require_once($file);
@@ -177,7 +177,11 @@ class Partisan
             echo basename($file, '.php');
 
             $obj = new $class();
-            $obj->up();
+            if($type == 'migration'){
+                $obj->up();
+            } else {
+                $obj->run();
+            }
 
             echo ' - done.'.PHP_EOL;
         }

@@ -18,7 +18,6 @@ final class User extends BaseModel
         'full_name',
         'email',
         'role_id',
-        'phone',
         'status'
     ];
 

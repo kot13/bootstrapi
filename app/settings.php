@@ -59,8 +59,15 @@ return [
                      * ['callable', ['roles']]
                      */
                     'callables' => [
-                        ['App\Controller\UserController',               ['user']], // $app->map(['GET'], '/user',      'App\Controller\UserController'); class with __invoke
-                        ['App\Controller\UserController:actionIndex',   ['user']], // $app->map(['GET'], '/user/{id}', 'App\Controller\UserController:getAction'); class and method
+                        ['App\Controller\ApiController',               ['user']], // $app->map(['GET'], '/user',      'App\Controller\UserController'); class with __invoke
+                        ['App\Controller\ApiController:actionIndex',   ['user']], // $app->map(['GET'], '/user/{id}', 'App\Controller\UserController:getAction'); class and method
+                        ['App\Controller\ApiController:actionGet',     ['user']],
+                        ['App\Controller\ApiController:actionCreate',  ['user']],
+                        ['App\Controller\ApiController:actionUpdate',  ['user']],
+                        ['App\Controller\ApiController:actionDelete',  ['user']],
+
+                        ['App\Controller\UserController:actionCreate', ['admin']],
+                        ['App\Controller\UserController:actionUpdate', ['user']],
                     ]
                 ]
             ],

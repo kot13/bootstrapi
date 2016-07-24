@@ -1,9 +1,7 @@
 <?php
 namespace App\Model;
 
-use Illuminate\Database\Eloquent\Model;
-
-final class Log extends Model
+final class Log extends BaseModel
 {
 
     protected $table = 'logs';

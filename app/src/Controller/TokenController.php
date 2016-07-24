@@ -29,6 +29,7 @@ final class TokenController extends BaseController
     {
         // TODO Получать из конфига список host'ов
         return [
+            'skeleton.dev',
             'localhost',
         ];
     }

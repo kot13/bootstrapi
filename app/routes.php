@@ -15,10 +15,26 @@ $app->group('/api', function () {
 
     $this->group('/{entity:user}', function () {
         $this->get('', 'App\Controller\ApiController:actionIndex');
+        $this->post('', 'App\Controller\UserController:actionCreate');
+        $this->get('/{id:[0-9]+}', 'App\Controller\ApiController:actionGet');
+        $this->patch('/{id:[0-9]+}', 'App\Controller\UserController:actionUpdate');
+        $this->delete('/{id:[0-9]+}', 'App\Controller\ApiController:actionDelete');
+        $this->post('/change-password', 'App\Controller\UserController:actionChangePassword');
+        $this->post('/request-password-reset', 'App\Controller\UserController:actionRequestResetPassword');
+        $this->post('/reset-password', 'App\Controller\UserController:actionResetPassword');
+    });
+
+    $this->group('/{entity:role|right}', function () {
+        $this->get('', 'App\Controller\ApiController:actionIndex');
         $this->get('/{id:[0-9]+}', 'App\Controller\ApiController:actionGet');
         $this->post('', 'App\Controller\ApiController:actionCreate');
         $this->patch('/{id:[0-9]+}', 'App\Controller\ApiController:actionUpdate');
         $this->delete('/{id:[0-9]+}', 'App\Controller\ApiController:actionDelete');
+    });
+
+    $this->group('/{entity:log}', function () {
+        $this->get('', 'App\Controller\ApiController:actionIndex');
+        $this->get('/{id:[0-9]+}', 'App\Controller\ApiController:actionGet');
     });
 
 });

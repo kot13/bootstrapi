@@ -1,7 +1,7 @@
 <?= "<?php";?>
 
 class <?= $className ?> {
-    function run()
+    public function run()
     {
 
     }
