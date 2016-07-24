@@ -31,6 +31,8 @@ $ nano params.php
 
 5) создать необходимые папки
 ```
+$ mkdir cache
+$ chmod -R 0777 cache
 $ mkdir log
 $ chmod -R 0777 log
 ```
@@ -74,6 +76,32 @@ server {
 
     location / {
         if (!-e $request_filename) {rewrite ^/(.*)$ /frontend/index.html?q=$1 last;}
+    }
+}
+
+server {
+    listen 80 ;
+    server_name     docs.hostname;
+    error_log       /path/to/nginx/logs/hostname.error.log;
+    access_log      /path/to/nginx/logs/hostname.access.log main;
+    index           index.php;
+    root            /path/to/projects/hostname/docs;
+
+    location / {
+        try_files $uri $uri/ /index.php?$args;
+    }
+
+    location ~* (.+\.(js|css|png|jpg|gif|swf|ico|pdf|mov|fla|zip|rar|woff|woff2|ttf|eot|svg))$ {
+        try_files $uri =404;
+    }
+
+    location ~ \.php$ {
+        try_files $uri =404;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
+        fastcgi_param APPLICATION_ENV develop;
+        fastcgi_param SECRET_KEY mysecretkey;
+        fastcgi_pass   127.0.0.1:9000;
     }
 }
 ```

@@ -36,5 +36,4 @@ $app->group('/api', function () {
         $this->get('', 'App\Controller\ApiController:actionIndex');
         $this->get('/{id:[0-9]+}', 'App\Controller\ApiController:actionGet');
     });
-
 });

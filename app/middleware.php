@@ -12,7 +12,7 @@ use App\Model\User;
  * Auth && ACL Middleware
  */
 $app->add(function (Request $request, Response $response, $next) {
-    // If path is "/api/token" or "/api/user/change-password" or "/api/user/request-password-reset" or "/api/user/reset-password" no need authorization process
+    // If path is "/api/token" or "/api/user/request-password-reset" or "/api/user/reset-password" no need authorization process
     $path = $request->getUri()->getPath();
     if (in_array($path, ['/api/token', '/api/user/request-password-reset', '/api/user/reset-password'])) {
         return $next($request, $response);

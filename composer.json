@@ -25,7 +25,9 @@
     "zendframework/zend-permissions-acl": "^2.6",
     "neomerx/json-api": "^0.8.2",
     "doctrine/dbal": "^2.5",
-    "swiftmailer/swiftmailer": "^5.4"
+    "swiftmailer/swiftmailer": "^5.4",
+    "zircote/swagger-php": "^2.0",
+    "slim/twig-view": "^2.1"
   },
 
   "scripts": {
