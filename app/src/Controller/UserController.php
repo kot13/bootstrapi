@@ -9,6 +9,26 @@ use App\Model\User;
 
 final class UserController extends BaseController
 {
+    /**
+     * @SWG\Post(path="/user",
+     *   tags={"user"},
+     *   summary="Creates user",
+     *   description="",
+     *   operationId="createUsersWithArrayInput",
+     *   produces={"application/json"},
+     *   @SWG\Parameter(
+     *     in="body",
+     *     name="body",
+     *     description="List of user object",
+     *     required=false,
+     *     @SWG\Schema(
+     *       type="array",
+     *       @SWG\Items(ref="#/definitions/User")
+     *     )
+     *   ),
+     *   @SWG\Response(response="default", description="successful operation")
+     * )
+     */
     public function actionCreate($request, $response, $args){
         $expandEntity = User::$expand;
         $params = $request->getParsedBody();

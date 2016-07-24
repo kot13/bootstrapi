@@ -8,6 +8,7 @@ This is my JSONAPI skeleton. Built using Slim 3, Eloquent, Zend-ACL
 * JsonApi https://github.com/neomerx/json-api
 * JWT https://github.com/firebase/php-jwt
 * SwiftMailer http://swiftmailer.org/
+* Swagger-php https://github.com/zircote/swagger-php
 
 ## Установка
 1) склонировать репозиторий

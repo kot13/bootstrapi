@@ -16,7 +16,7 @@ return [
         ],
 
         'swagger' => [
-            'baseDir' => '',
+            'baseDir' => __DIR__ . '/src',
         ],
 
         // monolog settings

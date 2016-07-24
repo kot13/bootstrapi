@@ -38,7 +38,7 @@ $app->get('/', function ($request, $response, $args) {
 });
 
 $app->get('/content', function ($request, $response, $args) {
-    $swagger = \Swagger\scan( __DIR__ . '/../app/src/Model');
+    $swagger = \Swagger\scan($this->settings['swagger']['baseDir']);
     header('Content-Type: application/json');
     echo $swagger;
 });
