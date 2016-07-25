@@ -2,9 +2,7 @@
 // Routes
 $app->group('/api', function () {
     $this->options('[/{params:.*}]', function ($request, $response, $args) {
-        $allowHost = $this->settings['params']['allowHost'];
-
-        return $response->withHeader('Access-Control-Allow-Origin', $allowHost)
+        return $response->withHeader('Access-Control-Allow-Origin', '*')
             ->withHeader('Access-Control-Allow-Methods', 'GET, PUT, PATCH, POST, DELETE, OPTIONS')
             ->withHeader('Access-Control-Allow-Credentials', 'true')
             ->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')

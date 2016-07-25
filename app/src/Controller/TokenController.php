@@ -9,10 +9,9 @@ use App\Model\User;
 
 final class TokenController extends BaseController
 {
-    protected static function createToken($request)
+    protected static function createToken($request, $tokenExpire)
     {
-        // TODO Получать из конфига tokenExpire
-        $tokenExpire = 3600;
+        $tokenExpire = isset($tokenExpire) ? $tokenExpire : 3600;
 
         $secret_key = getenv('SECRET_KEY');
         $token = array(
@@ -25,21 +24,11 @@ final class TokenController extends BaseController
         return $jwt;
     }
 
-    protected static function getWhiteListAudience()
-    {
-        // TODO Получать из конфига список host'ов
-        return [
-            'skeleton.dev',
-            'localhost',
-        ];
-    }
-
-    public static function validateToken($token)
+    public static function validateToken($token, $whiteList = [])
     {
         try {
             $payload = JWT::decode($token, getenv('SECRET_KEY'), ['HS256']);
-            $audiences = self::getWhiteListAudience();
-            if (!in_array($payload->aud, $audiences)) {
+            if (!in_array($payload->aud, $whiteList)) {
                 return false;
             }
             return true;
@@ -79,7 +68,7 @@ final class TokenController extends BaseController
         $user = User::findUserByEmail($params['username']);
 
         if ($user && password_verify($params['password'], $user->password)) {
-            $token = self::createToken($request);
+            $token = self::createToken($request, $this->settings['params']['tokenExpire']);
             $user->access_token = md5($token);
             $user->save();
         } else {
