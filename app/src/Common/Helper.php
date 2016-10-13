@@ -27,14 +27,16 @@ class Helper
 
     public static function generateRandomString($length=32)
     {
-        $chars = "abcdefghijkmnopqrstuvwxyz023456789";
+        $chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ023456789";
+        $charsCount = strlen($chars);
+
         srand((double)microtime()*1000000);
         $i = 1;
-        $token = '' ;
+        $token = '';
 
         while ($i <= $length)
         {
-            $num = rand() % 33;
+            $num = rand() % $charsCount;
             $tmp = substr($chars, $num, 1);
             $token .= $tmp;
             $i++;

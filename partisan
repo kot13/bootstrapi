@@ -64,6 +64,13 @@ class Partisan
             case "seed":
                 $this->runSeed();
                 break;
+            case "new":
+                if (count($this->args) < 4){
+                    echo "Missing required attributes".PHP_EOL;
+                    return;
+                }
+                $this->newProject($this->args[3]);
+                break;
             case "help":
             case "--help":
                 $this->help();
@@ -188,7 +195,7 @@ class Partisan
         echo 'Migrations completed.'.PHP_EOL;
     }
 
-    private function getCommandList ($files)
+    private function getCommandList($files)
     {
         $commands = [];
 
@@ -199,9 +206,19 @@ class Partisan
         return $commands;
     }
 
-    private function getCommandName ($file)
+    private function getCommandName($file)
     {
         return str_replace('controller', '', strtolower(basename($file, '.php')));
+    }
+
+    private function newProject()
+    {
+        // создаём папку log
+        // создаём папку cache
+        // назначаем ей права 777
+        // создаём файлы конфигов
+        // удаляем папку .git
+        echo "New project started".PHP_EOL;
     }
 }
 

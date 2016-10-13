@@ -10,6 +10,11 @@ This is my JSONAPI skeleton. Built using Slim 3, Eloquent, Zend-ACL
 * SwiftMailer http://swiftmailer.org/
 * Swagger-php https://github.com/zircote/swagger-php
 
+## Требования
+* PHP >= 5.5
+* composer
+* MySQL / PostgreSQL
+
 ## Установка
 1) склонировать репозиторий
 

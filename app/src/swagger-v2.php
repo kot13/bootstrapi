@@ -2,8 +2,8 @@
 /**
  * @SWG\Swagger(
  *     schemes={"http"},
- *     host="hostname",
- *     basePath="/v1",
+ *     host="skeleton.dev",
+ *     basePath="/api",
  *     @SWG\Info(
  *         version="0.0.1",
  *         title="Skeleton JSONAPI",

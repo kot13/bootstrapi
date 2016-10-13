@@ -7,7 +7,10 @@ use App\Common\LoggingTrait;
 use App\Common\Helper;
 
 /**
- * @SWG\Definition(required={"email", "password"}, @SWG\Xml(name="User"))
+ * @SWG\Definition(
+ *     required={"email", "password"},
+ *     @SWG\Xml(name="User")
+ * )
  */
 final class User extends BaseModel
 {

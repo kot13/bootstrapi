@@ -18,15 +18,21 @@ final class UserController extends BaseController
      *   produces={"application/json"},
      *   @SWG\Parameter(
      *     in="body",
-     *     name="body",
+     *     name="user",
      *     description="List of user object",
      *     required=false,
-     *     @SWG\Schema(
-     *       type="array",
-     *       @SWG\Items(ref="#/definitions/User")
-     *     )
+     *     @SWG\Schema(ref="#/definitions/User"),
      *   ),
-     *   @SWG\Response(response="default", description="successful operation")
+     *   @SWG\Response(
+     *     response="200",
+     *     description="Success",
+     *     @SWG\Schema(ref="#/definitions/User")
+     *   ),
+     *   @SWG\Response(
+     *     response="401",
+     *     description="Not authorized",
+     *     @SWG\Schema(ref="#/definitions/User")
+     *   )
      * )
      */
     public function actionCreate($request, $response, $args){
