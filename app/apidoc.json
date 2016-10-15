@@ -1,0 +1,12 @@
+{
+  "name": "Skeleton",
+  "version": "0.0.1",
+  "description": "Skeleton docs",
+  "title": "Skeleton docs",
+  "url" : "http://skeleton.dev/api",
+  "sampleUrl": "http://skeleton.dev/api",
+  "template": {
+    "withCompare": false,
+    "withGenerator": false
+  }
+}

@@ -24,7 +24,9 @@ $app->add(function (Request $request, Response $response, $next) {
     }
     // If request has the correct token, passed it to action
     if ($request->getHeader('Authorization')) {
-        $token = explode(' ', $request->getHeader('Authorization')[0])[1];
+        $token = explode(' ', $request->getHeader('Authorization')[0]);
+        $token = $token[count($token) - 1];
+
         if (Token::validateToken($token, $this->settings['params']['allowHosts'])) {
             $user = User::findUserByAccessToken($token);
             if ($user) {

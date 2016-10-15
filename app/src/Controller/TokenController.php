@@ -37,9 +37,76 @@ final class TokenController extends BaseController
         }
     }
 
+    /**
+     * @api {post} /token Получение токена
+     * @apiName CreateToken
+     * @apiGroup Token
+     *
+     * @apiParam {String} username Логин
+     * @apiParam {String} password Пароль
+     *
+     * @apiParamExample {json} Пример запроса:
+     *    {
+     *      "data":{
+     *        "attributes":{
+     *          "username":"kot_tdf@mail.ru",
+     *          "password": "qwerty"
+     *        }
+     *      }
+     *    }
+     *
+     * @apiSuccessExample {json} Успешно (200)
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOmZhbHNlLCJhdWQiOiJza2VsZXRvbi5kZXYiLCJpYXQiOjE0NzY0Mjk4NjksImV4cCI6MTQ3NjQzMzQ2OX0.NJn_-lK28kEZyZqygLr6B-FZ2zC2-1unStayTGicP5g",
+     *       "user": {
+     *         "id": 1,
+     *         "email": "kot_tdf@mail.ru",
+     *         "full_name": "Павел",
+     *         "role_id": "1",
+     *         "created_by": 0,
+     *         "updated_by": null,
+     *         "created_at": "2016-07-24 14:07:54",
+     *         "updated_at": "2016-10-14 10:24:29",
+     *         "deleted_at": null,
+     *         "status": 1
+     *       }
+     *     }
+     *
+     * @apiSuccessExample {json} Неверный запрос (400)
+     *     HTTP/1.1 400 Invalid Attribute
+     *     {
+     *       "errors": [
+     *         {
+     *           "id": "user",
+     *           "status": "400",
+     *           "code": "400",
+     *           "title": "Invalid Attribute",
+     *           "detail": "Not required attributes - data."
+     *         }
+     *       ]
+     *     }
+     */
     public function auth($request, $response, $args)
     {
         $params = $request->getParsedBody();
+
+        if(!isset($params['data']['attributes'])){
+            $error = new Error(
+                'token',
+                null,
+                '400',
+                '400',
+                'Invalid Attribute',
+                'Not required attributes - data.'
+            );
+
+            $result = Encoder::instance()->encodeError($error);
+
+            return $this->renderer->jsonApiRender($response, 400, $result);
+        }
+
+        $params = $params['data']['attributes'];
 
         $rules = [
             'username' => 'required',
@@ -75,15 +142,15 @@ final class TokenController extends BaseController
             $error = new Error(
                 'token',
                 null,
-                '401',
-                '401',
+                '400',
+                '400',
                 'Invalid Attribute',
                 'Invalid password or username'
             );
 
             $result = Encoder::instance()->encodeError($error);
 
-            return $this->renderer->jsonApiRender($response, 401, $result);
+            return $this->renderer->jsonApiRender($response, 400, $result);
         };
 
         $result = [

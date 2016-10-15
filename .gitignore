@@ -22,3 +22,6 @@ version.json
 # config file
 config/db.php
 config/params.php
+
+# apidoc
+/docs

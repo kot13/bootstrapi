@@ -6,37 +6,8 @@ use App\Common\CreatedByUpdatedByTrait;
 use App\Common\LoggingTrait;
 use App\Common\Helper;
 
-/**
- * @SWG\Definition(
- *     required={"email", "password"},
- *     @SWG\Xml(name="User")
- * )
- */
 final class User extends BaseModel
 {
-    /**
-     * @SWG\Property(property="id",type="integer")
-     */
-
-    /**
-     * @SWG\Property(property="full_name",type="string")
-     */
-
-    /**
-     * @SWG\Property(property="email",type="string")
-     */
-
-    /**
-     * @SWG\Property(property="role_id",type="integer")
-     */
-
-    /**
-     * @SWG\Property(property="status",type="integer")
-     */
-
-    /**
-     * @SWG\Property(property="password",type="string")
-     */
 
     use SoftDeletes;
     use CreatedByUpdatedByTrait;

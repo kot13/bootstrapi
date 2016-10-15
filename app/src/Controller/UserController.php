@@ -10,30 +10,92 @@ use App\Model\User;
 final class UserController extends BaseController
 {
     /**
-     * @SWG\Post(path="/user",
-     *   tags={"user"},
-     *   summary="Creates user",
-     *   description="",
-     *   operationId="createUsersWithArrayInput",
-     *   produces={"application/json"},
-     *   @SWG\Parameter(
-     *     in="body",
-     *     name="user",
-     *     description="List of user object",
-     *     required=false,
-     *     @SWG\Schema(ref="#/definitions/User"),
-     *   ),
-     *   @SWG\Response(
-     *     response="200",
-     *     description="Success",
-     *     @SWG\Schema(ref="#/definitions/User")
-     *   ),
-     *   @SWG\Response(
-     *     response="401",
-     *     description="Not authorized",
-     *     @SWG\Schema(ref="#/definitions/User")
-     *   )
-     * )
+     * @api {post} /user Создание пользователя
+     * @apiName CreateUser
+     * @apiGroup User
+     *
+     * @apiParam {String} full_name Полное имя пользователя
+     * @apiParam {String} email Email пользователя (уникальный)
+     * @apiParam {String} password Пароль
+     * @apiParam {Number} role_id Id роли пользователя
+     *
+     * @apiParamExample {json} Пример запроса:
+     *    {
+     *      "data":{
+     *        "attributes":{
+     *          "full_name":"Тестовый пользователь",
+     *          "email": "mail@example.com",
+     *          "password": "qwerty",
+     *          "role_id": 1
+     *        }
+     *      }
+     *    }
+     *
+     * @apiHeader {String} Authorization Токен.
+     *
+     * @apiSuccessExample {json} Успешно (200)
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "data": {
+     *         "type": "",
+     *         "id": ,
+     *         "attributes": {
+     *           "full_name": "Тестовый пользователь",
+     *           "email": "mail@example.com",
+     *           "role_id": 1,
+     *           "created_at": {
+     *             "date": "2016-10-13 21:37:40.000000",
+     *             "timezone_type": 3,
+     *             "timezone": "Europe/Moscow"
+     *           },
+     *           "updated_at": {
+     *             "date": "2016-10-13 21:37:40.000000",
+     *             "timezone_type": 3,
+     *             "timezone": "Europe/Moscow"
+     *           },
+     *           "created_by": null,
+     *           "updated_by": null,
+     *           "status": null,
+     *         },
+     *         "relationships": {
+     *           "role": {
+     *             "data": {
+     *               "type": "role",
+     *               "id": "1"
+     *             }
+     *           }
+     *         },
+     *         "links": {
+     *           "self": "http://skeleton.dev/api/user/4"
+     *         }
+     *       }
+     *     }
+     *
+     * @apiSuccessExample {json} Не авторизован (401)
+     *     HTTP/1.1 401 Unauthorized
+     *     {
+     *       "errors": [
+     *         {
+     *           "status": "401",
+     *           "code": "401",
+     *           "title": "Not authorized",
+     *           "detail": "The user must be authorized"
+     *         }
+     *       ]
+     *     }
+     * @apiSuccessExample {json} Неверный запрос (400)
+     *     HTTP/1.1 400 Unauthorized
+     *     {
+     *       "errors": [
+     *         {
+     *           "id": "user",
+     *           "status": "400",
+     *           "code": "400",
+     *           "title": "Invalid Attribute",
+     *           "detail": "Not required attributes - data."
+     *         }
+     *       ]
+     *     }
      */
     public function actionCreate($request, $response, $args){
         $expandEntity = User::$expand;

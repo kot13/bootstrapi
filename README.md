@@ -8,12 +8,12 @@ This is my JSONAPI skeleton. Built using Slim 3, Eloquent, Zend-ACL
 * JsonApi https://github.com/neomerx/json-api
 * JWT https://github.com/firebase/php-jwt
 * SwiftMailer http://swiftmailer.org/
-* Swagger-php https://github.com/zircote/swagger-php
 
 ## Требования
 * PHP >= 5.5
-* composer
+* Composer
 * MySQL / PostgreSQL
+* NodeJs && NPM && ApiDocJs (for docs generate)
 
 ## Установка
 1) склонировать репозиторий
@@ -90,24 +90,15 @@ server {
     server_name     docs.hostname;
     error_log       /path/to/nginx/logs/hostname.error.log;
     access_log      /path/to/nginx/logs/hostname.access.log main;
-    index           index.php;
+    index           index.html;
     root            /path/to/projects/hostname/docs;
 
     location / {
-        try_files $uri $uri/ /index.php?$args;
+        try_files $uri $uri/ /index.html?$args;
     }
 
     location ~* (.+\.(js|css|png|jpg|gif|swf|ico|pdf|mov|fla|zip|rar|woff|woff2|ttf|eot|svg))$ {
         try_files $uri =404;
-    }
-
-    location ~ \.php$ {
-        try_files $uri =404;
-        include fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
-        fastcgi_param APPLICATION_ENV develop;
-        fastcgi_param SECRET_KEY mysecretkey;
-        fastcgi_pass   127.0.0.1:9000;
     }
 }
 ```
@@ -116,4 +107,9 @@ server {
 ```
 $ php partisan migrate up
 $ php partisan seed
+```
+
+8) сгенерировать документацию
+```
+$ apidoc -i ./ -o ./docs -t ./docstemplate
 ```
