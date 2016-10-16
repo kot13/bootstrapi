@@ -1,7 +1,7 @@
 # slim3-eloquent-jsonapi-skeleton
 This is my JSONAPI skeleton. Built using Slim 3, Eloquent, Zend-ACL
 
-## Что внутри
+## Inside:
 * Slim3 http://www.slimframework.com/
 * ORM Eloquent http://laravel.su/docs/5.2/eloquent
 * Zend ACL https://zendframework.github.io/zend-permissions-acl/
@@ -10,26 +10,31 @@ This is my JSONAPI skeleton. Built using Slim 3, Eloquent, Zend-ACL
 * SwiftMailer http://swiftmailer.org/
 * ApiDocJS http://apidocjs.com/
 
-## Требования
+## Demo
+[Documentation](http://docs.skeleton.demostage.ru/)
+
+[Client](http://skeleton.demostage.ru/)
+
+## Requirements
 * PHP >= 5.5
 * Composer
 * MySQL / PostgreSQL
 * NodeJs && NPM && ApiDocJs (for docs generate)
 
-## Установка
-1) склонировать репозиторий
+## Installing
+1) clone this repo
 
-2) установить зависимости бекенда
+2) install dependencies
 ```
 $ composer install
 ```
 
-3) создать новый проект
+3) create new project
 ```
 $ php partisan new project-name
 ```
 
-4) исправить конфиги:
+4) change config files:
 ```
 $ nano config/db.php
 $ nano config/params.php
@@ -37,21 +42,21 @@ $ nano app/apidoc.json
 $ nano version.sh
 ```
 
-5) настроить nginx
+5) configure nginx
 
-Обязательно нужно определить переменные окружения:
+Be sure to define environment variables:
 ```
 APPLICATION_ENV
 SECRET_KEY
 ```
 
-Пример конфигурации:
+Example configuration:
 ```
 server {
     listen 80 ;
     server_name     hostname;
     error_log       /path/to/nginx/logs/hostname.error.log;
-    access_log      /path/to/nginx/logs/hostname.access.log main;
+    access_log      /path/to/nginx/logs/hostname.access.log;
     index           /frontend/index.html index.html;
 
     root   /path/to/projects/hostname;
@@ -83,7 +88,7 @@ server {
     listen 80 ;
     server_name     docs.hostname;
     error_log       /path/to/nginx/logs/hostname.error.log;
-    access_log      /path/to/nginx/logs/hostname.access.log main;
+    access_log      /path/to/nginx/logs/hostname.access.log;
     index           index.html;
     root            /path/to/projects/hostname/docs;
 
@@ -97,12 +102,12 @@ server {
 }
 ```
 
-6) выполнить миграции
+6) migration
 ```
 $ php partisan migrate --seed
 ```
 
-7) сгенерировать документацию
+7) generate documentation
 ```
 $ php partisan docsgenerate
 ```
