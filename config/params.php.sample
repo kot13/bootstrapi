@@ -1,7 +1,10 @@
 <?php
 
 return [
-    'host' => 'http://localhost',
-    'allowHost' => 'http://localhost',
+    'host' => 'http://hostname.domain',
+    'allowHost' => [
+        'hostname.domain',
+        'docs.hostname.domain',
+    ],
     'tokenExpire' => 3600,
 ];
