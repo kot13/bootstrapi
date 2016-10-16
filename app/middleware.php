@@ -6,6 +6,8 @@ use App\Controller\TokenController as Token;
 use \Neomerx\JsonApi\Encoder\Encoder;
 use \Neomerx\JsonApi\Document\Error;
 
+use App\Common\Auth;
+
 use App\Model\User;
 
 /*
@@ -30,7 +32,7 @@ $app->add(function (Request $request, Response $response, $next) {
         if (Token::validateToken($token, $this->settings['params']['allowHosts'])) {
             $user = User::findUserByAccessToken($token);
             if ($user) {
-                $_SESSION['user'] = $user;
+                Auth::setUser($user);
 
                 $isAllowed = false;
 

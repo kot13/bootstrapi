@@ -2,16 +2,11 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Common\CreatedByUpdatedByTrait;
-use App\Common\LoggingTrait;
 use App\Common\Helper;
 
 final class User extends BaseModel
 {
-
     use SoftDeletes;
-    use CreatedByUpdatedByTrait;
-    use LoggingTrait;
 
     protected $table = 'users';
 

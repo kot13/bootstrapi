@@ -2,7 +2,7 @@
 
 return [
     'host' => 'http://hostname.domain',
-    'allowHost' => [
+    'allowHosts' => [
         'hostname.domain',
         'docs.hostname.domain',
     ],

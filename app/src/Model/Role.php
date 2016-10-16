@@ -2,13 +2,11 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Common\CreatedByUpdatedByTrait;
 
 final class Role extends BaseModel
 {
 
     use SoftDeletes;
-    use CreatedByUpdatedByTrait;
 
     protected $table = 'roles';
 

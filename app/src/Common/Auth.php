@@ -1,32 +1,58 @@
 <?php
 namespace App\Common;
 
-final class Auth {
-    public static function checkUser(){
-        if (isset($_SESSION['user'])) {
-            return true;
-        } else {
-            return false;
-        }
+use App\Model\User;
+
+final class Auth
+{
+    /**
+     * Forbidden to create new instances
+     */
+    private function __construct() {}
+
+    /**
+     * Forbidden to cloned instances
+     */
+    private function __clone() {}
+
+    /**
+     * @var User
+     */
+    private static $user = null;
+
+    /**
+     * @param User $user
+     */
+    public static function setUser(User $user)
+    {
+        self::$user = $user;
     }
 
-    public static function getUser(){
-        $user = $_SESSION['user'];
+    /**
+     * @return bool
+     */
+    public static function checkUser()
+    {
+        return !is_null(self::$user);
+    }
 
-        if (isset($user)) {
-            return $user;
+    /**
+     * @return User
+     */
+    public static function getUser()
+    {
+        return self::$user;
+    }
+
+    /**
+     * @return int|null
+     */
+    public static function getUserId()
+    {
+        if(self::checkUser()){
+            return self::$user->id;
         } else {
             return null;
-        }
-    }
-
-    public static function getUserId(){
-        $user = self::getUser();
-
-        if(isset($user) && $user != null){
-            return $user->id;
-        } else {
-            return false;
         }
     }
 }
