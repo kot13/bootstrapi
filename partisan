@@ -3,9 +3,13 @@
 date_default_timezone_set("Europe/Moscow");
 require_once __DIR__ . '/vendor/autoload.php';
 
+define('ROOT_PATH', __DIR__ );
 define('MIGRATIONS_PATH', __DIR__ . '/app/database/migrations');
 define('SEEDS_PATH', __DIR__ . '/app/database/seeds');
 define('COMMANDS_PATH', __DIR__ . '/app/src/Commands');
+define('CONFIG_PATH', __DIR__ . '/config');
+define('GIT_PATH', __DIR__ . '/.git');
+define('APP_PATH', __DIR__ . '/app');
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Events\Dispatcher;
@@ -65,14 +69,14 @@ class Partisan
                 $this->runSeed();
                 break;
             case "new":
-                if (count($this->args) < 4){
+                if (count($this->args) < 3){
                     echo "Missing required attributes".PHP_EOL;
                     return;
                 }
-                $this->newProject($this->args[3]);
+                $this->newProject($this->args[2]);
                 break;
-            case "docs":
-                exec('apidoc -i ./ -o ./docs -t ./docstemplate');
+            case "docsgenerate":
+                echo exec('apidoc -i ./app -o ./docs -t ./docstemplate').PHP_EOL;
                 break;
             case "help":
             case "--help":
@@ -103,7 +107,7 @@ class Partisan
         //echo "php partisan down <migrationId>                   -->   Revert a specific migration.".PHP_EOL;
         echo "php partisan <commandsName> <action> [<args>]     -->   Running a specific console commands.".PHP_EOL;
         echo "php partisan new <projectName>                    -->   Create a new project.".PHP_EOL;
-        echo "php partisan docs generate                        -->   Generate documentation.".PHP_EOL;
+        echo "php partisan docsgenerate                         -->   Generate documentation.".PHP_EOL;
         echo PHP_EOL;
     }
 
@@ -219,14 +223,35 @@ class Partisan
     private function newProject($projectName)
     {
         // создаём папку log и назначаем ей права 777
-        exec('mkdir log && chmod 777 ./log');
+        echo exec('mkdir ' . ROOT_PATH . '/log && chmod 777 ' . ROOT_PATH . '/log');
 
         // создаём файлы конфигов
+        if (file_exists(CONFIG_PATH . '/db.php')) {
+            echo 'The file config/db.php already exists'.PHP_EOL;
+            return;
+        } else {
+            exec('mv ' . CONFIG_PATH . '/db.php.sample ' . CONFIG_PATH . '/db.php');
+        };
 
-        // удаляем папку .git
-        // exec('rm -rf .git');
+        if (file_exists(CONFIG_PATH . '/params.php')) {
+            echo 'The file config/params.php already exists'.PHP_EOL;
+            return;
+        } else {
+            exec('mv ' . CONFIG_PATH . '/params.php.sample ' . CONFIG_PATH . '/params.php');
+        };
 
         // формируем apidoc.json
+        if (file_exists(APP_PATH . '/apidoc.json')) {
+            echo 'The file app/apidoc.json already exists'.PHP_EOL;
+            return;
+        } else {
+            exec('mv ' . APP_PATH . '/apidoc.json.sample ' . APP_PATH . '/apidoc.json');
+        };
+
+        // удаляем папку .git
+        echo exec('rm -rf ' . ROOT_PATH . '/.git');
+
+        // формируем version.sh
 
         echo "New project " . $projectName . "created".PHP_EOL;
     }

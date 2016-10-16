@@ -55,32 +55,9 @@ define([
       // grab user-inputted URL
       var url = $root.find(".sample-request-url").val();
 
-      // Insert url parameter
-      var pattern = pathToRegexp(url, null);
-      var matches = pattern.exec(url);
-      for (var i = 1; i < matches.length; i++) {
-          var key = matches[i].substr(1);
-          if (param[key] !== undefined) {
-              url = url.replace(matches[i], encodeURIComponent(param[key]));
-
-              // remove URL parameters from list
-              delete param[key];
-          }
-      } // for
-
       $root.find(".sample-request-response").fadeTo(250, 1);
       $root.find(".sample-request-response-json").html("Loading...");
       refreshScrollSpy();
-
-      // _.each( param, function( val, key ) {
-      //     var t = paramType[ key ].toLowerCase();
-      //     if ( t === 'object' || t === 'array' ) {
-      //         try {
-      //             param[ key ] = JSON.parse( val );
-      //         } catch (e) {
-      //         }
-      //     }
-      // });
 
       // send AJAX request, catch success or error callback
       var ajaxRequest = {

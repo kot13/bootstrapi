@@ -8,6 +8,7 @@ This is my JSONAPI skeleton. Built using Slim 3, Eloquent, Zend-ACL
 * JsonApi https://github.com/neomerx/json-api
 * JWT https://github.com/firebase/php-jwt
 * SwiftMailer http://swiftmailer.org/
+* ApiDocJS http://apidocjs.com/
 
 ## Требования
 * PHP >= 5.5
@@ -28,17 +29,15 @@ $ composer install
 $ php partisan new project-name
 ```
 
-4) исправить конфиг подключения к БД:
+4) исправить конфиги:
 ```
 $ nano config/db.php
-```
-
-5) исправить конфиг
-```
 $ nano config/params.php
+$ nano app/apidoc.json
+$ nano version.sh
 ```
 
-6) настроить nginx
+5) настроить nginx
 
 Обязательно нужно определить переменные окружения:
 ```
@@ -98,12 +97,12 @@ server {
 }
 ```
 
-7) выполнить миграции
+6) выполнить миграции
 ```
 $ php partisan migrate --seed
 ```
 
-8) сгенерировать документацию
+7) сгенерировать документацию
 ```
-$ php partisan docs generate
+$ php partisan docsgenerate
 ```
