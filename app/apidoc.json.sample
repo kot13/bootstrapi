@@ -16,7 +16,23 @@
     "GetUser",
     "CreateUser",
     "UpdateUser",
+    "DeleteUser",
     "RequestPasswordReset",
-    "ResetPassword"
+    "ResetPassword",
+    "Role",
+    "GetRoles",
+    "GetRole",
+    "CreateRole",
+    "UpdateRole",
+    "DeleteRole",
+    "Right",
+    "GetRights",
+    "GetRight",
+    "CreateRight",
+    "UpdateRight",
+    "DeleteRight",
+    "Log",
+    "GetLogs",
+    "GetLog"
   ]
 }

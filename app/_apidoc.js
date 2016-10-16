@@ -32,7 +32,7 @@
  *       ]
  *     }
  * @apiSuccessExample {json} Ошибка сервера (500)
- *     Error 500: Internal Server Error
+ *     HTTP/1.1 500 Internal Server Error
  *     {
  *       "errors": [
  *         {

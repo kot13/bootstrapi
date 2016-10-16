@@ -113,6 +113,26 @@ final class UserController extends BaseController
      *
      * @apiUse StandardErrors
      * @apiUse UnauthorizedError
+     * @apiUse NotFoundError
+     */
+
+    /**
+     * @api {delete} /user/:id Удаление пользователя
+     * @apiName DeleteUser
+     * @apiGroup User
+     *
+     * @apiDescription Метод для удаления пользователя.
+     *
+     * @apiParam {Number} id Id пользователя
+     *
+     * @apiHeader {String} Authorization Токен.
+     *
+     * @apiSuccessExample {json} Успешно (204)
+     *     HTTP/1.1 204 OK
+     *
+     * @apiUse UnauthorizedError
+     * @apiUse StandardErrors
+     * @apiUse NotFoundError
      */
 
     /**
