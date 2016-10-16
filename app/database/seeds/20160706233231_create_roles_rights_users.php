@@ -9,6 +9,10 @@ class CreateRolesRightsUsers {
             'name' => 'admin',
             'description' => 'Администратор',
         ]);
+        Role::create([
+            'name' => 'user',
+            'description' => 'Пользователь',
+        ]);
 
         $user = new User();
 

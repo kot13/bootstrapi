@@ -17,24 +17,14 @@ use Illuminate\Container\Container;
 use App\Commands;
 use App\Common\Helper;
 
-$config = require_once __DIR__ . '/app/settings.php';
-
-$capsule = new Capsule;
-$capsule->addConnection($config['settings']['database']['connections']['main'], 'default');
-$capsule->setEventDispatcher(new Dispatcher(new Container));
-$capsule->setAsGlobal();
-$capsule->bootEloquent();
-
 class Partisan
 {
     private $args;
-    private $settings;
     private $commands;
 
     function __construct($args)
     {
         $this->args = $args;
-        $this->settings = require_once __DIR__ . '/app/settings.php';
 
         $files = glob(COMMANDS_PATH.'/*.php');
         $this->commands = $this->getCommandList($files);
@@ -113,6 +103,7 @@ class Partisan
 
     private function runMigrations()
     {
+        $this->dbConnect();
         $files = glob(MIGRATIONS_PATH.'/*.php');
         $this->run($files);
     }
@@ -254,6 +245,17 @@ class Partisan
         // формируем version.sh
 
         echo "New project " . $projectName . "created".PHP_EOL;
+    }
+
+    private function dbConnect()
+    {
+        $config = require_once APP_PATH . '/settings.php';
+
+        $capsule = new Capsule;
+        $capsule->addConnection($config['settings']['database']['connections']['main'], 'default');
+        $capsule->setEventDispatcher(new Dispatcher(new Container));
+        $capsule->setAsGlobal();
+        $capsule->bootEloquent();
     }
 }
 

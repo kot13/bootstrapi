@@ -8,7 +8,7 @@ use \Neomerx\JsonApi\Document\Error;
 
 use App\Common\Helper;
 
-class ApiController extends BaseController{
+class CrudController extends BaseController{
 
     public function actionIndex($request, $response, $args){
         $factory    = new Factory();

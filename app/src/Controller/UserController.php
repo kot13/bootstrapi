@@ -115,7 +115,7 @@ final class UserController extends BaseController
      * @apiUse UnauthorizedError
      */
 
-     /**
+    /**
      * @api {post} /user Создание пользователя
      * @apiName CreateUser
      * @apiGroup User
@@ -134,7 +134,8 @@ final class UserController extends BaseController
      *          "full_name":"Тестовый пользователь",
      *          "email": "mail@example.com",
      *          "password": "qwerty",
-     *          "role_id": 1
+     *          "role_id": 1,
+     *          "status": 1
      *        }
      *      }
      *    }
@@ -146,10 +147,10 @@ final class UserController extends BaseController
      *     {
      *       "data": {
      *         "type": "user",
-     *         "id": "1",
+     *         "id": "2",
      *         "attributes": {
      *           "full_name": "Тестовый пользователь",
-     *           "email": "mail@example.com",
+     *           "email": "mail2@example.com",
      *           "role_id": 1,
      *           "created_at": {
      *             "date": "2016-10-13 21:37:40.000000",
@@ -161,12 +162,12 @@ final class UserController extends BaseController
      *             "timezone_type": 3,
      *             "timezone": "Europe/Moscow"
      *           },
-     *           "created_by": null,
+     *           "created_by": 1,
      *           "updated_by": null,
-     *           "status": null,
+     *           "status": 1,
      *         },
      *         "relationships": {
-     *           "role": {
+     *            "role": {
      *             "data": {
      *               "type": "role",
      *               "id": "1"
@@ -174,7 +175,7 @@ final class UserController extends BaseController
      *           }
      *         },
      *         "links": {
-     *           "self": "http://skeleton.dev/api/user/4"
+     *           "self": "http://skeleton.dev/api/user/2"
      *         }
      *       }
      *     }
@@ -284,10 +285,10 @@ final class UserController extends BaseController
      *     {
      *       "data": {
      *         "type": "user",
-     *         "id": ,
+     *         "id": 2,
      *         "attributes": {
      *           "full_name": "Тестовый пользователь",
-     *           "email": "mail@example.com",
+     *           "email": "mail1@example.com",
      *           "role_id": 1,
      *           "created_at": {
      *             "date": "2016-10-13 21:37:40.000000",
@@ -301,7 +302,7 @@ final class UserController extends BaseController
      *           },
      *           "created_by": null,
      *           "updated_by": null,
-     *           "status": null,
+     *           "status": 1,
      *         },
      *         "relationships": {
      *           "role": {
@@ -312,7 +313,7 @@ final class UserController extends BaseController
      *           }
      *         },
      *         "links": {
-     *           "self": "http://skeleton.dev/api/user/4"
+     *           "self": "http://skeleton.dev/api/user/2"
      *         }
      *       }
      *     }
