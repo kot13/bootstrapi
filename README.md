@@ -23,24 +23,19 @@ This is my JSONAPI skeleton. Built using Slim 3, Eloquent, Zend-ACL
 $ composer install
 ```
 
-3) исправить конфиг подключения к БД:
+3) создать новый проект
 ```
-$ mv config/db.php.sample db.php
-$ nano db.php
-```
-
-4) исправить конфиг
-```
-$ mv config/params.php.sample params.php
-$ nano params.php
+$ php partisan new project-name
 ```
 
-5) создать необходимые папки
+4) исправить конфиг подключения к БД:
 ```
-$ mkdir cache
-$ chmod -R 0777 cache
-$ mkdir log
-$ chmod -R 0777 log
+$ nano config/db.php
+```
+
+5) исправить конфиг
+```
+$ nano config/params.php
 ```
 
 6) настроить nginx
@@ -105,11 +100,10 @@ server {
 
 7) выполнить миграции
 ```
-$ php partisan migrate up
-$ php partisan seed
+$ php partisan migrate --seed
 ```
 
 8) сгенерировать документацию
 ```
-$ apidoc -i ./ -o ./docs -t ./docstemplate
+$ php partisan docs generate
 ```

@@ -9,10 +9,8 @@ use App\Model\User;
 
 final class TokenController extends BaseController
 {
-    protected static function createToken($request, $tokenExpire)
+    protected static function createToken($request, $tokenExpire = 3600)
     {
-        $tokenExpire = isset($tokenExpire) ? $tokenExpire : 3600;
-
         $secret_key = getenv('SECRET_KEY');
         $token = array(
             'iss' => getenv('AUTH_ISS'),

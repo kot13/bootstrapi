@@ -71,6 +71,9 @@ class Partisan
                 }
                 $this->newProject($this->args[3]);
                 break;
+            case "docs":
+                exec('apidoc -i ./ -o ./docs -t ./docstemplate');
+                break;
             case "help":
             case "--help":
                 $this->help();
@@ -99,6 +102,8 @@ class Partisan
         echo "php partisan migrate --seed                       -->   Migrate and seed the database.".PHP_EOL;
         //echo "php partisan down <migrationId>                   -->   Revert a specific migration.".PHP_EOL;
         echo "php partisan <commandsName> <action> [<args>]     -->   Running a specific console commands.".PHP_EOL;
+        echo "php partisan new <projectName>                    -->   Create a new project.".PHP_EOL;
+        echo "php partisan docs generate                        -->   Generate documentation.".PHP_EOL;
         echo PHP_EOL;
     }
 
@@ -211,14 +216,19 @@ class Partisan
         return str_replace('controller', '', strtolower(basename($file, '.php')));
     }
 
-    private function newProject()
+    private function newProject($projectName)
     {
-        // создаём папку log
-        // создаём папку cache
-        // назначаем ей права 777
+        // создаём папку log и назначаем ей права 777
+        exec('mkdir log && chmod 777 ./log');
+
         // создаём файлы конфигов
+
         // удаляем папку .git
-        echo "New project started".PHP_EOL;
+        // exec('rm -rf .git');
+
+        // формируем apidoc.json
+
+        echo "New project " . $projectName . "created".PHP_EOL;
     }
 }
 
