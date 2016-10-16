@@ -244,7 +244,7 @@ class Partisan
 
         // формируем version.sh
 
-        echo "New project " . $projectName . "created".PHP_EOL;
+        echo "New project " . $projectName . " created".PHP_EOL;
     }
 
     private function dbConnect()

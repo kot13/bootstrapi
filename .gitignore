@@ -12,7 +12,7 @@ log/*
 cache/*
 
 # composer
-vendor
+/vendor
 composer.phar
 composer.lock
 
