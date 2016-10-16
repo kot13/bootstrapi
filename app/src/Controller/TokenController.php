@@ -42,6 +42,10 @@ final class TokenController extends BaseController
      * @apiName CreateToken
      * @apiGroup Token
      *
+     * @apiDescription Метод для получения авторизационного токена. Он отправляется в заголовке запроса:
+     *
+     * Authorization: Bearer xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+     *
      * @apiParam {String} username Логин
      * @apiParam {String} password Пароль
      *
@@ -49,7 +53,7 @@ final class TokenController extends BaseController
      *    {
      *      "data":{
      *        "attributes":{
-     *          "username":"kot_tdf@mail.ru",
+     *          "username":"admin@example.com",
      *          "password": "qwerty"
      *        }
      *      }
@@ -61,8 +65,8 @@ final class TokenController extends BaseController
      *       "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOmZhbHNlLCJhdWQiOiJza2VsZXRvbi5kZXYiLCJpYXQiOjE0NzY0Mjk4NjksImV4cCI6MTQ3NjQzMzQ2OX0.NJn_-lK28kEZyZqygLr6B-FZ2zC2-1unStayTGicP5g",
      *       "user": {
      *         "id": 1,
-     *         "email": "kot_tdf@mail.ru",
-     *         "full_name": "Павел",
+     *         "email": "mail@example.com",
+     *         "full_name": "Тестовый пользоатель",
      *         "role_id": "1",
      *         "created_by": 0,
      *         "updated_by": null,
@@ -73,19 +77,7 @@ final class TokenController extends BaseController
      *       }
      *     }
      *
-     * @apiSuccessExample {json} Неверный запрос (400)
-     *     HTTP/1.1 400 Invalid Attribute
-     *     {
-     *       "errors": [
-     *         {
-     *           "id": "user",
-     *           "status": "400",
-     *           "code": "400",
-     *           "title": "Invalid Attribute",
-     *           "detail": "Not required attributes - data."
-     *         }
-     *       ]
-     *     }
+     * @apiUse StandardErrors
      */
     public function auth($request, $response, $args)
     {

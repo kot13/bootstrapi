@@ -48,7 +48,9 @@ define([
       //});
 
       // todo support versions
-      var param = editor.get();
+      if (editor != undefined) {
+          var param = editor.get();
+      }
 
       // grab user-inputted URL
       var url = $root.find(".sample-request-url").val();
@@ -100,6 +102,9 @@ define([
               jsonResponse = JSON.stringify(jsonResponse, null, 4);
           } catch (e) {
               jsonResponse = data;
+          }
+          if (jqXHR.status == "204") {
+              jsonResponse = "HTTP/1.1 204 OK";
           }
           $root.find(".sample-request-response-json").html(jsonResponse);
           refreshScrollSpy();

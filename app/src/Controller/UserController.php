@@ -10,9 +10,117 @@ use App\Model\User;
 final class UserController extends BaseController
 {
     /**
+     * @api {get} /user Список пользователей
+     * @apiName GetUsers
+     * @apiGroup User
+     *
+     * @apiDescription Метод для получения списка пользователей.
+     *
+     * @apiHeader {String} Authorization Токен.
+     *
+     * @apiSuccessExample {json} Успешно (200)
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "data": [
+     *         {
+     *           "type": "user",
+     *           "id": "1",
+     *           "attributes": {
+     *             "full_name": "Тестовый пользователь",
+     *             "email": "mail@example.com",
+     *             "role_id": 1,
+     *             "created_at": {
+     *               "date": "2016-10-13 21:37:40.000000",
+     *               "timezone_type": 3,
+     *               "timezone": "Europe/Moscow"
+     *             },
+     *             "updated_at": {
+     *               "date": "2016-10-13 21:37:40.000000",
+     *               "timezone_type": 3,
+     *               "timezone": "Europe/Moscow"
+     *             },
+     *             "created_by": 0,
+     *             "updated_by": null,
+     *             "status": 1,
+     *           },
+     *           "relationships": {
+     *             "role": {
+     *               "data": {
+     *                 "type": "role",
+     *                 "id": "1"
+     *               }
+     *             }
+     *           },
+     *           "links": {
+     *             "self": "http://skeleton.dev/api/user/1"
+     *           }
+     *         }
+     *       ]
+     *     }
+     *
+     * @apiUse StandardErrors
+     * @apiUse UnauthorizedError
+     */
+
+    /**
+     * @api {get} /user/:id?include=role&fields[role]=name Получить пользователя
+     * @apiName GetUser
+     * @apiGroup User
+     *
+     * @apiDescription Метод для получения пользователя.
+     *
+     * @apiParam {Number} id Id пользователя
+     *
+     * @apiHeader {String} Authorization Токен.
+     *
+     * @apiSuccessExample {json} Успешно (200)
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "data": {
+     *         "type": "user",
+     *         "id": "1",
+     *         "attributes": {
+     *           "full_name": "Тестовый пользователь",
+     *           "email": "mail@example.com",
+     *           "role_id": 1,
+     *           "created_at": {
+     *             "date": "2016-10-13 21:37:40.000000",
+     *             "timezone_type": 3,
+     *             "timezone": "Europe/Moscow"
+     *           },
+     *           "updated_at": {
+     *             "date": "2016-10-13 21:37:40.000000",
+     *             "timezone_type": 3,
+     *             "timezone": "Europe/Moscow"
+     *           },
+     *           "created_by": 0,
+     *           "updated_by": null,
+     *           "status": 1,
+     *         },
+     *         "relationships": {
+     *           "role": {
+     *             "data": {
+     *               "type": "role",
+     *               "id": "1"
+     *             }
+     *           }
+     *         },
+     *         "links": {
+     *           "self": "http://skeleton.dev/api/user/1"
+     *         }
+     *       }
+     *     }
+     *
+     * @apiUse StandardErrors
+     * @apiUse UnauthorizedError
+     */
+
+     /**
      * @api {post} /user Создание пользователя
      * @apiName CreateUser
      * @apiGroup User
+     *
+     * @apiDescription Метод для создания нового пользователя.
      *
      * @apiParam {String} full_name Полное имя пользователя
      * @apiParam {String} email Email пользователя (уникальный)
@@ -37,8 +145,8 @@ final class UserController extends BaseController
      *     HTTP/1.1 200 OK
      *     {
      *       "data": {
-     *         "type": "",
-     *         "id": ,
+     *         "type": "user",
+     *         "id": "1",
      *         "attributes": {
      *           "full_name": "Тестовый пользователь",
      *           "email": "mail@example.com",
@@ -71,31 +179,8 @@ final class UserController extends BaseController
      *       }
      *     }
      *
-     * @apiSuccessExample {json} Не авторизован (401)
-     *     HTTP/1.1 401 Unauthorized
-     *     {
-     *       "errors": [
-     *         {
-     *           "status": "401",
-     *           "code": "401",
-     *           "title": "Not authorized",
-     *           "detail": "The user must be authorized"
-     *         }
-     *       ]
-     *     }
-     * @apiSuccessExample {json} Неверный запрос (400)
-     *     HTTP/1.1 400 Unauthorized
-     *     {
-     *       "errors": [
-     *         {
-     *           "id": "user",
-     *           "status": "400",
-     *           "code": "400",
-     *           "title": "Invalid Attribute",
-     *           "detail": "Not required attributes - data."
-     *         }
-     *       ]
-     *     }
+     * @apiUse StandardErrors
+     * @apiUse UnauthorizedError
      */
     public function actionCreate($request, $response, $args){
         $expandEntity = User::$expand;
@@ -135,6 +220,23 @@ final class UserController extends BaseController
             return $this->renderer->jsonApiRender($response, 400, $result);
         }
 
+        $exist = User::exist($params['data']['attributes']['email']);
+
+        if ($exist) {
+            $error = new Error(
+                $args['entity'],
+                null,
+                '400',
+                '400',
+                'User already exists',
+                'User already exists'
+            );
+
+            $result = Encoder::instance()->encodeError($error);
+
+            return $this->renderer->jsonApiRender($response, 400, $result);
+        }
+
         $user = User::create($params['data']['attributes']);
         $user->setPassword($params['data']['attributes']['password']);
         $user->save();
@@ -153,6 +255,74 @@ final class UserController extends BaseController
 
     }
 
+    /**
+     * @api {patch} /user/:id Изменение пользователя
+     * @apiName UpdateUser
+     * @apiGroup User
+     *
+     * @apiDescription Метод для изменения пользователя.
+     *
+     * @apiParam {String} full_name Полное имя пользователя
+     * @apiParam {String} email Email пользователя (уникальный)
+     * @apiParam {String} password Пароль
+     * @apiParam {Number} role_id Id роли пользователя
+     *
+     * @apiParamExample {json} Пример запроса:
+     *    {
+     *      "data":{
+     *        "attributes":{
+     *          "full_name":"Тестовый пользователь",
+     *          "email": "mail@example.com",
+     *          "password": "qwerty",
+     *          "role_id": 1
+     *        }
+     *      }
+     *    }
+     *
+     * @apiSuccessExample {json} Успешно (200)
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "data": {
+     *         "type": "user",
+     *         "id": ,
+     *         "attributes": {
+     *           "full_name": "Тестовый пользователь",
+     *           "email": "mail@example.com",
+     *           "role_id": 1,
+     *           "created_at": {
+     *             "date": "2016-10-13 21:37:40.000000",
+     *             "timezone_type": 3,
+     *             "timezone": "Europe/Moscow"
+     *           },
+     *           "updated_at": {
+     *             "date": "2016-10-13 21:37:40.000000",
+     *             "timezone_type": 3,
+     *             "timezone": "Europe/Moscow"
+     *           },
+     *           "created_by": null,
+     *           "updated_by": null,
+     *           "status": null,
+     *         },
+     *         "relationships": {
+     *           "role": {
+     *             "data": {
+     *               "type": "role",
+     *               "id": "1"
+     *             }
+     *           }
+     *         },
+     *         "links": {
+     *           "self": "http://skeleton.dev/api/user/4"
+     *         }
+     *       }
+     *     }
+     *
+     * @apiHeader {String} Authorization Токен.
+     *
+     * @apiUse StandardErrors
+     * @apiUse UnauthorizedError
+     * @apiUse NotFoundError
+     */
     public function actionUpdate($request, $response, $args){
         $expandEntity = User::$expand;
         $params = $request->getParsedBody();
@@ -228,6 +398,31 @@ final class UserController extends BaseController
         return $this->renderer->jsonApiRender($response, 200, $result);
     }
 
+    /**
+     * @api {post} /user/request-password-reset Запрос на сброс пароля
+     * @apiName RequestPasswordReset
+     * @apiGroup User
+     *
+     * @apiDescription Метод высылающий на email пользователя письмо со ссылкой для изменения пароля.
+     *
+     * В ссылке отправляется токен для сброса пароля. Его нужно отправить в методе /user/reset-password
+     *
+     * @apiParam {String} email Email пользователя
+     *
+     * @apiParamExample {json} Пример запроса:
+     *    {
+     *      "data":{
+     *        "attributes":{
+     *          "email": "mail@example.com"
+     *        }
+     *      }
+     *    }
+     *
+     * @apiSuccessExample {json} Успешно (204)
+     *     HTTP/1.1 204 OK
+     *
+     * @apiUse StandardErrors
+     */
     public function actionRequestResetPassword($request, $response, $args){
         $params = $request->getParsedBody();
 
@@ -336,6 +531,32 @@ final class UserController extends BaseController
         return $this->renderer->jsonApiRender($response, 400, $result);
     }
 
+    /**
+     * @api {post} /user/reset-password Сброс пароля
+     * @apiName ResetPassword
+     * @apiGroup User
+     *
+     * @apiDescription Метод для изменения пароля.
+     *
+     * Вместе с паролем нужно отправить токен, который был отправлен пользователю на почту.
+     *
+     * @apiParam {String} email Email пользователя
+     *
+     * @apiParamExample {json} Пример запроса:
+     *    {
+     *      "data":{
+     *        "attributes":{
+     *          "token": "f35v3g7h3frw24yi58cawo2e2kqhy3i5_1466085622",
+     *          "password": "qwerty"
+     *        }
+     *      }
+     *    }
+     *
+     * @apiSuccessExample {json} Успешно (204)
+     *     HTTP/1.1 204 OK
+     *
+     * @apiUse StandardErrors
+     */
     public function actionResetPassword($request, $response, $args){
         $params = $request->getParsedBody();
 

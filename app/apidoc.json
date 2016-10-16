@@ -8,5 +8,15 @@
   "template": {
     "withCompare": false,
     "withGenerator": false
-  }
+  },
+  "order": [
+    "Token",
+    "User",
+    "GetUsers",
+    "GetUser",
+    "CreateUser",
+    "UpdateUser",
+    "RequestPasswordReset",
+    "ResetPassword"
+  ]
 }

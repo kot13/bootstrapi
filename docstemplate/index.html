@@ -259,30 +259,31 @@
         {{/if}}
       {{/if}}
 
-          <h3>{{__ "Request"}}</h3>
-          <div class="control-group resizable">
-            {{#each article.parameter.examples}}
+      {{#if article.parameter.examples}}
+        <h3>{{__ "Request"}}</h3>
+        <div class="control-group resizable">
+          {{#each article.parameter.examples}}
 
-            <div id="jsoneditor-{{../id}}-{{@index}}" class="jsoneditor" data-jsoneditor-key="{{../id}}">
-              {{content}}
-            </div>
-
-            {{/each}}
+          <div id="jsoneditor-{{../id}}-{{@index}}" class="jsoneditor" data-jsoneditor-key="{{../id}}">
+            {{content}}
           </div>
 
-          <div class="control-group">
-            <div class="controls">
-              <button class="btn btn-default sample-request-send" data-sample-request-type="{{article.type}}" data-sample-request-key="{{../id}}">{{__ "Send"}}</button>
-            </div>
+          {{/each}}
+        </div>
+      {{/if}}
+        <div class="control-group">
+          <div class="controls">
+            <button class="btn btn-default sample-request-send" data-sample-request-type="{{article.type}}" data-sample-request-key="{{../id}}">{{__ "Send"}}</button>
           </div>
+        </div>
 
-          <div class="sample-request-response" style="display: none;">
-            <h3>
-              {{__ "Response"}}
-              <button class="btn btn-small btn-default pull-right sample-request-clear">X</button>
-            </h3>
-            <pre class="prettyprint language-json" data-type="json"><code class="sample-request-response-json"></code></pre>
-          </div>
+        <div class="sample-request-response" style="display: none;">
+          <h3>
+            {{__ "Response"}}
+            <button class="btn btn-small btn-default pull-right sample-request-clear">X</button>
+          </h3>
+          <pre class="prettyprint language-json" data-type="json"><code class="sample-request-response-json"></code></pre>
+        </div>
       </form>
     {{/if}}
 </script>

@@ -39,13 +39,15 @@ $container['logger'] = function ($c) {
 // error handlers
 $container['errorHandler'] = function ($c) {
     return function ($request, $response, $exception) use ($c) {
+        $details = (defined('DEBUG_MODE') && DEBUG_MODE == 1) ? $exception->getMessage() : 'Internal server error';
+
         $error = new Error(
             null,
             null,
             '500',
             '500',
             'Internal server error',
-            'Internal server error'
+            $details
         );
 
         $result = Encoder::instance()->encodeError($error);

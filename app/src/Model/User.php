@@ -52,6 +52,11 @@ final class User extends BaseModel
         return $this->hasOne('App\Model\Role', 'id', 'role_id');
     }
 
+    public static function exist($email)
+    {
+        return !empty(User::where('email', $email));
+    }
+
     public static function findUserByEmail($email)
     {
         return User::where('email', $email)->where('status', 1)->first();
