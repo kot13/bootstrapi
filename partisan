@@ -11,6 +11,9 @@ define('CONFIG_PATH', __DIR__ . '/config');
 define('GIT_PATH', __DIR__ . '/.git');
 define('APP_PATH', __DIR__ . '/app');
 
+define('MIGRATIONS_TABLE', 'migrations');
+define('SEEDS_TABLE', 'seeds');
+
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
@@ -20,7 +23,12 @@ use App\Common\Helper;
 class Partisan
 {
     private $args;
+
     private $commands;
+
+    private $config  = null;
+
+    private $capsule = null;
 
     function __construct($args)
     {
@@ -104,12 +112,17 @@ class Partisan
     private function runMigrations()
     {
         $this->dbConnect();
+        $this->safeCreateTable(MIGRATIONS_TABLE);
+
         $files = glob(MIGRATIONS_PATH.'/*.php');
         $this->run($files);
     }
 
     private function runSeed()
     {
+        $this->dbConnect();
+        $this->safeCreateTable(SEEDS_TABLE);
+
         $files = glob(SEEDS_PATH.'/*.php');
         $this->run($files, 'seed');
     }
@@ -183,16 +196,22 @@ class Partisan
 
             echo basename($file, '.php');
 
-            $obj = new $class();
-            if($type == 'migration'){
-                $obj->up();
-            } else {
-                $obj->run();
-            }
+            $table = ($type == 'migration') ? MIGRATIONS_TABLE : SEEDS_TABLE;
 
-            echo ' - done.'.PHP_EOL;
+            if ($this->isExistRow(basename($file, '.php'), $table)) {
+                echo ' - already exists.'.PHP_EOL;
+            } else {
+                $obj = new $class();
+                if($type == 'migration'){
+                    $obj->up();
+                } else {
+                    $obj->run();
+                }
+                $this->insertRow(basename($file, '.php'), $table);
+                echo ' - done.'.PHP_EOL;
+            }
         }
-        echo 'Migrations completed.'.PHP_EOL;
+        echo ucfirst($type) . ' completed.'.PHP_EOL;
     }
 
     private function getCommandList($files)
@@ -213,10 +232,8 @@ class Partisan
 
     private function newProject($projectName)
     {
-        // создаём папку log и назначаем ей права 777
         echo exec('mkdir ' . ROOT_PATH . '/log && chmod 777 ' . ROOT_PATH . '/log');
 
-        // создаём файлы конфигов
         if (file_exists(CONFIG_PATH . '/db.php')) {
             echo 'The file config/db.php already exists'.PHP_EOL;
             return;
@@ -231,7 +248,7 @@ class Partisan
             exec('mv ' . CONFIG_PATH . '/params.php.sample ' . CONFIG_PATH . '/params.php');
         };
 
-        // формируем apidoc.json
+        // TODO формировать apidoc.json по шаблону из данных вводимых пользователем
         if (file_exists(APP_PATH . '/apidoc.json')) {
             echo 'The file app/apidoc.json already exists'.PHP_EOL;
             return;
@@ -239,24 +256,56 @@ class Partisan
             exec('mv ' . APP_PATH . '/apidoc.json.sample ' . APP_PATH . '/apidoc.json');
         };
 
-        // удаляем папку .git
         echo exec('rm -rf ' . ROOT_PATH . '/.git');
 
-        // формируем version.sh
+        // TODO формировать version.sh
 
-        echo "New project " . $projectName . " created".PHP_EOL;
+        echo "New project " . $projectName . " successful created".PHP_EOL;
+        echo "Now run command: git init".PHP_EOL;
     }
 
     private function dbConnect()
     {
-        $config = require_once APP_PATH . '/settings.php';
+        if (empty($this->config)) {
+            $this->config  = require_once APP_PATH . '/settings.php';
+        }
 
-        $capsule = new Capsule;
-        $capsule->addConnection($config['settings']['database']['connections']['main'], 'default');
-        $capsule->setEventDispatcher(new Dispatcher(new Container));
-        $capsule->setAsGlobal();
-        $capsule->bootEloquent();
+        if (empty($this->capsule)) {
+            $this->capsule = new Capsule;
+
+            $this->capsule->addConnection($this->config['settings']['database']['connections']['main'], 'default');
+            $this->capsule->setEventDispatcher(new Dispatcher(new Container));
+            $this->capsule->setAsGlobal();
+            $this->capsule->bootEloquent();
+        }
     }
+
+    private function safeCreateTable($tableName)
+    {
+        if (!Capsule::schema()->hasTable($tableName)) {
+            Capsule::schema()->create($tableName, function($table)
+            {
+                $table->string('version');
+                $table->timestamp('apply_time')->useCurrent();
+
+                $table->primary('version');
+            });
+        }
+    }
+
+    private function isExistRow($name, $table)
+    {
+        $item = Capsule::table($table)->where('version', $name)->first();
+        return !is_null($item);
+    }
+
+    private function insertRow($name, $table)
+    {
+        Capsule::table($table)->insert([
+            'version' => $name,
+        ]);
+    }
+
 }
 
 $partisan = new Partisan($argv);
