@@ -11,7 +11,9 @@ return [
             'path' => __DIR__ . '/../log/app.log',
         ],
 
-        // DB
+        'mailTemplate' => __DIR__ . '/../mail',
+
+            // DB
         'database' => require(__DIR__ . '/../config/db.php'),
 
         // ACL

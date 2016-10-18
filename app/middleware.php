@@ -53,7 +53,7 @@ $app->add(function (Request $request, Response $response, $next) {
         }
     }
 
-
+    throw new JsonException(null, 401, 'Not authorized', 'The user must be authorized');
 });
 
 /*

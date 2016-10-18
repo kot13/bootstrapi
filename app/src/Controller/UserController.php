@@ -404,22 +404,10 @@ final class UserController extends BaseController
             throw new JsonException($args['entity'], 400, 'Bad request', 'Bad request');
         }
 
-        // TODO вынести отправку в абстракцию, шаблонизация письма
-
-        $emailText = '<a href="'.$this->settings['params']['host'].'/reset-password?reset_token='.$user->password_reset_token.'">Ссылка для восстановления пароля</a>';
-
         $message = \Swift_Message::newInstance('Восстановление пароля для доступа в example.com')
             ->setFrom(['no-reply@example.com' => 'Почтовик example.com'])
             ->setTo([$user->email => $user->full_name])
-            ->setBody(
-                '<html>' .
-                ' <head></head>' .
-                ' <body>' .
-                $emailText.
-                ' </body>' .
-                '</html>',
-                'text/html'
-            );
+            ->setBody($this->mailRenderer->render("/RequestResetPassword.php", ['host' => $this->settings['params']['host'], 'token' => $user->password_reset_token]), 'text/html');
 
         if ($this->mailer->send($message)){
             return $this->renderer->jsonApiRender($response, 204);

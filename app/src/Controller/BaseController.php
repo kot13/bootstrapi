@@ -9,6 +9,7 @@ abstract class BaseController {
     public $renderer;
     public $settings;
     public $mailer;
+    public $mailRenderer;
 
     /**
      * BaseController constructor.
@@ -16,10 +17,11 @@ abstract class BaseController {
      * @param $container
      */
     public function __construct($container){
-        $this->renderer   = $container['renderer'];
-        $this->validation = $container['validation'];
-        $this->settings   = $container['settings'];
-        $this->mailer     = $container['mailer'];
+        $this->renderer     = $container['renderer'];
+        $this->validation   = $container['validation'];
+        $this->settings     = $container['settings'];
+        $this->mailer       = $container['mailer'];
+        $this->mailRenderer = $container['mailRenderer'];
 
         $this->registerModelObservers();
     }

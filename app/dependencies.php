@@ -14,6 +14,7 @@ use Illuminate\Validation\Factory;
 
 use App\Common\Acl;
 use App\Common\Renderer;
+use App\Common\MailRenderer;
 use App\Common\JsonException;
 
 // DIC configuration
@@ -21,8 +22,14 @@ $container = $app->getContainer();
 
 // render
 $container['renderer'] = function($c){
-    $view = new Renderer();
-    return $view;
+    $renderer = new Renderer();
+    return $renderer;
+};
+
+$container['mailRenderer'] = function($c){
+    $settings = $c->get('settings');
+    $renderer = new MailRenderer($settings['mailTemplate']);
+    return $renderer;
 };
 
 // monolog
