@@ -1,11 +1,10 @@
 <?php
 namespace App\Controller;
 
-use \Neomerx\JsonApi\Encoder\Encoder;
-use \Neomerx\JsonApi\Document\Error;
-
 use Firebase\JWT\JWT;
 use App\Model\User;
+
+use App\Common\JsonException;
 
 final class TokenController extends BaseController
 {
@@ -82,18 +81,7 @@ final class TokenController extends BaseController
         $params = $request->getParsedBody();
 
         if(!isset($params['data']['attributes'])){
-            $error = new Error(
-                'token',
-                null,
-                '400',
-                '400',
-                'Invalid Attribute',
-                'Not required attributes - data.'
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 400, $result);
+            throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Not required attributes - data.');
         }
 
         $params = $params['data']['attributes'];
@@ -107,19 +95,7 @@ final class TokenController extends BaseController
 
         if ($validator->fails()) {
             $messages = implode(' ', $validator->messages()->all());
-
-            $error = new Error(
-                'token',
-                null,
-                '400',
-                '400',
-                'Invalid Attribute',
-                $messages
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 400, $result);
+            throw new JsonException($args['entity'], 400, 'Invalid Attribute', $messages);
         }
 
         $user = User::findUserByEmail($params['username']);
@@ -129,18 +105,7 @@ final class TokenController extends BaseController
             $user->access_token = md5($token);
             $user->save();
         } else {
-            $error = new Error(
-                'token',
-                null,
-                '400',
-                '400',
-                'Invalid Attribute',
-                'Invalid password or username'
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 400, $result);
+            throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Invalid password or username');
         };
 
         $result = [

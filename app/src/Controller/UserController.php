@@ -3,9 +3,9 @@ namespace App\Controller;
 
 use \Neomerx\JsonApi\Encoder\Encoder;
 use \Neomerx\JsonApi\Encoder\EncoderOptions;
-use \Neomerx\JsonApi\Document\Error;
 
 use App\Model\User;
+use App\Common\JsonException;
 
 final class UserController extends BaseController
 {
@@ -208,54 +208,20 @@ final class UserController extends BaseController
         $params = $request->getParsedBody();
 
         if(!isset($params['data']['attributes'])){
-            $error = new Error(
-                $args['entity'],
-                null,
-                '400',
-                '400',
-                'Invalid Attribute',
-                'Not required attributes - data.'
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 400, $result);
+            throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Not required attributes - data.');
         }
 
         $validator = $this->validation->make($params['data']['attributes'], User::$rules['create']);
 
         if ($validator->fails()) {
             $messages = implode(' ', $validator->messages()->all());
-
-            $error = new Error(
-                $args['entity'],
-                null,
-                '400',
-                '400',
-                'Invalid Attribute',
-                $messages
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 400, $result);
+            throw new JsonException($args['entity'], 400, 'Invalid Attribute', $messages);
         }
 
         $exist = User::exist($params['data']['attributes']['email']);
 
         if ($exist) {
-            $error = new Error(
-                $args['entity'],
-                null,
-                '400',
-                '400',
-                'User already exists',
-                'User already exists'
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 400, $result);
+            throw new JsonException($args['entity'], 400, 'User already exists', 'User already exists');
         }
 
         $user = User::create($params['data']['attributes']);
@@ -349,54 +315,20 @@ final class UserController extends BaseController
         $params = $request->getParsedBody();
 
         if(!isset($params['data']['attributes'])){
-            $error = new Error(
-                $args['entity'],
-                null,
-                '400',
-                '400',
-                'Invalid Attribute',
-                'Not required attributes - data.'
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 400, $result);
+            throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Not required attributes - data.');
         }
 
         $user = User::find($args['id']);
 
         if (!$user) {
-            $error = new Error(
-                $args['entity'],
-                null,
-                '404',
-                '404',
-                'Not found',
-                'Entities not found'
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 404, $result);
+            throw new JsonException($args['entity'], 404, 'Not found','Entity not found');
         }
 
         $validator = $this->validation->make($params['data']['attributes'], User::$rules['update']);
 
         if ($validator->fails()) {
             $messages = implode(' ', $validator->messages()->all());
-
-            $error = new Error(
-                $args['entity'],
-                null,
-                '400',
-                '400',
-                'Invalid Attribute',
-                $messages
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 400, $result);
+            throw new JsonException($args['entity'], 400, 'Invalid Attribute', $messages);
         }
 
         $user->update($params['data']['attributes']);
@@ -448,54 +380,20 @@ final class UserController extends BaseController
         $params = $request->getParsedBody();
 
         if(!isset($params['data']['attributes'])){
-            $error = new Error(
-                $args['entity'],
-                null,
-                '400',
-                '400',
-                'Invalid Attribute',
-                'Not required attributes - data.'
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 400, $result);
+            throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Not required attributes - data.');
         }
 
         $validator = $this->validation->make($params['data']['attributes'], ['email' => 'required|email']);
 
         if ($validator->fails()) {
             $messages = implode(' ', $validator->messages()->all());
-
-            $error = new Error(
-                $args['entity'],
-                null,
-                '400',
-                '400',
-                'Invalid Attribute',
-                $messages
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 400, $result);
+            throw new JsonException($args['entity'], 400, 'Invalid Attribute', $messages);
         }
 
         $user = User::findUserByEmail($params['data']['attributes']['email']);
 
         if (!$user) {
-            $error = new Error(
-                $args['entity'],
-                null,
-                '400',
-                '400',
-                'Bad request',
-                'Bad request'
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 400, $result);
+            throw new JsonException($args['entity'], 400, 'Bad request', 'Bad request');
         }
 
         if (!User::isPasswordResetTokenValid($user->password_reset_token)) {
@@ -503,18 +401,7 @@ final class UserController extends BaseController
         }
 
         if (!$user->save()) {
-            $error = new Error(
-                $args['entity'],
-                null,
-                '400',
-                '400',
-                'Bad request',
-                'Bad request'
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 400, $result);
+            throw new JsonException($args['entity'], 400, 'Bad request', 'Bad request');
         }
 
         // TODO вынести отправку в абстракцию, шаблонизация письма
@@ -538,18 +425,7 @@ final class UserController extends BaseController
             return $this->renderer->jsonApiRender($response, 204);
         };
 
-        $error = new Error(
-            $args['entity'],
-            null,
-            '400',
-            '400',
-            'Bad request',
-            'Bad request'
-        );
-
-        $result = Encoder::instance()->encodeError($error);
-
-        return $this->renderer->jsonApiRender($response, 400, $result);
+        throw new JsonException($args['entity'], 400, 'Bad request', 'Bad request');
     }
 
     /**
@@ -582,18 +458,7 @@ final class UserController extends BaseController
         $params = $request->getParsedBody();
 
         if(!isset($params['data']['attributes'])){
-            $error = new Error(
-                $args['entity'],
-                null,
-                '400',
-                '400',
-                'Invalid Attribute',
-                'Not required attributes - data.'
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 400, $result);
+            throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Not required attributes - data.');
         }
 
         $rules = [
@@ -605,19 +470,7 @@ final class UserController extends BaseController
 
         if ($validator->fails()) {
             $messages = implode(' ', $validator->messages()->all());
-
-            $error = new Error(
-                $args['entity'],
-                null,
-                '400',
-                '400',
-                'Invalid Attribute',
-                $messages
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 400, $result);
+            throw new JsonException($args['entity'], 400, 'Invalid Attribute', $messages);
         }
 
         $user = User::findByPasswordResetToken($params['data']['attributes']['token']);
@@ -631,17 +484,6 @@ final class UserController extends BaseController
             };
         }
 
-        $error = new Error(
-            $args['entity'],
-            null,
-            '400',
-            '400',
-            'Bad request',
-            'Bad request'
-        );
-
-        $result = Encoder::instance()->encodeError($error);
-
-        return $this->renderer->jsonApiRender($response, 400, $result);
+        throw new JsonException($args['entity'], 400, 'Bad request', 'Bad request');
     }
 }

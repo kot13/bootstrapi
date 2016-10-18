@@ -14,9 +14,7 @@ use Illuminate\Validation\Factory;
 
 use App\Common\Acl;
 use App\Common\Renderer;
-
-use \Neomerx\JsonApi\Encoder\Encoder;
-use \Neomerx\JsonApi\Document\Error;
+use App\Common\JsonException;
 
 // DIC configuration
 $container = $app->getContainer();
@@ -41,52 +39,19 @@ $container['errorHandler'] = function ($c) {
     return function ($request, $response, $exception) use ($c) {
         $details = (defined('DEBUG_MODE') && DEBUG_MODE == 1) ? $exception->getMessage() : 'Internal server error';
 
-        $error = new Error(
-            null,
-            null,
-            '500',
-            '500',
-            'Internal server error',
-            $details
-        );
-
-        $result = Encoder::instance()->encodeError($error);
-
-        return $c->get('renderer')->jsonApiRender($c->get('response'), 500, $result);
+        throw new JsonException(null, 500, 'Internal server error', $details);
     };
 };
 
 $container['notAllowedHandler'] = function ($c) {
     return function ($request, $response, $methods) use ($c) {
-        $error = new Error(
-            null,
-            null,
-            '405',
-            '405',
-            'Method Not Allowed',
-            'Method must be one of: ' . implode(', ', $methods)
-        );
-
-        $result = Encoder::instance()->encodeError($error);
-
-        return $c->get('renderer')->jsonApiRender($c->get('response'), 405, $result);
+        throw new JsonException(null, 405, 'Method Not Allowed', 'Method must be one of: ' . implode(', ', $methods));
     };
 };
 
 $container['notFoundHandler'] = function ($c) {
     return function ($request, $response) use ($c) {
-        $error = new Error(
-            null,
-            null,
-            '404',
-            '404',
-            'Not found',
-            'Entity not found'
-        );
-
-        $result = Encoder::instance()->encodeError($error);
-
-        return $c->get('renderer')->jsonApiRender($c->get('response'), 404, $result);
+        throw new JsonException(null, 404, 'Not found', 'Entity not found');
     };
 };
 

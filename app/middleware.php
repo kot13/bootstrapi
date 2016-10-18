@@ -3,10 +3,8 @@ use \Slim\Http\Request;
 use \Slim\Http\Response;
 use App\Controller\TokenController as Token;
 
-use \Neomerx\JsonApi\Encoder\Encoder;
-use \Neomerx\JsonApi\Document\Error;
-
 use App\Common\Auth;
+use App\Common\JsonException;
 
 use App\Model\User;
 
@@ -46,18 +44,7 @@ $app->add(function (Request $request, Response $response, $next) {
                         $isAllowed = $isAllowed || $this->acl->isAllowed($user->role->name, 'callable/' . $route->getCallable());
                     }
                     if (!$isAllowed) {
-                        $error = new Error(
-                            null,
-                            null,
-                            '403',
-                            '403',
-                            'Not allowed',
-                            $user->role->name . ' is not allowed access to this location.'
-                        );
-
-                        $result = Encoder::instance()->encodeError($error);
-
-                        return $this->renderer->jsonApiRender($response, 403, $result);
+                        throw new JsonException(null, 403, 'Not allowed', $user->role->name . ' is not allowed access to this location.');
                     }
                 }
 
@@ -66,18 +53,7 @@ $app->add(function (Request $request, Response $response, $next) {
         }
     }
 
-    $error = new Error(
-        null,
-        null,
-        '401',
-        '401',
-        'Not authorized',
-        'The user must be authorized'
-    );
 
-    $result = Encoder::instance()->encodeError($error);
-
-    return $this->renderer->jsonApiRender($response, 401, $result);
 });
 
 /*
@@ -119,4 +95,15 @@ $app->add(function (Request $request, Response $response, $next) {
             break;
     }
     return $response;
+});
+
+/**
+ * Custom exception
+ */
+$app->add(function (Request $request, Response $response, $next) {
+    try {
+        return $next($request, $response);
+    } catch (JsonException $e){
+        return $this->renderer->jsonApiRender($response, $e->statusCode, $e->encodeError());
+    }
 });

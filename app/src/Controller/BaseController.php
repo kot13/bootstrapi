@@ -9,7 +9,6 @@ abstract class BaseController {
     public $renderer;
     public $settings;
     public $mailer;
-    public $user;
 
     /**
      * BaseController constructor.

@@ -4,9 +4,9 @@ namespace App\Controller;
 use \Neomerx\JsonApi\Encoder\Encoder;
 use \Neomerx\JsonApi\Encoder\EncoderOptions;
 use \Neomerx\JsonApi\Factories\Factory;
-use \Neomerx\JsonApi\Document\Error;
 
 use App\Common\Helper;
+use App\Common\JsonException;
 
 final class CrudController extends BaseController{
 
@@ -65,18 +65,7 @@ final class CrudController extends BaseController{
         }
 
         if (!$entity) {
-            $error = new Error(
-                $args['entity'],
-                null,
-                '404',
-                '404',
-                'Not found',
-                'Entity not found'
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 404, $result);
+            throw new JsonException($args['entity'], 404, 'Not found','Entity not found');
         }
 
         $encodeEntities = [$modelName => $modelName::$schemaName];
@@ -97,18 +86,7 @@ final class CrudController extends BaseController{
         $params = $request->getParsedBody();
 
         if(!isset($params['data']['attributes'])){
-            $error = new Error(
-                $args['entity'],
-                null,
-                '400',
-                '400',
-                'Invalid Attribute',
-                'Not required attributes - data.'
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 400, $result);
+            throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Not required attributes - data.');
         }
 
         $validator = $this->validation->make($params['data']['attributes'], $modelName::$rules);
@@ -116,18 +94,7 @@ final class CrudController extends BaseController{
         if ($validator->fails()) {
             $messages = implode(' ', $validator->messages()->all());
 
-            $error = new Error(
-                $args['entity'],
-                null,
-                '400',
-                '400',
-                'Invalid Attribute',
-                $messages
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 400, $result);
+            throw new JsonException($args['entity'], 400, 'Invalid Attribute', $messages);
         }
 
         $entity = $modelName::create($params['data']['attributes']);
@@ -152,35 +119,13 @@ final class CrudController extends BaseController{
         $params = $request->getParsedBody();
 
         if(!isset($params['data']['attributes'])){
-            $error = new Error(
-                $args['entity'],
-                null,
-                '400',
-                '400',
-                'Invalid Attribute',
-                'Not required attributes - data.'
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 400, $result);
+            throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Not required attributes - data.');
         }
 
         $entity = $modelName::find($args['id']);
 
         if (!$entity) {
-            $error = new Error(
-                $args['entity'],
-                null,
-                '404',
-                '404',
-                'Not found',
-                'Entities not found'
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 404, $result);
+            throw new JsonException($args['entity'], 404, 'Not found','Entity not found');
         }
 
         $validator = $this->validation->make($params['data']['attributes'], $modelName::$rules);
@@ -188,18 +133,7 @@ final class CrudController extends BaseController{
         if ($validator->fails()) {
             $messages = implode(' ', $validator->messages()->all());
 
-            $error = new Error(
-                $args['entity'],
-                null,
-                '400',
-                '400',
-                'Invalid Attribute',
-                $messages
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 400, $result);
+            throw new JsonException($args['entity'], 400, 'Invalid Attribute', $messages);
         }
 
         $entity->update($params['data']['attributes']);
@@ -222,18 +156,7 @@ final class CrudController extends BaseController{
         $entity = $modelName::find($args['id']);
 
         if (!$entity) {
-            $error = new Error(
-                $args['entity'],
-                null,
-                '404',
-                '404',
-                'Not found',
-                'Entities not found'
-            );
-
-            $result = Encoder::instance()->encodeError($error);
-
-            return $this->renderer->jsonApiRender($response, 404, $result);
+            throw new JsonException($args['entity'], 404, 'Not found','Entity not found');
         }
 
         $entity->delete();
