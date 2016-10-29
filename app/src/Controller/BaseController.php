@@ -4,7 +4,8 @@ namespace App\Controller;
 use App\Observers;
 use App\Model;
 
-abstract class BaseController {
+abstract class BaseController
+{
     public $validation;
     public $renderer;
     public $settings;

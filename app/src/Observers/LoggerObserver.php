@@ -13,7 +13,8 @@ final class LoggerObserver extends BaseObserver
      * @param  BaseModel  $model
      * @return void
      */
-    public function created(BaseModel $model){
+    public function created(BaseModel $model)
+    {
         $this->logEvent('CREATE', $model);
     }
 
@@ -23,7 +24,8 @@ final class LoggerObserver extends BaseObserver
      * @param  BaseModel  $model
      * @return void
      */
-    public function updated(BaseModel $model){
+    public function updated(BaseModel $model)
+    {
         $this->logEvent('UPDATE', $model);
     }
 
@@ -33,7 +35,8 @@ final class LoggerObserver extends BaseObserver
      * @param  BaseModel  $model
      * @return void
      */
-    public function deleted(BaseModel $model){
+    public function deleted(BaseModel $model)
+    {
         $this->logEvent('DELETE', $model);
     }
 
@@ -43,7 +46,8 @@ final class LoggerObserver extends BaseObserver
      * @param  BaseModel  $model
      * @return void
      */
-    public function restored(BaseModel $model){
+    public function restored(BaseModel $model)
+    {
         $this->logEvent('RESTORE', $model);
     }
 
@@ -51,10 +55,11 @@ final class LoggerObserver extends BaseObserver
      * @param string $event
      * @param BaseModel $model
      */
-    private function logEvent($event, BaseModel $model){
+    private function logEvent($event, BaseModel $model)
+    {
         $user = Auth::getUser();
 
-        if(!is_null($user)){
+        if (!is_null($user)) {
 
             Log::create([
                 'action'      => $event,

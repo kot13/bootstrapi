@@ -4,23 +4,38 @@ namespace App\Controller;
 use Firebase\JWT\JWT;
 use App\Model\User;
 
+use Slim\Http\Request;
+use Slim\Http\Response;
+
 use App\Common\JsonException;
 
 final class TokenController extends BaseController
 {
-    protected static function createToken($request, $tokenExpire = 3600)
+    /**
+     * @param Request $request
+     * @param int     $tokenExpire
+     *
+     * @return string
+     */
+    protected static function createToken(Request $request, $tokenExpire = 3600)
     {
         $secret_key = getenv('SECRET_KEY');
-        $token = array(
+        $token = [
             'iss' => getenv('AUTH_ISS'),
             'aud' => $request->getUri()->getHost(),
             'iat' => time(),
             'exp' => time() + $tokenExpire,
-        );
+        ];
         $jwt = JWT::encode($token, $secret_key);
         return $jwt;
     }
 
+    /**
+     * @param string $token
+     * @param array  $whiteList
+     *
+     * @return bool
+     */
     public static function validateToken($token, $whiteList = [])
     {
         try {
@@ -76,11 +91,19 @@ final class TokenController extends BaseController
      *
      * @apiUse StandardErrors
      */
-    public function auth($request, $response, $args)
+    /**
+     * @param Request  $request
+     * @param Response $response
+     * @param array    $args
+     *
+     * @return mixed
+     * @throws JsonException
+     */
+    public function auth(Request $request, Response $response, $args)
     {
         $params = $request->getParsedBody();
 
-        if(!isset($params['data']['attributes'])){
+        if (!isset($params['data']['attributes'])) {
             throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Not required attributes - data.');
         }
 
@@ -101,7 +124,7 @@ final class TokenController extends BaseController
         $user = User::findUserByEmail($params['username']);
 
         if ($user && password_verify($params['password'], $user->password)) {
-            $token = self::createToken($request, $this->settings['params']['tokenExpire']);
+            $token              = self::createToken($request, $this->settings['params']['tokenExpire']);
             $user->access_token = md5($token);
             $user->save();
         } else {
@@ -110,7 +133,7 @@ final class TokenController extends BaseController
 
         $result = [
             'access_token' => $token,
-            'user' => $user->toArray()
+            'user'         => $user->toArray()
         ];
 
         return $this->renderer->jsonApiRender($response, 200, json_encode($result));

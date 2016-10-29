@@ -5,6 +5,13 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 final class Renderer
 {
+    /**
+     * @param Response $response
+     * @param int      $statusCode
+     * @param string   $data
+     *
+     * @return Response
+     */
     public function jsonApiRender(Response $response, $statusCode = 200, $data = '')
     {
         $jsonApiResponse = $response

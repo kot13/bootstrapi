@@ -216,8 +216,8 @@ namespace App\Schema;
      * @apiUse NotFoundError
      */
 
-class RightSchema extends BaseSchema{
-
+final class RightSchema extends BaseSchema
+{
     protected $resourceType = 'right';
 
     public function getId($right)
@@ -228,12 +228,12 @@ class RightSchema extends BaseSchema{
     public function getAttributes($right)
     {
         return [
-            'name' => $right->name,
+            'name'        => $right->name,
             'description' => $right->description,
-            'created_at' => $right->created_at,
-            'updated_at' => $right->updated_at,
-            'created_by' => $right->created_by,
-            'updated_by' => $right->updated_by,
+            'created_at'  => $right->created_at,
+            'updated_at'  => $right->updated_at,
+            'created_by'  => $right->created_by,
+            'updated_by'  => $right->updated_by,
         ];
     }
 }

@@ -235,7 +235,7 @@ namespace App\Schema;
      * @apiUse StandardErrors
      * @apiUse NotFoundError
      */
-class RoleSchema extends BaseSchema
+final class RoleSchema extends BaseSchema
 {
     protected $resourceType = 'role';
 
@@ -247,12 +247,12 @@ class RoleSchema extends BaseSchema
     public function getAttributes($role)
     {
         return [
-            'name' => $role->name,
+            'name'        => $role->name,
             'description' => $role->description,
-            'created_at' => $role->created_at,
-            'updated_at' => $role->updated_at,
-            'created_by' => $role->created_by,
-            'updated_by' => $role->updated_by,
+            'created_at'  => $role->created_at,
+            'updated_at'  => $role->updated_at,
+            'created_by'  => $role->created_by,
+            'updated_by'  => $role->updated_by,
         ];
     }
 

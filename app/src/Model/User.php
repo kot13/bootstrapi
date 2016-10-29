@@ -57,16 +57,31 @@ final class User extends BaseModel
         return User::where('email', $email)->count() > 0;
     }
 
+    /**
+     * @param string $email
+     *
+     * @return User|null
+     */
     public static function findUserByEmail($email)
     {
         return User::where('email', $email)->where('status', 1)->first();
     }
 
+    /**
+     * @param string $accessToken
+     *
+     * @return User|null
+     */
     public static function findUserByAccessToken($accessToken)
     {
         return User::where('access_token', md5($accessToken))->where('status', 1)->first();
     }
 
+    /**
+     * @param string $resetToken
+     *
+     * @return User|null
+     */
     public static function findByPasswordResetToken($resetToken)
     {
         if (!User::isPasswordResetTokenValid($resetToken)) {
@@ -76,6 +91,11 @@ final class User extends BaseModel
         return User::where('password_reset_token', $resetToken)->where('status', 1)->first();
     }
 
+    /**
+     * @param string $token
+     *
+     * @return bool
+     */
     public static function isPasswordResetTokenValid($token)
     {
         if (empty($token)) {
@@ -88,16 +108,25 @@ final class User extends BaseModel
         return $timestamp + $expire >= time();
     }
 
+    /**
+     * @void
+     */
     public function generatePasswordResetToken()
     {
         $this->password_reset_token = Helper::generateRandomString() . '_' . time();
     }
 
+    /**
+     * @void
+     */
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
     }
 
+    /**
+     * @param string $password
+     */
     public function setPassword($password)
     {
         $this->access_token = null;

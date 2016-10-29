@@ -7,6 +7,9 @@ use \Neomerx\JsonApi\Encoder\EncoderOptions;
 use App\Model\User;
 use App\Common\JsonException;
 
+use Slim\Http\Request;
+use Slim\Http\Response;
+
 final class UserController extends BaseController
 {
     /**
@@ -203,11 +206,20 @@ final class UserController extends BaseController
      * @apiUse StandardErrors
      * @apiUse UnauthorizedError
      */
-    public function actionCreate($request, $response, $args){
+    /**
+     * @param Request  $request
+     * @param Response $response
+     * @param array    $args
+     *
+     * @return mixed
+     * @throws JsonException
+     */
+    public function actionCreate(Request $request, Response $response, $args)
+    {
         $expandEntity = User::$expand;
         $params = $request->getParsedBody();
 
-        if(!isset($params['data']['attributes'])){
+        if (!isset($params['data']['attributes'])) {
             throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Not required attributes - data.');
         }
 
@@ -235,11 +247,9 @@ final class UserController extends BaseController
         }
 
         $encoder = Encoder::instance($encodeEntities, new EncoderOptions(JSON_PRETTY_PRINT, $this->settings['params']['host'].'/api'));
-
-        $result = $encoder->encodeData($user);
+        $result  = $encoder->encodeData($user);
 
         return $this->renderer->jsonApiRender($response, 200, $result);
-
     }
 
     /**
@@ -310,11 +320,20 @@ final class UserController extends BaseController
      * @apiUse UnauthorizedError
      * @apiUse NotFoundError
      */
-    public function actionUpdate($request, $response, $args){
+    /**
+     * @param Request  $request
+     * @param Response $response
+     * @param array    $args
+     *
+     * @return mixed
+     * @throws JsonException
+     */
+    public function actionUpdate(Request $request, Response $response, $args)
+    {
         $expandEntity = User::$expand;
-        $params = $request->getParsedBody();
+        $params       = $request->getParsedBody();
 
-        if(!isset($params['data']['attributes'])){
+        if (!isset($params['data']['attributes'])) {
             throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Not required attributes - data.');
         }
 
@@ -333,7 +352,7 @@ final class UserController extends BaseController
 
         $user->update($params['data']['attributes']);
 
-        if(isset($params['data']['attributes']['password'])) {
+        if (isset($params['data']['attributes']['password'])) {
             $user->setPassword($params['data']['attributes']['password']);
             $user->save();
         }
@@ -345,8 +364,7 @@ final class UserController extends BaseController
         }
 
         $encoder = Encoder::instance($encodeEntities, new EncoderOptions(JSON_PRETTY_PRINT, $this->settings['params']['host'].'/api'));
-
-        $result = $encoder->encodeData($user);
+        $result  = $encoder->encodeData($user);
 
         return $this->renderer->jsonApiRender($response, 200, $result);
     }
@@ -376,10 +394,19 @@ final class UserController extends BaseController
      *
      * @apiUse StandardErrors
      */
-    public function actionRequestResetPassword($request, $response, $args){
+    /**
+     * @param Request  $request
+     * @param Response $response
+     * @param array    $args
+     *
+     * @return mixed
+     * @throws JsonException
+     */
+    public function actionRequestResetPassword(Request $request, Response $response, $args)
+    {
         $params = $request->getParsedBody();
 
-        if(!isset($params['data']['attributes'])){
+        if (!isset($params['data']['attributes'])) {
             throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Not required attributes - data.');
         }
 
@@ -409,7 +436,7 @@ final class UserController extends BaseController
             ->setTo([$user->email => $user->full_name])
             ->setBody($this->mailRenderer->render("/RequestResetPassword.php", ['host' => $this->settings['params']['host'], 'token' => $user->password_reset_token]), 'text/html');
 
-        if ($this->mailer->send($message)){
+        if ($this->mailer->send($message)) {
             return $this->renderer->jsonApiRender($response, 204);
         };
 
@@ -442,15 +469,24 @@ final class UserController extends BaseController
      *
      * @apiUse StandardErrors
      */
-    public function actionResetPassword($request, $response, $args){
+    /**
+     * @param Request  $request
+     * @param Response $response
+     * @param array    $args
+     *
+     * @return mixed
+     * @throws JsonException
+     */
+    public function actionResetPassword(Request $request, Response $response, $args)
+    {
         $params = $request->getParsedBody();
 
-        if(!isset($params['data']['attributes'])){
+        if (!isset($params['data']['attributes'])) {
             throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Not required attributes - data.');
         }
 
         $rules = [
-            'token' => 'required',
+            'token'    => 'required',
             'password' => 'required',
         ];
 
@@ -463,7 +499,7 @@ final class UserController extends BaseController
 
         $user = User::findByPasswordResetToken($params['data']['attributes']['token']);
 
-        if($user){
+        if ($user) {
             $user->setPassword($params['data']['attributes']['password']);
             $user->removePasswordResetToken();
 

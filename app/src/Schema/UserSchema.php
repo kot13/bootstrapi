@@ -1,8 +1,8 @@
 <?php
 namespace App\Schema;
 
-class UserSchema extends BaseSchema{
-
+final class UserSchema extends BaseSchema
+{
     protected $resourceType = 'user';
 
     public function getId($user)
@@ -13,14 +13,14 @@ class UserSchema extends BaseSchema{
     public function getAttributes($user)
     {
         return [
-            'full_name' => $user->full_name,
-            'email' => $user->email,
-            'role_id' => $user->role_id,
+            'full_name'  => $user->full_name,
+            'email'      => $user->email,
+            'role_id'    => $user->role_id,
             'created_at' => $user->created_at,
             'updated_at' => $user->updated_at,
             'created_by' => $user->created_by,
             'updated_by' => $user->updated_by,
-            'status' => $user->status,
+            'status'     => $user->status,
         ];
     }
 
