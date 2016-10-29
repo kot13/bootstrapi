@@ -215,16 +215,7 @@ final class UserController extends BaseController
     {
         $params = $request->getParsedBody();
 
-        if (!isset($params['data']['attributes'])) {
-            throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Not required attributes - data.');
-        }
-
-        $validator = $this->validation->make($params['data']['attributes'], User::$rules['create']);
-
-        if ($validator->fails()) {
-            $messages = implode(' ', $validator->messages()->all());
-            throw new JsonException($args['entity'], 400, 'Invalid Attribute', $messages);
-        }
+        $this->validationRequest($params, $args['entity'], User::$rules['create']);
 
         $exist = User::exist($params['data']['attributes']['email']);
 
@@ -319,24 +310,15 @@ final class UserController extends BaseController
      */
     public function actionUpdate(Request $request, Response $response, $args)
     {
-        $params = $request->getParsedBody();
-
-        if (!isset($params['data']['attributes'])) {
-            throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Not required attributes - data.');
-        }
-
         $user = User::find($args['id']);
 
         if (!$user) {
             throw new JsonException($args['entity'], 404, 'Not found','Entity not found');
         }
 
-        $validator = $this->validation->make($params['data']['attributes'], User::$rules['update']);
+        $params = $request->getParsedBody();
 
-        if ($validator->fails()) {
-            $messages = implode(' ', $validator->messages()->all());
-            throw new JsonException($args['entity'], 400, 'Invalid Attribute', $messages);
-        }
+        $this->validationRequest($params, $args['entity'], User::$rules['update']);
 
         $user->update($params['data']['attributes']);
 
@@ -387,16 +369,7 @@ final class UserController extends BaseController
     {
         $params = $request->getParsedBody();
 
-        if (!isset($params['data']['attributes'])) {
-            throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Not required attributes - data.');
-        }
-
-        $validator = $this->validation->make($params['data']['attributes'], ['email' => 'required|email']);
-
-        if ($validator->fails()) {
-            $messages = implode(' ', $validator->messages()->all());
-            throw new JsonException($args['entity'], 400, 'Invalid Attribute', $messages);
-        }
+        $this->validationRequest($params, $args['entity'], ['email' => 'required|email']);
 
         $user = User::findUserByEmail($params['data']['attributes']['email']);
 
@@ -462,21 +435,10 @@ final class UserController extends BaseController
     {
         $params = $request->getParsedBody();
 
-        if (!isset($params['data']['attributes'])) {
-            throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Not required attributes - data.');
-        }
-
-        $rules = [
+        $this->validationRequest($params, $args['entity'], [
             'token'    => 'required',
             'password' => 'required',
-        ];
-
-        $validator = $this->validation->make($params['data']['attributes'], $rules);
-
-        if ($validator->fails()) {
-            $messages = implode(' ', $validator->messages()->all());
-            throw new JsonException($args['entity'], 400, 'Invalid Attribute', $messages);
-        }
+        ]);
 
         $user = User::findByPasswordResetToken($params['data']['attributes']['token']);
 

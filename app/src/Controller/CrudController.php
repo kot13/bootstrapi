@@ -81,17 +81,7 @@ final class CrudController extends BaseController
         $modelName = 'App\Model\\'.Helper::dashesToCamelCase($args['entity'], true);
         $params    = $request->getParsedBody();
 
-        if (!isset($params['data']['attributes'])) {
-            throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Not required attributes - data.');
-        }
-
-        $validator = $this->validation->make($params['data']['attributes'], $modelName::$rules);
-
-        if ($validator->fails()) {
-            $messages = implode(' ', $validator->messages()->all());
-
-            throw new JsonException($args['entity'], 400, 'Invalid Attribute', $messages);
-        }
+        $this->validationRequest($params, $args['entity'], $modelName::$rules);
 
         $entity = $modelName::create($params['data']['attributes']);
         $result = $this->encode($request, $entity);
@@ -112,24 +102,13 @@ final class CrudController extends BaseController
     {
         $modelName = 'App\Model\\'.Helper::dashesToCamelCase($args['entity'], true);
         $params    = $request->getParsedBody();
-
-        if(!isset($params['data']['attributes'])){
-            throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Not required attributes - data.');
-        }
-
-        $entity = $modelName::find($args['id']);
+        $entity    = $modelName::find($args['id']);
 
         if (!$entity) {
             throw new JsonException($args['entity'], 404, 'Not found','Entity not found');
         }
 
-        $validator = $this->validation->make($params['data']['attributes'], $modelName::$rules);
-
-        if ($validator->fails()) {
-            $messages = implode(' ', $validator->messages()->all());
-
-            throw new JsonException($args['entity'], 400, 'Invalid Attribute', $messages);
-        }
+        $this->validationRequest($params, $args['entity'], $modelName::$rules);
 
         $entity->update($params['data']['attributes']);
 

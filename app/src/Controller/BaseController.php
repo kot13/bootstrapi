@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Observers;
 use App\Model;
+use App\Common\JsonException;
 
 use \Neomerx\JsonApi\Encoder\Encoder;
 use \Neomerx\JsonApi\Encoder\EncoderOptions;
@@ -61,6 +62,30 @@ abstract class BaseController
         $this->mailRenderer = $container['mailRenderer'];
 
         $this->registerModelObservers();
+    }
+
+    /**
+     * @param array  $params
+     * @param string $entity
+     * @param array  $rules
+     *
+     * @return bool
+     * @throws JsonException
+     */
+    public function validationRequest($params, $entity, $rules)
+    {
+        if (!isset($params['data']['attributes'])) {
+            throw new JsonException($entity, 400, 'Invalid Attribute', 'Not required attributes - data.');
+        }
+
+        $validator = $this->validation->make($params['data']['attributes'], $rules);
+
+        if ($validator->fails()) {
+            $messages = implode(' ', $validator->messages()->all());
+            throw new JsonException($entity, 400, 'Invalid Attribute', $messages);
+        }
+
+        return true;
     }
 
     /**

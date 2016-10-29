@@ -103,32 +103,19 @@ final class TokenController extends BaseController
     {
         $params = $request->getParsedBody();
 
-        if (!isset($params['data']['attributes'])) {
-            throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Not required attributes - data.');
-        }
-
-        $params = $params['data']['attributes'];
-
-        $rules = [
+        $this->validationRequest($params, 'token', [
             'username' => 'required',
             'password' => 'required',
-        ];
+        ]);
 
-        $validator = $this->validation->make($params, $rules);
+        $user = User::findUserByEmail($params['data']['attributes']['username']);
 
-        if ($validator->fails()) {
-            $messages = implode(' ', $validator->messages()->all());
-            throw new JsonException($args['entity'], 400, 'Invalid Attribute', $messages);
-        }
-
-        $user = User::findUserByEmail($params['username']);
-
-        if ($user && password_verify($params['password'], $user->password)) {
+        if ($user && password_verify($params['data']['attributes']['password'], $user->password)) {
             $token              = self::createToken($request, $this->settings['params']['tokenExpire']);
             $user->access_token = md5($token);
             $user->save();
         } else {
-            throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Invalid password or username');
+            throw new JsonException('token', 400, 'Invalid Attribute', 'Invalid password or username');
         };
 
         $result = [

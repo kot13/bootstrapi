@@ -47,8 +47,9 @@ $container['logger'] = function ($c) {
 $container['errorHandler'] = function ($c) {
     return function ($request, $response, $exception) use ($c) {
         $details = (defined('DEBUG_MODE') && DEBUG_MODE == 1) ? $exception->getMessage() : 'Internal server error';
+        $e = new JsonException(null, 500, 'Internal server error', $details);
 
-        throw new JsonException(null, 500, 'Internal server error', $details);
+        return $c->get('renderer')->jsonApiRender($response, $e->statusCode, $e->encodeError());
     };
 };
 
