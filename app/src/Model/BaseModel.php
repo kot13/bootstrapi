@@ -5,8 +5,10 @@ use Illuminate\Database\Eloquent\Model;
 
 abstract class BaseModel extends Model
 {
-    public static $expand = [];
-
+    /**
+     * Model validation rules
+     * @var array
+     */
     public static $rules = [];
 
 }

@@ -1,9 +1,6 @@
 <?php
 namespace App\Controller;
 
-use \Neomerx\JsonApi\Encoder\Encoder;
-use \Neomerx\JsonApi\Encoder\EncoderOptions;
-
 use App\Model\User;
 use App\Common\JsonException;
 
@@ -216,7 +213,6 @@ final class UserController extends BaseController
      */
     public function actionCreate(Request $request, Response $response, $args)
     {
-        $expandEntity = User::$expand;
         $params = $request->getParsedBody();
 
         if (!isset($params['data']['attributes'])) {
@@ -240,14 +236,7 @@ final class UserController extends BaseController
         $user->setPassword($params['data']['attributes']['password']);
         $user->save();
 
-        $encodeEntities = [User::class => User::$schemaName];
-
-        foreach ($expandEntity as $name => $className){
-            $encodeEntities[$className] = $className::$schemaName;
-        }
-
-        $encoder = Encoder::instance($encodeEntities, new EncoderOptions(JSON_PRETTY_PRINT, $this->settings['params']['host'].'/api'));
-        $result  = $encoder->encodeData($user);
+        $result = $this->encode($request, $user);
 
         return $this->renderer->jsonApiRender($response, 200, $result);
     }
@@ -330,8 +319,7 @@ final class UserController extends BaseController
      */
     public function actionUpdate(Request $request, Response $response, $args)
     {
-        $expandEntity = User::$expand;
-        $params       = $request->getParsedBody();
+        $params = $request->getParsedBody();
 
         if (!isset($params['data']['attributes'])) {
             throw new JsonException($args['entity'], 400, 'Invalid Attribute', 'Not required attributes - data.');
@@ -357,14 +345,7 @@ final class UserController extends BaseController
             $user->save();
         }
 
-        $encodeEntities = [User::class => User::$schemaName];
-
-        foreach ($expandEntity as $name => $className){
-            $encodeEntities[$className] = $className::$schemaName;
-        }
-
-        $encoder = Encoder::instance($encodeEntities, new EncoderOptions(JSON_PRETTY_PRINT, $this->settings['params']['host'].'/api'));
-        $result  = $encoder->encodeData($user);
+        $result = $this->encode($request, $user);
 
         return $this->renderer->jsonApiRender($response, 200, $result);
     }

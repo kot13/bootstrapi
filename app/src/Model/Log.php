@@ -16,6 +16,4 @@ final class Log extends BaseModel
 
     public $timestamps = false;
 
-    public static $schemaName = 'App\Schema\LogSchema';
-
 }

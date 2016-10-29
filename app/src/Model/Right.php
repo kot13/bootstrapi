@@ -14,8 +14,6 @@ final class Right extends BaseModel
         'description',
     ];
 
-    public static $schemaName = 'App\Schema\RightSchema';
-
     public static $rules = [
         'name' => 'required',
     ];

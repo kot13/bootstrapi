@@ -23,13 +23,6 @@ final class User extends BaseModel
         'password_reset_token',
     ];
 
-    public static $schemaName = 'App\Schema\UserSchema';
-
-    public static $expand = [
-        'role' => 'App\Model\Role',
-        'role.rights' => 'App\Model\Right',
-    ];
-
     public static $rules = [
         'create' => [
             'email' => 'required|email',

@@ -23,6 +23,7 @@ $container = $app->getContainer();
 // render
 $container['renderer'] = function($c){
     $renderer = new Renderer();
+
     return $renderer;
 };
 
@@ -35,9 +36,10 @@ $container['mailRenderer'] = function($c){
 // monolog
 $container['logger'] = function ($c) {
     $settings = $c->get('settings');
-    $logger = new Logger($settings['logger']['name']);
+    $logger   = new Logger($settings['logger']['name']);
     $logger->pushProcessor(new UidProcessor());
     $logger->pushHandler(new StreamHandler($settings['logger']['path'], Logger::DEBUG));
+
     return $logger;
 };
 
@@ -73,17 +75,16 @@ $capsule->bootEloquent();
 // ACL
 $container['acl'] = function ($c) {
     $settings = $c->get('settings');
-    $acl = new Acl($settings['acl']);
+    $acl      = new Acl($settings['acl']);
 
     return $acl;
 };
 
 // translation
 $container['translator'] = function($c){
-    $settings = $c->get('settings');
-
+    $settings                = $c->get('settings');
     $translation_file_loader = new FileLoader(new Filesystem, $settings['translate']['path']);
-    $translator = new Translator($translation_file_loader, $settings['translate']['locale']);
+    $translator              = new Translator($translation_file_loader, $settings['translate']['locale']);
 
     return $translator;
 };
@@ -98,9 +99,8 @@ $container['validation'] = function($c){
 
 // mailer
 $container['mailer'] = function($c){
-    $settings = $c->get('settings');
     $transport = \Swift_MailTransport::newInstance();
-    $mailer = \Swift_Mailer::newInstance($transport);
+    $mailer    = \Swift_Mailer::newInstance($transport);
 
     return $mailer;
 };

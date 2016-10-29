@@ -15,12 +15,6 @@ final class Role extends BaseModel
         'description',
     ];
 
-    public static $schemaName = 'App\Schema\RoleSchema';
-
-    public static $expand = [
-        'rights' => 'App\Model\Right',
-    ];
-
     public static $rules = [
         'name' => 'required',
     ];
