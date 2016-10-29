@@ -15,7 +15,7 @@ final class UserSchema extends BaseSchema
         return [
             'full_name'  => $user->full_name,
             'email'      => $user->email,
-            'role_id'    => $user->role_id,
+            'role_id'    => (int) $user->role_id,
             'created_at' => $user->created_at,
             'updated_at' => $user->updated_at,
             'created_by' => $user->created_by,

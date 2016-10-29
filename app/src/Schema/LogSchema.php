@@ -93,7 +93,7 @@ final class LogSchema extends BaseSchema
     {
         return [
             'action'      => $log->action,
-            'entity_id'   => $log->entity_id,
+            'entity_id'   => (int) $log->entity_id,
             'entity_type' => $log->entity_type,
             'state'       => $log->state,
             'created_at'  => $log->created_at,

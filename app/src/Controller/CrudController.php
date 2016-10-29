@@ -60,7 +60,7 @@ final class CrudController extends BaseController
         $entity    = $modelName::find($args['id']);
 
         if (!$entity) {
-            throw new JsonException($args['entity'], 404, 'Not found','Entity not found');
+            throw new JsonException($args['entity'], 404, 'Not found', 'Entity not found');
         }
 
         $result = $this->encode($request, $entity);
@@ -105,7 +105,7 @@ final class CrudController extends BaseController
         $entity    = $modelName::find($args['id']);
 
         if (!$entity) {
-            throw new JsonException($args['entity'], 404, 'Not found','Entity not found');
+            throw new JsonException($args['entity'], 404, 'Not found', 'Entity not found');
         }
 
         $this->validationRequest($params, $args['entity'], $modelName::$rules);
@@ -131,7 +131,7 @@ final class CrudController extends BaseController
         $entity    = $modelName::find($args['id']);
 
         if (!$entity) {
-            throw new JsonException($args['entity'], 404, 'Not found','Entity not found');
+            throw new JsonException($args['entity'], 404, 'Not found', 'Entity not found');
         }
 
         $entity->delete();

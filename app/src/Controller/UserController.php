@@ -313,7 +313,7 @@ final class UserController extends BaseController
         $user = User::find($args['id']);
 
         if (!$user) {
-            throw new JsonException($args['entity'], 404, 'Not found','Entity not found');
+            throw new JsonException($args['entity'], 404, 'Not found', 'Entity not found');
         }
 
         $params = $request->getParsedBody();

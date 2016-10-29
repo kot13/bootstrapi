@@ -25,12 +25,12 @@ final class User extends BaseModel
 
     public static $rules = [
         'create' => [
-            'email' => 'required|email',
-            'role_id' => 'required',
+            'email'    => 'required|email',
+            'role_id'  => 'required',
             'password' => 'required',
         ],
         'update' => [
-            'email' => 'required|email',
+            'email'   => 'required|email',
             'role_id' => 'required',
         ]
     ];
