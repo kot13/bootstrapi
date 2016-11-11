@@ -20,6 +20,7 @@ final class CrudController extends BaseController
     {
         $modelName = 'App\Model\\'.Helper::dashesToCamelCase($args['entity'], true);
         $params    = $request->getQueryParams();
+        $query     = $modelName::CurrentUser();
 
         if (isset($params['withTrashed']) && $params['withTrashed'] == 1) {
             $query = $modelName::withTrashed();
@@ -35,13 +36,8 @@ final class CrudController extends BaseController
             }
         }
 
-        if (isset($query)) {
-            $entities = $query->get();
-        } else {
-            $entities = $modelName::all();
-        }
-
-        $result = $this->encode($request, $entities);
+        $entities = $query->get();
+        $result   = $this->encode($request, $entities);
 
         return $this->renderer->jsonApiRender($response, 200, $result);
     }
@@ -57,7 +53,8 @@ final class CrudController extends BaseController
     public function actionGet(Request $request, Response $response, $args)
     {
         $modelName = 'App\Model\\'.Helper::dashesToCamelCase($args['entity'], true);
-        $entity    = $modelName::find($args['id']);
+        $query     = $modelName::CurrentUser();
+        $entity    = $query->find($args['id']);
 
         if (!$entity) {
             throw new JsonException($args['entity'], 404, 'Not found', 'Entity not found');
@@ -104,7 +101,8 @@ final class CrudController extends BaseController
         $modelName    = 'App\Model\\'.Helper::dashesToCamelCase($args['entity'], true);
         $requestClass = 'App\Requests\\'.Helper::dashesToCamelCase($args['entity'], true).'UpdateRequest';
         $params       = $request->getParsedBody();
-        $entity       = $modelName::find($args['id']);
+        $query        = $modelName::CurrentUser();
+        $entity       = $query->find($args['id']);
 
         if (!$entity) {
             throw new JsonException($args['entity'], 404, 'Not found', 'Entity not found');
@@ -130,7 +128,8 @@ final class CrudController extends BaseController
     public function actionDelete(Request $request, Response $response, $args)
     {
         $modelName = 'App\Model\\'.Helper::dashesToCamelCase($args['entity'], true);
-        $entity    = $modelName::find($args['id']);
+        $query     = $modelName::CurrentUser();
+        $entity    = $query->find($args['id']);
 
         if (!$entity) {
             throw new JsonException($args['entity'], 404, 'Not found', 'Entity not found');

@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Observers;
 use App\Model;
 use App\Common\JsonException;
+use App\Common\Auth;
 
 use App\Requests\IRequest;
 use \Neomerx\JsonApi\Encoder\Encoder;
@@ -42,7 +43,17 @@ abstract class BaseController
     /**
      * @var array
      */
-    public $encodeEntities = [
+    private $encodeEntitiesExtended = [
+        'App\Model\Log'   => 'App\Schema\LogSchema',
+        'App\Model\Right' => 'App\Schema\RightSchema',
+        'App\Model\Role'  => 'App\Schema\RoleSchema',
+        'App\Model\User'  => 'App\Schema\UserSchemaExtended',
+    ];
+
+    /**
+     * @var array
+     */
+    private $encodeEntities = [
         'App\Model\Log'   => 'App\Schema\LogSchema',
         'App\Model\Right' => 'App\Schema\RightSchema',
         'App\Model\Role'  => 'App\Schema\RoleSchema',
@@ -97,10 +108,17 @@ abstract class BaseController
      */
     public function encode(Request $request, $entities)
     {
-        $factory    = new Factory();
-        $parameters = $factory->createQueryParametersParser()->parse($request);
+        $factory        = new Factory();
+        $parameters     = $factory->createQueryParametersParser()->parse($request);
+        $user           = Auth::getUser();
+        $encodeEntities = $this->encodeEntities;
+
+        if ($user && $user->role_id == Model\User::ROLE_ADMIN) {
+            $encodeEntities = $this->encodeEntitiesExtended;
+        }
+
         $encoder    = Encoder::instance(
-            $this->encodeEntities,
+            $encodeEntities,
             new EncoderOptions(
                 JSON_PRETTY_PRINT,
                 $this->settings['params']['host'].'/api'

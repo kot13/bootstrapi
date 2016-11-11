@@ -3,6 +3,7 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Common\Helper;
+use App\Common\Auth;
 
 final class User extends BaseModel
 {
@@ -45,6 +46,23 @@ final class User extends BaseModel
     public function role()
     {
         return $this->hasOne('App\Model\Role', 'id', 'role_id');
+    }
+
+    public function scopeCurrentUser($query)
+    {
+        $user = Auth::getUser();
+
+        if ($user) {
+            if ($user->role_id == User::ROLE_ADMIN) {
+                return $query;
+            }
+
+            $query->where('id', $user->id);
+        } else {
+            $query->where('id', 0);
+        }
+
+        return $query;
     }
 
     /**

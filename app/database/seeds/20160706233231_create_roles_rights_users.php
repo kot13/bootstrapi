@@ -21,7 +21,15 @@ class CreateRolesRightsUsers {
         $user->password   = password_hash('qwerty', PASSWORD_DEFAULT, ['cost' => 13]);
         $user->role_id    = User::ROLE_ADMIN;
         $user->status     = User::STATUS_ACTIVE;
+        $user->save();
 
+        $user = new User();
+
+        $user->email      = 'mail@example.com';
+        $user->full_name  = 'Пользователь';
+        $user->password   = password_hash('qwerty', PASSWORD_DEFAULT, ['cost' => 13]);
+        $user->role_id    = User::ROLE_USER;
+        $user->status     = User::STATUS_ACTIVE;
         $user->save();
     }
 }
