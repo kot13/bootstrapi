@@ -10,6 +10,7 @@ use Monolog\Handler\StreamHandler;
 use Illuminate\Translation\FileLoader;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Translation\Translator;
+use Illuminate\Validation\DatabasePresenceVerifier;
 use Illuminate\Validation\Factory;
 
 use App\Common\Acl;
@@ -73,6 +74,8 @@ $capsule->setEventDispatcher(new Dispatcher(new Container));
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
+$container['databaseManager'] = $capsule->getDatabaseManager();
+
 // ACL
 $container['acl'] = function ($c) {
     $settings = $c->get('settings');
@@ -94,6 +97,8 @@ $container['translator'] = function($c){
 $container['validation'] = function($c){
     $translator = $c->get('translator');
     $validation = new Factory($translator);
+    $presence   = new DatabasePresenceVerifier($c->get('databaseManager'));
+    $validation->setPresenceVerifier($presence);
 
     return $validation;
 };

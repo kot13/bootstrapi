@@ -4,6 +4,11 @@ namespace App\Controller;
 use App\Model\User;
 use App\Common\JsonException;
 
+use App\Requests\RequestResetPasswordRequest;
+use App\Requests\ResetPasswordRequest;
+use App\Requests\UserCreateRequest;
+use App\Requests\UserUpdateRequest;
+
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -215,7 +220,7 @@ final class UserController extends BaseController
     {
         $params = $request->getParsedBody();
 
-        $this->validationRequest($params, $args['entity'], User::$rules['create']);
+        $this->validationRequest($params, $args['entity'], new UserCreateRequest());
 
         $exist = User::exist($params['data']['attributes']['email']);
 
@@ -318,7 +323,7 @@ final class UserController extends BaseController
 
         $params = $request->getParsedBody();
 
-        $this->validationRequest($params, $args['entity'], User::$rules['update']);
+        $this->validationRequest($params, $args['entity'], new UserUpdateRequest());
 
         $user->update($params['data']['attributes']);
 
@@ -369,7 +374,7 @@ final class UserController extends BaseController
     {
         $params = $request->getParsedBody();
 
-        $this->validationRequest($params, $args['entity'], ['email' => 'required|email']);
+        $this->validationRequest($params, $args['entity'], new RequestResetPasswordRequest());
 
         $user = User::findUserByEmail($params['data']['attributes']['email']);
 
@@ -388,7 +393,13 @@ final class UserController extends BaseController
         $message = \Swift_Message::newInstance('Восстановление пароля для доступа в example.com')
             ->setFrom(['no-reply@example.com' => 'Почтовик example.com'])
             ->setTo([$user->email => $user->full_name])
-            ->setBody($this->mailRenderer->render("/RequestResetPassword.php", ['host' => $this->settings['params']['host'], 'token' => $user->password_reset_token]), 'text/html');
+            ->setBody($this->mailRenderer->render(
+                "/RequestResetPassword.php",
+                [
+                    'host' => $this->settings['params']['host'],
+                    'token' => $user->password_reset_token
+                ]
+            ), 'text/html');
 
         if ($this->mailer->send($message)) {
             return $this->renderer->jsonApiRender($response, 204);
@@ -435,10 +446,7 @@ final class UserController extends BaseController
     {
         $params = $request->getParsedBody();
 
-        $this->validationRequest($params, $args['entity'], [
-            'token'    => 'required',
-            'password' => 'required',
-        ]);
+        $this->validationRequest($params, $args['entity'], new ResetPasswordRequest());
 
         $user = User::findByPasswordResetToken($params['data']['attributes']['token']);
 

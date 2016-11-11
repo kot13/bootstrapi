@@ -5,6 +5,7 @@ use App\Observers;
 use App\Model;
 use App\Common\JsonException;
 
+use App\Requests\IRequest;
 use \Neomerx\JsonApi\Encoder\Encoder;
 use \Neomerx\JsonApi\Encoder\EncoderOptions;
 use \Neomerx\JsonApi\Factories\Factory;
@@ -65,20 +66,20 @@ abstract class BaseController
     }
 
     /**
-     * @param array  $params
-     * @param string $entity
-     * @param array  $rules
+     * @param array    $params
+     * @param string   $entity
+     * @param IRequest $request
      *
      * @return bool
      * @throws JsonException
      */
-    public function validationRequest($params, $entity, $rules)
+    public function validationRequest($params, $entity, $request)
     {
         if (!isset($params['data']['attributes'])) {
             throw new JsonException($entity, 400, 'Invalid Attribute', 'Not required attributes - data.');
         }
 
-        $validator = $this->validation->make($params['data']['attributes'], $rules);
+        $validator = $this->validation->make($params['data']['attributes'], $request->rules());
 
         if ($validator->fails()) {
             $messages = implode(' ', $validator->messages()->all());

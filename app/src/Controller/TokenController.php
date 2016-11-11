@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Requests\GetTokenRequest;
 use Firebase\JWT\JWT;
 use App\Model\User;
 
@@ -103,10 +104,7 @@ final class TokenController extends BaseController
     {
         $params = $request->getParsedBody();
 
-        $this->validationRequest($params, 'token', [
-            'username' => 'required',
-            'password' => 'required',
-        ]);
+        $this->validationRequest($params, 'token', new GetTokenRequest());
 
         $user = User::findUserByEmail($params['data']['attributes']['username']);
 

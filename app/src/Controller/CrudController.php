@@ -26,8 +26,8 @@ final class CrudController extends BaseController
         }
 
         if (isset($params['filter']) && count($params['filter']) > 0) {
-            foreach($params['filter'] as $key => $values){
-                if(isset($query)) {
+            foreach ($params['filter'] as $key => $values) {
+                if (isset($query)) {
                     $query = $query->whereIn($key, explode(',', $values));
                 } else {
                     $query = $modelName::whereIn($key, explode(',', $values));
@@ -78,10 +78,11 @@ final class CrudController extends BaseController
      */
     public function actionCreate(Request $request, Response $response, $args)
     {
-        $modelName = 'App\Model\\'.Helper::dashesToCamelCase($args['entity'], true);
-        $params    = $request->getParsedBody();
+        $modelName    = 'App\Model\\'.Helper::dashesToCamelCase($args['entity'], true);
+        $requestClass = 'App\Requests\\'.Helper::dashesToCamelCase($args['entity'], true).'CreateRequest';
+        $params       = $request->getParsedBody();
 
-        $this->validationRequest($params, $args['entity'], $modelName::$rules);
+        $this->validationRequest($params, $args['entity'], new $requestClass());
 
         $entity = $modelName::create($params['data']['attributes']);
         $result = $this->encode($request, $entity);
@@ -100,15 +101,16 @@ final class CrudController extends BaseController
      */
     public function actionUpdate(Request $request, Response $response, $args)
     {
-        $modelName = 'App\Model\\'.Helper::dashesToCamelCase($args['entity'], true);
-        $params    = $request->getParsedBody();
-        $entity    = $modelName::find($args['id']);
+        $modelName    = 'App\Model\\'.Helper::dashesToCamelCase($args['entity'], true);
+        $requestClass = 'App\Requests\\'.Helper::dashesToCamelCase($args['entity'], true).'UpdateRequest';
+        $params       = $request->getParsedBody();
+        $entity       = $modelName::find($args['id']);
 
         if (!$entity) {
             throw new JsonException($args['entity'], 404, 'Not found', 'Entity not found');
         }
 
-        $this->validationRequest($params, $args['entity'], $modelName::$rules);
+        $this->validationRequest($params, $args['entity'], new $requestClass());
 
         $entity->update($params['data']['attributes']);
 

@@ -8,6 +8,13 @@ final class User extends BaseModel
 {
     use SoftDeletes;
 
+    const STATUS_BLOCKED = 0;
+    const STATUS_ACTIVE  = 1;
+    const STATUS_WAIT    = 2;
+
+    const ROLE_ADMIN     = 1;
+    const ROLE_USER      = 2;
+
     protected $table = 'users';
 
     protected $fillable = [
@@ -57,7 +64,7 @@ final class User extends BaseModel
      */
     public static function findUserByEmail($email)
     {
-        return User::where('email', $email)->where('status', 1)->first();
+        return User::where('email', $email)->where('status', self::STATUS_ACTIVE)->first();
     }
 
     /**
@@ -67,7 +74,7 @@ final class User extends BaseModel
      */
     public static function findUserByAccessToken($accessToken)
     {
-        return User::where('access_token', md5($accessToken))->where('status', 1)->first();
+        return User::where('access_token', md5($accessToken))->where('status', self::STATUS_ACTIVE)->first();
     }
 
     /**
@@ -81,7 +88,7 @@ final class User extends BaseModel
             return null;
         }
 
-        return User::where('password_reset_token', $resetToken)->where('status', 1)->first();
+        return User::where('password_reset_token', $resetToken)->where('status', self::STATUS_ACTIVE)->first();
     }
 
     /**

@@ -15,8 +15,6 @@ final class Right extends BaseModel
     ];
 
     public static $rules = [
-        'name' => 'required',
+        'name' => 'required|unique:rights',
     ];
-
-
 }
