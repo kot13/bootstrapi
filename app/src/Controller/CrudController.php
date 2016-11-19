@@ -7,7 +7,7 @@ use App\Common\JsonException;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-final class CrudController extends BaseController
+class CrudController extends BaseController
 {
     /**
      * @param Request  $request
@@ -36,8 +36,17 @@ final class CrudController extends BaseController
             }
         }
 
-        $entities = $query->get();
-        $result   = $this->encode($request, $entities);
+        $pageNumber = null;
+        $pageSize   = null;
+        if (isset($params['page']['number'])) {
+            $pageNumber = $params['page']['number'];
+            $pageSize   = (isset($params['page']['size']) && $params['page']['size'] <= 100) ? $params['page']['size'] : 15;
+            $entities   = $query->paginate($pageSize, ['*'], 'page', $pageNumber);
+        } else {
+            $entities = $query->get();
+        }
+
+        $result = $this->encode($request, $entities, $pageNumber, $pageSize);
 
         return $this->renderer->jsonApiRender($response, 200, $result);
     }

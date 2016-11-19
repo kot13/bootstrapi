@@ -68,8 +68,11 @@ return [
                         ['App\Controller\CrudController:actionUpdate',  ['user']],
                         ['App\Controller\CrudController:actionDelete',  ['user']],
 
+                        ['App\Controller\UserController:actionIndex',  ['admin']],
+                        ['App\Controller\UserController:actionGet',    ['admin']],
                         ['App\Controller\UserController:actionCreate', ['admin']],
-                        ['App\Controller\UserController:actionUpdate', ['user']],
+                        ['App\Controller\UserController:actionUpdate', ['admin']],
+                        ['App\Controller\UserController:actionDelete',  ['user']],
                     ]
                 ]
             ],

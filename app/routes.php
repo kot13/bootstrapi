@@ -12,11 +12,11 @@ $app->group('/api', function () {
     $this->post('/token', 'App\Controller\TokenController:auth');
 
     $this->group('/{entity:user}', function () {
-        $this->get('', 'App\Controller\CrudController:actionIndex');
+        $this->get('', 'App\Controller\UserController:actionIndex');
         $this->post('', 'App\Controller\UserController:actionCreate');
-        $this->get('/{id:[0-9]+}', 'App\Controller\CrudController:actionGet');
+        $this->get('/{id:[0-9]+}', 'App\Controller\UserController:actionGet');
         $this->patch('/{id:[0-9]+}', 'App\Controller\UserController:actionUpdate');
-        $this->delete('/{id:[0-9]+}', 'App\Controller\CrudController:actionDelete');
+        $this->delete('/{id:[0-9]+}', 'App\Controller\UserController:actionDelete');
         $this->post('/change-password', 'App\Controller\UserController:actionChangePassword');
         $this->post('/request-password-reset', 'App\Controller\UserController:actionRequestResetPassword');
         $this->post('/reset-password', 'App\Controller\UserController:actionResetPassword');
