@@ -2,9 +2,20 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Scopes\MaxPerPageScope;
 
 abstract class BaseModel extends Model
 {
+    /**
+     * Global scope
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new MaxPerPageScope);
+    }
+
     /**
      * Default scope - ALL
      * @param $query

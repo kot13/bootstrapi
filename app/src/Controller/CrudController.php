@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Common\Helper;
 use App\Common\JsonException;
+use App\Scopes\MaxPerPageScope;
 
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -28,11 +29,7 @@ class CrudController extends BaseController
 
         if (isset($params['filter']) && count($params['filter']) > 0) {
             foreach ($params['filter'] as $key => $values) {
-                if (isset($query)) {
-                    $query = $query->whereIn($key, explode(',', $values));
-                } else {
-                    $query = $modelName::whereIn($key, explode(',', $values));
-                }
+                $query = $query->whereIn($key, explode(',', $values));
             }
         }
 
@@ -41,7 +38,7 @@ class CrudController extends BaseController
         if (isset($params['page']['number'])) {
             $pageNumber = $params['page']['number'];
             $pageSize   = (isset($params['page']['size']) && $params['page']['size'] <= 100) ? $params['page']['size'] : 15;
-            $entities   = $query->paginate($pageSize, ['*'], 'page', $pageNumber);
+            $entities   = $query->withoutGlobalScopes([MaxPerPageScope::class])->paginate($pageSize, ['*'], 'page', $pageNumber);
         } else {
             $entities = $query->get();
         }
