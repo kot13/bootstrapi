@@ -9,6 +9,10 @@
     "withCompare": false,
     "withGenerator": false
   },
+  "header": {
+    "title": "Начало",
+    "filename": "header.md"
+  },
   "order": [
     "Token",
     "User",

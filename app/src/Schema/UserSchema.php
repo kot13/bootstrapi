@@ -8,6 +8,8 @@ namespace App\Schema;
  *
  * @apiDescription Метод для получения списка пользователей.
  *
+ * @apiPermission user
+ *
  * @apiHeader {String} Authorization Токен.
  *
  * @apiSuccessExample {json} Успешно (200)
@@ -60,6 +62,8 @@ namespace App\Schema;
  * @apiGroup User
  *
  * @apiDescription Метод для получения пользователя.
+ *
+ * @apiPermission user
  *
  * @apiParam {Number} id Id пользователя
  *
@@ -115,6 +119,8 @@ namespace App\Schema;
  *
  * @apiDescription Метод для удаления пользователя.
  *
+ * @apiPermission admin
+ *
  * @apiParam {Number} id Id пользователя
  *
  * @apiHeader {String} Authorization Токен.
@@ -133,6 +139,8 @@ namespace App\Schema;
  * @apiGroup User
  *
  * @apiDescription Метод для создания нового пользователя.
+ *
+ * @apiPermission admin
  *
  * @apiParam {String} full_name Полное имя пользователя
  * @apiParam {String} email Email пользователя (уникальный)
@@ -202,6 +210,8 @@ namespace App\Schema;
  * @apiGroup User
  *
  * @apiDescription Метод для изменения пользователя.
+ *
+ * @apiPermission admin
  *
  * @apiParam {String} full_name Полное имя пользователя
  * @apiParam {String} email Email пользователя (уникальный)

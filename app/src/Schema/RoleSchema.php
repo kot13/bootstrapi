@@ -8,6 +8,8 @@ namespace App\Schema;
      *
      * @apiDescription Метод для получения списка ролей.
      *
+     * @apiPermission user
+     *
      * @apiHeader {String} Authorization Токен.
      *
      * @apiSuccessExample {json} Успешно (200)
@@ -55,6 +57,8 @@ namespace App\Schema;
      * @apiGroup Role
      *
      * @apiDescription Метод для получения роли.
+     *
+     * @apiPermission user
      *
      * @apiParam {Number} id Id роли
      *
@@ -104,6 +108,8 @@ namespace App\Schema;
      * @apiGroup Role
      *
      * @apiDescription Метод для создания новой роли.
+     *
+     * @apiPermission admin
      *
      * @apiParam {String} name Имя роли (уникальный)
      * @apiParam {String} description Человекопонятное описание
@@ -164,6 +170,8 @@ namespace App\Schema;
      *
      * @apiDescription Метод для изменения роли.
      *
+     * @apiPermission admin
+     *
      * @apiParam {String} name Имя роли (уникальный)
      * @apiParam {String} description Человекопонятное описание
      *
@@ -223,6 +231,8 @@ namespace App\Schema;
      * @apiGroup Role
      *
      * @apiDescription Метод для удаления роли.
+     *
+     * @apiPermission admin
      *
      * @apiParam {Number} id Id роли
      *

@@ -8,6 +8,8 @@ namespace App\Schema;
      *
      * @apiDescription Метод для получения списка прав.
      *
+     * @apiPermission user
+     *
      * @apiHeader {String} Authorization Токен.
      *
      * @apiSuccessExample {json} Успешно (200)
@@ -50,6 +52,8 @@ namespace App\Schema;
      * @apiGroup Right
      *
      * @apiDescription Метод для получения права.
+     *
+     * @apiPermission user
      *
      * @apiParam {Number} id Id права
      *
@@ -94,6 +98,8 @@ namespace App\Schema;
      * @apiGroup Right
      *
      * @apiDescription Метод для создания нового права.
+     *
+     * @apiPermission admin
      *
      * @apiParam {String} name Имя права (уникальный)
      * @apiParam {String} description Человекопонятное описание
@@ -149,6 +155,8 @@ namespace App\Schema;
      *
      * @apiDescription Метод для изменения права.
      *
+     * @apiPermission admin
+     *
      * @apiParam {String} name Имя права (уникальный)
      * @apiParam {String} description Человекопонятное описание
      *
@@ -203,6 +211,8 @@ namespace App\Schema;
      * @apiGroup Right
      *
      * @apiDescription Метод для удаления права.
+     *
+     * @apiPermission admin
      *
      * @apiParam {Number} id Id права
      *

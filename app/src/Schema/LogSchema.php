@@ -8,6 +8,8 @@ namespace App\Schema;
  *
  * @apiDescription Метод для получения списка логов.
  *
+ * @apiPermission user
+ *
  * @apiHeader {String} Authorization Токен.
  *
  * @apiSuccessExample {json} Успешно (200)
@@ -56,6 +58,8 @@ namespace App\Schema;
  * @apiGroup Log
  *
  * @apiDescription Метод для получения лога.
+ *
+ * @apiPermission user
  *
  * @apiParam {Number} id Id лога
  *
