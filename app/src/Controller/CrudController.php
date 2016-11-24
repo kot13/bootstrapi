@@ -27,9 +27,43 @@ class CrudController extends BaseController
             $query = $modelName::withTrashed();
         }
 
-        if (isset($params['filter']) && count($params['filter']) > 0) {
-            foreach ($params['filter'] as $key => $values) {
-                $query = $query->whereIn($key, explode(',', $values));
+        if (isset($params['filters'])) {
+            $filters = json_decode($params['filters'], true);
+
+            foreach ($filters as $filter) {
+                $filter['operator']  = trim(strtolower($filter['operator']));
+                $filter['attribute'] = trim($filter['attribute']);
+
+                if (empty($filter['operator']) || empty($filter['attribute']) || empty($filter['value'])) continue;
+
+                switch ($filter['operator']) {
+                    case 'in':
+                        $query = $query->whereIn($filter['attribute'], [1, 2, 3]);
+                        break;
+                    case 'not in':
+                        $query = $query->whereNotIn($filter['attribute'], [1, 2, 3]);
+                        break;
+                    case 'like':
+                        $query = $query->where($filter['attribute'], 'like', '%' . $filter['value'] . '%');
+                        break;
+                    case '=':
+                    case '!=':
+                    case '>':
+                    case '>=':
+                    case '<':
+                    case '<=':
+                        $query = $query->where($filter['attribute'], $filter['operator'], $filter['value']);
+                        break;
+                }
+            }
+        }
+
+        if (isset($params['sort'])) {
+            $sorters = json_decode($params['sort'], true);
+
+            foreach ($sorters as $sorter) {
+                $sorter['direction'] = trim(strtolower($sorter['direction'])) == 'asc' ? 'asc' : 'desc';
+                $query->orderBy(trim($sorter['attribute']), $sorter['direction']);
             }
         }
 
