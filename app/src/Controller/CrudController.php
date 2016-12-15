@@ -38,10 +38,10 @@ class CrudController extends BaseController
 
                 switch ($filter['operator']) {
                     case 'in':
-                        $query = $query->whereIn($filter['attribute'], [1, 2, 3]);
+                        $query = $query->whereIn($filter['attribute'], $filter['value']);
                         break;
                     case 'not in':
-                        $query = $query->whereNotIn($filter['attribute'], [1, 2, 3]);
+                        $query = $query->whereNotIn($filter['attribute'], $filter['value']);
                         break;
                     case 'like':
                         $query = $query->where($filter['attribute'], 'like', '%' . $filter['value'] . '%');

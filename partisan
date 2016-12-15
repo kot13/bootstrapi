@@ -8,7 +8,6 @@ define('MIGRATIONS_PATH', __DIR__ . '/app/database/migrations');
 define('SEEDS_PATH', __DIR__ . '/app/database/seeds');
 define('COMMANDS_PATH', __DIR__ . '/app/src/Commands');
 define('CONFIG_PATH', __DIR__ . '/config');
-define('GIT_PATH', __DIR__ . '/.git');
 define('APP_PATH', __DIR__ . '/app');
 
 define('MIGRATIONS_TABLE', 'migrations');
@@ -104,7 +103,6 @@ class Partisan
         echo "php partisan migrate --seed                       -->   Migrate and seed the database.".PHP_EOL;
         //echo "php partisan down <migrationId>                   -->   Revert a specific migration.".PHP_EOL;
         echo "php partisan <commandsName> <action> [<args>]     -->   Running a specific console commands.".PHP_EOL;
-        echo "php partisan new <projectName>                    -->   Create a new project.".PHP_EOL;
         echo "php partisan docsgenerate                         -->   Generate documentation.".PHP_EOL;
         echo PHP_EOL;
     }
@@ -228,40 +226,6 @@ class Partisan
     private function getCommandName($file)
     {
         return str_replace('controller', '', strtolower(basename($file, '.php')));
-    }
-
-    private function newProject($projectName)
-    {
-        echo exec('mkdir ' . ROOT_PATH . '/log && chmod 777 ' . ROOT_PATH . '/log');
-
-        if (file_exists(CONFIG_PATH . '/db.php')) {
-            echo 'The file config/db.php already exists'.PHP_EOL;
-            return;
-        } else {
-            exec('mv ' . CONFIG_PATH . '/db.php.sample ' . CONFIG_PATH . '/db.php');
-        };
-
-        if (file_exists(CONFIG_PATH . '/params.php')) {
-            echo 'The file config/params.php already exists'.PHP_EOL;
-            return;
-        } else {
-            exec('mv ' . CONFIG_PATH . '/params.php.sample ' . CONFIG_PATH . '/params.php');
-        };
-
-        // TODO формировать apidoc.json по шаблону из данных вводимых пользователем
-        if (file_exists(APP_PATH . '/apidoc.json')) {
-            echo 'The file app/apidoc.json already exists'.PHP_EOL;
-            return;
-        } else {
-            exec('mv ' . APP_PATH . '/apidoc.json.sample ' . APP_PATH . '/apidoc.json');
-        };
-
-        echo exec('rm -rf ' . ROOT_PATH . '/.git');
-
-        // TODO формировать version.sh
-
-        echo "New project " . $projectName . " successful created".PHP_EOL;
-        echo "Now run command: git init".PHP_EOL;
     }
 
     private function dbConnect()

@@ -58,7 +58,7 @@ Authorization: Bearer xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ## Фильтрация
 При запросе коллекции сущностей в /GET параметрах можно передать:
 ```
-?filter=[{"operator": "like", "attribute": "name", "value": "1"},...]
+?filters=[{"operator": "like", "attribute": "name", "value": "1"},...]
 ```
 Он представляюет из себя json-массив объектов с условиями фильтрации:
 |Параметр |Описание               |Возможные значение                     |

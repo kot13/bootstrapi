@@ -22,19 +22,12 @@ This is my JSONAPI skeleton. Built using Slim 3, Eloquent, Zend-ACL
 * NodeJs && NPM && ApiDocJs (for docs generate)
 
 ## Installing
-1) clone this repo
-
-2) install dependencies
+1) create new project
 ```
-$ composer install
+$ composer create-project pmurkin/slim3-eloquent-skeleton my-app
 ```
 
-3) create new project
-```
-$ php partisan new project-name
-```
-
-4) change config files:
+2) change config files:
 ```
 $ nano config/db.php
 $ nano config/params.php
@@ -42,7 +35,7 @@ $ nano app/apidoc.json
 $ nano version.sh
 ```
 
-5) configure nginx
+3) configure nginx
 
 Be sure to define environment variables:
 ```
@@ -102,12 +95,12 @@ server {
 }
 ```
 
-6) migration
+4) migration
 ```
 $ php partisan migrate --seed
 ```
 
-7) generate documentation
+5) generate documentation (optional)
 ```
 $ php partisan docsgenerate
 ```
