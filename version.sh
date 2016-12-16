@@ -1,6 +1,6 @@
 #!/bin/sh
 
-PROJECT="slim3-eloquent-jsonapi-skeleton"
+PROJECT="bootstrapi"
 
 #if [ $# -eq 0 ]
 if [ -z "$1" ]

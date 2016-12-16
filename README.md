@@ -1,4 +1,4 @@
-# slim3-eloquent-jsonapi-skeleton
+# bootstrapi
 This is my JSONAPI skeleton. Built using Slim 3, Eloquent, Zend-ACL
 
 ## Inside:
@@ -9,6 +9,15 @@ This is my JSONAPI skeleton. Built using Slim 3, Eloquent, Zend-ACL
 * JWT https://github.com/firebase/php-jwt
 * SwiftMailer http://swiftmailer.org/
 * ApiDocJS http://apidocjs.com/
+
+## Feature
+* Authorization
+* ACL role based
+* Support base CRUD operation
+* Filtering
+* CLI-tools
+* JSONAPI negotiation
+* Log
 
 ## Demo
 [Documentation](http://docs.skeleton.demostage.ru/)
@@ -24,7 +33,7 @@ This is my JSONAPI skeleton. Built using Slim 3, Eloquent, Zend-ACL
 ## Installing
 1) create new project
 ```
-$ composer create-project pmurkin/slim3-eloquent-skeleton my-app
+$ composer create-project pmurkin/bootstrapi my-api
 ```
 
 2) change config files:

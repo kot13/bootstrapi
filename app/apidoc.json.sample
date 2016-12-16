@@ -1,10 +1,10 @@
 {
-  "name": "Skeleton",
+  "name": "Bootstrapi",
   "version": "0.0.1",
-  "description": "Skeleton docs",
-  "title": "Skeleton docs",
-  "url" : "http://skeleton.dev/api",
-  "sampleUrl": "http://skeleton.dev/api",
+  "description": "Bootstrapi docs",
+  "title": "Bootstrapi docs",
+  "url" : "http://bootstrapi.dev/api",
+  "sampleUrl": "http://bootstrapi.dev/api",
   "template": {
     "withCompare": false,
     "withGenerator": false

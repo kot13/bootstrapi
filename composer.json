@@ -1,5 +1,5 @@
 {
-  "name": "slim3-eloquent-jsonapi-skeleton",
+  "name": "bootstrapi",
   "description": "This is my JSONAPI skeleton. Built using Slim 3, Eloquent, Zend-ACL",
   "minimum-stability": "stable",
 
@@ -30,7 +30,7 @@
   },
 
   "scripts": {
-    "post-create-project-cmd": "bash -c mv ./config/db.php.sample ./config/db.php && mv ./config/params.php.sample ./config/params.php''",
+    "post-create-project-cmd": "bash -c 'mv ./config/db.php.sample ./config/db.php && mv ./config/params.php.sample ./config/params.php && mv ./app/apidoc.json.sample ./app/apidoc.json'",
     "post-update-cmd": "bash -c 'chmod 0755 ./version.sh; ./version.sh ${JOB_NAME} ${BUILD_NUMBER} ${GIT_BRANCH} > ./version.json'",
     "post-install-cmd": "bash -c 'chmod 0755 ./version.sh; ./version.sh ${JOB_NAME} ${BUILD_NUMBER} ${GIT_BRANCH} > ./version.json'"
   }
