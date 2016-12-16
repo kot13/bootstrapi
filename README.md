@@ -25,7 +25,7 @@ This is my JSONAPI skeleton. Built using Slim 3, Eloquent, Zend-ACL
 [Client](http://skeleton.demostage.ru/)
 
 ## Requirements
-* PHP >= 5.5
+* PHP >= 5.6
 * Composer
 * MySQL / PostgreSQL
 * NodeJs && NPM && ApiDocJs (for docs generate)

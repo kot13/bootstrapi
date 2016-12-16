@@ -4,6 +4,7 @@
   "minimum-stability": "stable",
   "version": "0.1",
   "license": "MIT",
+  "homepage": "https://github.com/kot13/bootstrapi",
   "type": "project",
   "keywords": ["slim-framework", "skeleton", "auth", "eloquent", "cli-tool", "migration", "jsonapi"],
 
@@ -19,6 +20,7 @@
   },
 
   "require": {
+    "php": ">=5.6.0",
     "slim/slim": "^3.0",
     "monolog/monolog": "^1.13",
     "firebase/php-jwt": "^3.0",
