@@ -2,6 +2,10 @@
   "name": "pmurkin/bootstrapi",
   "description": "This is my JSONAPI skeleton. Built using Slim 3, Eloquent, Zend-ACL",
   "minimum-stability": "stable",
+  "version": "0.1",
+  "license": "MIT",
+  "type": "project",
+  "keywords": ["slim-framework", "skeleton", "auth", "eloquent", "cli-tool", "migration", "jsonapi"],
 
   "authors": [{
     "name": "Муркин Павел",

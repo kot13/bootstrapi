@@ -33,7 +33,7 @@ This is my JSONAPI skeleton. Built using Slim 3, Eloquent, Zend-ACL
 ## Installing
 1) create new project
 ```
-$ composer create-project pmurkin/bootstrapi my-api
+$ composer create-project -n -s dev pmurkin/bootstrapi my-api
 ```
 
 2) change config files:
