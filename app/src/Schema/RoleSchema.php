@@ -1,6 +1,8 @@
 <?php
 namespace App\Schema;
 
+use \Carbon\Carbon;
+
 /**
  * @api {get} /role Список ролей
  * @apiName GetRoles
@@ -22,16 +24,8 @@ namespace App\Schema;
  *           "attributes": {
  *             "name": "admin",
  *             "description": "Администратор",
- *             "created_at": {
- *               "date": "2016-10-13 21:37:40.000000",
- *               "timezone_type": 3,
- *               "timezone": "Europe/Moscow"
- *             },
- *             "updated_at": {
- *               "date": "2016-10-13 21:37:40.000000",
- *               "timezone_type": 3,
- *               "timezone": "Europe/Moscow"
- *             },
+ *             "created_at": "2016-10-17T07:38:21+0000",
+ *             "updated_at": "2016-10-17T07:38:21+0000",
  *             "created_by": 0,
  *             "updated_by": null
  *           },
@@ -41,7 +35,7 @@ namespace App\Schema;
  *             }
  *           },
  *           "links": {
- *             "self": "http://skeleton.dev/api/role/1"
+ *             "self": "http://bootstrapi.dev/api/role/1"
  *           }
  *         }
  *       ]
@@ -73,16 +67,8 @@ namespace App\Schema;
  *         "attributes": {
  *           "name": "admin",
  *           "description": "Администратор",
- *           "created_at": {
- *             "date": "2016-10-13 21:37:40.000000",
- *             "timezone_type": 3,
- *             "timezone": "Europe/Moscow"
- *           },
- *           "updated_at": {
- *             "date": "2016-10-13 21:37:40.000000",
- *             "timezone_type": 3,
- *             "timezone": "Europe/Moscow"
- *           },
+ *           "created_at": "2016-10-17T07:38:21+0000",
+ *           "updated_at": "2016-10-17T07:38:21+0000",
  *           "created_by": 0,
  *           "updated_by": null
  *         },
@@ -92,7 +78,7 @@ namespace App\Schema;
  *           }
  *         },
  *         "links": {
- *           "self": "http://skeleton.dev/api/role/1"
+ *           "self": "http://bootstrapi.dev/api/role/1"
  *         }
  *       }
  *     }
@@ -135,16 +121,8 @@ namespace App\Schema;
  *         "attributes": {
  *           "name": "guest",
  *           "description": "Гость",
- *           "created_at": {
- *             "date": "2016-10-13 21:37:40.000000",
- *             "timezone_type": 3,
- *             "timezone": "Europe/Moscow"
- *           },
- *           "updated_at": {
- *             "date": "2016-10-13 21:37:40.000000",
- *             "timezone_type": 3,
- *             "timezone": "Europe/Moscow"
- *           },
+ *           "created_at": "2016-10-17T07:38:21+0000",
+ *           "updated_at": "2016-10-17T07:38:21+0000",
  *           "created_by": 1,
  *           "updated_by": null
  *         },
@@ -154,7 +132,7 @@ namespace App\Schema;
  *           }
  *         },
  *         "links": {
- *           "self": "http://skeleton.dev/api/role/2"
+ *           "self": "http://bootstrapi.dev/api/role/2"
  *         }
  *       }
  *     }
@@ -196,16 +174,8 @@ namespace App\Schema;
  *         "attributes": {
  *           "name": "guest",
  *           "description": "Гость",
- *           "created_at": {
- *             "date": "2016-10-13 21:37:40.000000",
- *             "timezone_type": 3,
- *             "timezone": "Europe/Moscow"
- *           },
- *           "updated_at": {
- *             "date": "2016-10-13 21:37:40.000000",
- *             "timezone_type": 3,
- *             "timezone": "Europe/Moscow"
- *           },
+ *           "created_at": "2016-10-17T07:38:21+0000",
+ *           "updated_at": "2016-10-17T07:38:21+0000",
  *           "created_by": 1,
  *           "updated_by": null
  *         },
@@ -215,7 +185,7 @@ namespace App\Schema;
  *           }
  *         },
  *         "links": {
- *           "self": "http://skeleton.dev/api/role/2"
+ *           "self": "http://bootstrapi.dev/api/role/2"
  *         }
  *       }
  *     }
@@ -259,8 +229,8 @@ final class RoleSchema extends BaseSchema
         return [
             'name'        => $role->name,
             'description' => $role->description,
-            'created_at'  => $role->created_at,
-            'updated_at'  => $role->updated_at,
+            'created_at'  => Carbon::parse($role->created_at)->setTimezone('UTC')->format(Carbon::ISO8601),
+            'updated_at'  => Carbon::parse($role->updated_at)->setTimezone('UTC')->format(Carbon::ISO8601),
             'created_by'  => $role->created_by,
             'updated_by'  => $role->updated_by,
         ];

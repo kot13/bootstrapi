@@ -1,6 +1,8 @@
 <?php
 namespace App\Schema;
 
+use \Carbon\Carbon;
+
 /**
  * @api {get} /user Список пользователей
  * @apiName GetUsers
@@ -23,16 +25,8 @@ namespace App\Schema;
  *             "full_name": "Тестовый пользователь",
  *             "email": "mail@example.com",
  *             "role_id": 1,
- *             "created_at": {
- *               "date": "2016-10-13 21:37:40.000000",
- *               "timezone_type": 3,
- *               "timezone": "Europe/Moscow"
- *             },
- *             "updated_at": {
- *               "date": "2016-10-13 21:37:40.000000",
- *               "timezone_type": 3,
- *               "timezone": "Europe/Moscow"
- *             },
+ *             "created_at": "2016-10-17T07:38:21+0000",
+ *             "updated_at": "2016-10-17T07:38:21+0000",
  *             "created_by": 0,
  *             "updated_by": null,
  *             "status": 1,
@@ -46,7 +40,7 @@ namespace App\Schema;
  *             }
  *           },
  *           "links": {
- *             "self": "http://skeleton.dev/api/user/1"
+ *             "self": "http://bootstrapi.dev/api/user/1"
  *           }
  *         }
  *       ]
@@ -79,16 +73,8 @@ namespace App\Schema;
  *           "full_name": "Тестовый пользователь",
  *           "email": "mail@example.com",
  *           "role_id": 1,
- *           "created_at": {
- *             "date": "2016-10-13 21:37:40.000000",
- *             "timezone_type": 3,
- *             "timezone": "Europe/Moscow"
- *           },
- *           "updated_at": {
- *             "date": "2016-10-13 21:37:40.000000",
- *             "timezone_type": 3,
- *             "timezone": "Europe/Moscow"
- *           },
+ *           "created_at": "2016-10-17T07:38:21+0000",
+ *           "updated_at": "2016-10-17T07:38:21+0000",
  *           "created_by": 0,
  *           "updated_by": null,
  *           "status": 1,
@@ -102,7 +88,7 @@ namespace App\Schema;
  *           }
  *         },
  *         "links": {
- *           "self": "http://skeleton.dev/api/user/1"
+ *           "self": "http://bootstrapi.dev/api/user/1"
  *         }
  *       }
  *     }
@@ -172,16 +158,8 @@ namespace App\Schema;
  *           "full_name": "Тестовый пользователь",
  *           "email": "mail2@example.com",
  *           "role_id": 1,
- *           "created_at": {
- *             "date": "2016-10-13 21:37:40.000000",
- *             "timezone_type": 3,
- *             "timezone": "Europe/Moscow"
- *           },
- *           "updated_at": {
- *             "date": "2016-10-13 21:37:40.000000",
- *             "timezone_type": 3,
- *             "timezone": "Europe/Moscow"
- *           },
+ *           "created_at": "2016-10-17T07:38:21+0000",
+ *           "updated_at": "2016-10-17T07:38:21+0000",
  *           "created_by": 1,
  *           "updated_by": null,
  *           "status": 1,
@@ -195,7 +173,7 @@ namespace App\Schema;
  *           }
  *         },
  *         "links": {
- *           "self": "http://skeleton.dev/api/user/2"
+ *           "self": "http://bootstrapi.dev/api/user/2"
  *         }
  *       }
  *     }
@@ -240,16 +218,8 @@ namespace App\Schema;
  *           "full_name": "Тестовый пользователь",
  *           "email": "mail1@example.com",
  *           "role_id": 1,
- *           "created_at": {
- *             "date": "2016-10-13 21:37:40.000000",
- *             "timezone_type": 3,
- *             "timezone": "Europe/Moscow"
- *           },
- *           "updated_at": {
- *             "date": "2016-10-13 21:37:40.000000",
- *             "timezone_type": 3,
- *             "timezone": "Europe/Moscow"
- *           },
+ *           "created_at": "2016-10-17T07:38:21+0000",
+ *           "updated_at": "2016-10-17T07:38:21+0000",
  *           "created_by": null,
  *           "updated_by": null,
  *           "status": 1,
@@ -263,7 +233,7 @@ namespace App\Schema;
  *           }
  *         },
  *         "links": {
- *           "self": "http://skeleton.dev/api/user/2"
+ *           "self": "http://bootstrapi.dev/api/user/2"
  *         }
  *       }
  *     }
@@ -343,8 +313,8 @@ final class UserSchema extends BaseSchema
             'full_name'  => $user->full_name,
             'email'      => $user->email,
             'role_id'    => (int) $user->role_id,
-            'created_at' => $user->created_at,
-            'updated_at' => $user->updated_at,
+            'created_at' => Carbon::parse($user->created_at)->setTimezone('UTC')->format(Carbon::ISO8601),
+            'updated_at' => Carbon::parse($user->updated_at)->setTimezone('UTC')->format(Carbon::ISO8601),
             'created_by' => $user->created_by,
             'updated_by' => $user->updated_by,
             'status'     => $user->status,

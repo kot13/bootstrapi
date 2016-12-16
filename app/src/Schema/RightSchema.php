@@ -1,6 +1,8 @@
 <?php
 namespace App\Schema;
 
+use \Carbon\Carbon;
+
 /**
  * @api {get} /right Список прав
  * @apiName GetRights
@@ -22,21 +24,13 @@ namespace App\Schema;
  *           "attributes": {
  *             "name": "manageUsers",
  *             "description": "Управление пользователями",
- *             "created_at": {
- *               "date": "2016-10-13 21:37:40.000000",
- *               "timezone_type": 3,
- *               "timezone": "Europe/Moscow"
- *             },
- *             "updated_at": {
- *               "date": "2016-10-13 21:37:40.000000",
- *               "timezone_type": 3,
- *               "timezone": "Europe/Moscow"
- *             },
+ *             "created_at": "2016-10-17T07:38:21+0000",
+ *             "updated_at": "2016-10-17T07:38:21+0000",
  *             "created_by": 0,
  *             "updated_by": null
  *           },
  *           "links": {
- *             "self": "http://skeleton.dev/api/right/1"
+ *             "self": "http://bootstrapi.dev/api/right/1"
  *           }
  *         }
  *       ]
@@ -68,21 +62,13 @@ namespace App\Schema;
  *         "attributes": {
  *           "name": "manageUsers",
  *           "description": "Управление пользователями",
- *           "created_at": {
- *             "date": "2016-10-13 21:37:40.000000",
- *             "timezone_type": 3,
- *             "timezone": "Europe/Moscow"
- *           },
- *           "updated_at": {
- *             "date": "2016-10-13 21:37:40.000000",
- *             "timezone_type": 3,
- *             "timezone": "Europe/Moscow"
- *           },
+ *           "created_at": "2016-10-17T07:38:21+0000",
+ *           "updated_at": "2016-10-17T07:38:21+0000",
  *           "created_by": 0,
  *           "updated_by": null
  *         },
  *         "links": {
- *           "self": "http://skeleton.dev/api/right/1"
+ *           "self": "http://bootstrapi.dev/api/right/1"
  *         }
  *       }
  *     }
@@ -125,21 +111,13 @@ namespace App\Schema;
  *         "attributes": {
  *           "name": "manageUsers",
  *           "description": "Управление пользователями",
- *           "created_at": {
- *             "date": "2016-10-13 21:37:40.000000",
- *             "timezone_type": 3,
- *             "timezone": "Europe/Moscow"
- *           },
- *           "updated_at": {
- *             "date": "2016-10-13 21:37:40.000000",
- *             "timezone_type": 3,
- *             "timezone": "Europe/Moscow"
- *           },
+ *           "created_at": "2016-10-17T07:38:21+0000",
+ *           "updated_at": "2016-10-17T07:38:21+0000",
  *           "created_by": 1,
  *           "updated_by": null
  *         },
  *         "links": {
- *           "self": "http://skeleton.dev/api/right/1"
+ *           "self": "http://bootstrapi.dev/api/right/1"
  *         }
  *       }
  *     }
@@ -181,21 +159,13 @@ namespace App\Schema;
  *         "attributes": {
  *           "name": "manageUsers",
  *           "description": "Управление пользователями",
- *           "created_at": {
- *             "date": "2016-10-13 21:37:40.000000",
- *             "timezone_type": 3,
- *             "timezone": "Europe/Moscow"
- *           },
- *           "updated_at": {
- *             "date": "2016-10-13 21:37:40.000000",
- *             "timezone_type": 3,
- *             "timezone": "Europe/Moscow"
- *           },
+ *           "created_at": "2016-10-17T07:38:21+0000",
+ *           "updated_at": "2016-10-17T07:38:21+0000",
  *           "created_by": 1,
  *           "updated_by": 1
  *         },
  *         "links": {
- *           "self": "http://skeleton.dev/api/right/1"
+ *           "self": "http://bootstrapi.dev/api/right/1"
  *         }
  *       }
  *     }
@@ -240,8 +210,8 @@ final class RightSchema extends BaseSchema
         return [
             'name'        => $right->name,
             'description' => $right->description,
-            'created_at'  => $right->created_at,
-            'updated_at'  => $right->updated_at,
+            'created_at'  => Carbon::parse($right->created_at)->setTimezone('UTC')->format(Carbon::ISO8601),
+            'updated_at'  => Carbon::parse($right->updated_at)->setTimezone('UTC')->format(Carbon::ISO8601),
             'created_by'  => $right->created_by,
             'updated_by'  => $right->updated_by,
         ];

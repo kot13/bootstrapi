@@ -48,10 +48,10 @@ Authorization: Bearer xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   "count": 5
 },
 "links": {
-  "self": "http://skeleton.dev/api/log?page[number]=1&page[size]=5",
-  "first": "http://skeleton.dev/api/log?page[number]=1&page[size]=5",
-  "last": "http://skeleton.dev/api/log?page[number]=5&page[size]=5",
-  "next": "http://skeleton.dev/api/log?page[number]=2&page[size]=5"
+  "self": "http://bootstrapi.dev/api/log?page[number]=1&page[size]=5",
+  "first": "http://bootstrapi.dev/api/log?page[number]=1&page[size]=5",
+  "last": "http://bootstrapi.dev/api/log?page[number]=5&page[size]=5",
+  "next": "http://bootstrapi.dev/api/log?page[number]=2&page[size]=5"
 }
 ```
 

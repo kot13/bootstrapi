@@ -11,12 +11,15 @@ This is my JSONAPI skeleton. Built using Slim 3, Eloquent, Zend-ACL
 * ApiDocJS http://apidocjs.com/
 
 ## Feature
-* Authorization
+* JWT-token authorization
+* Validation request
 * ACL role based
 * Support base CRUD operation
-* Filtering
+* Filtering && Sorting && Pagination
+* Migration
 * CLI-tools
 * JSONAPI negotiation
+* Generated documentation
 * Log
 
 ## Demo

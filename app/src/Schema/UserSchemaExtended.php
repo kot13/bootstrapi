@@ -1,6 +1,8 @@
 <?php
 namespace App\Schema;
 
+use \Carbon\Carbon;
+
 final class UserSchemaExtended extends BaseSchema
 {
     protected $resourceType = 'user';
@@ -16,8 +18,8 @@ final class UserSchemaExtended extends BaseSchema
             'full_name'   => $user->full_name,
             'email'       => $user->email,
             'role_id'     => (int) $user->role_id,
-            'created_at'  => $user->created_at,
-            'updated_at'  => $user->updated_at,
+            'created_at'  => Carbon::parse($user->created_at)->setTimezone('UTC')->format(Carbon::ISO8601),
+            'updated_at'  => Carbon::parse($user->updated_at)->setTimezone('UTC')->format(Carbon::ISO8601),
             'created_by'  => $user->created_by,
             'updated_by'  => $user->updated_by,
             'status'      => $user->status,
