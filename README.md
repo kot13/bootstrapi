@@ -16,7 +16,7 @@ This is my JSONAPI skeleton. Built using Slim 3, Eloquent, Zend-ACL
 * ACL role based
 * Support base CRUD operation
 * Filtering && Sorting && Pagination
-* Migration
+* DB migration
 * CLI-tools
 * JSONAPI negotiation
 * Generated documentation

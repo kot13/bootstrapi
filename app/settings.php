@@ -79,7 +79,7 @@ return [
 
         'translate' => [
             'path' => __DIR__ . '/../lang',
-            'locale' => 'en',
+            'locale' => 'ru',
         ],
 
         'params' => require(__DIR__ . '/../config/params.php'),
