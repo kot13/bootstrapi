@@ -23,9 +23,9 @@ This is my JSONAPI skeleton. Built using Slim 3, Eloquent, Zend-ACL
 * Log
 
 ## Demo
-[Documentation](http://docs.skeleton.demostage.ru/)
+[Example documentation](http://docs.bootstrapi.demostage.ru/)
 
-[Client](http://skeleton.demostage.ru/)
+[Example client (Ember.js application)](http://bootstrapi.demostage.ru/)
 
 ## Requirements
 * PHP >= 5.6
@@ -43,7 +43,7 @@ $ composer create-project -n -s dev pmurkin/bootstrapi my-api
 ```
 $ nano config/db.php
 $ nano config/params.php
-$ nano app/apidoc.json
+$ nano app/apidoc.json # require set "url"
 $ nano version.sh
 ```
 

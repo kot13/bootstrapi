@@ -237,7 +237,7 @@ class Partisan
         if (empty($this->capsule)) {
             $this->capsule = new Capsule;
 
-            $this->capsule->addConnection($this->config['settings']['database']['connections']['main'], 'default');
+            $this->capsule->addConnection($this->config['settings']['database']['connections']['default'], 'default');
             $this->capsule->setEventDispatcher(new Dispatcher(new Container));
             $this->capsule->setAsGlobal();
             $this->capsule->bootEloquent();
