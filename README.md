@@ -1,15 +1,6 @@
 # bootstrapi
 This is my JSONAPI skeleton. Built using Slim 3, Eloquent, Zend-ACL
 
-## Inside:
-* Slim3 http://www.slimframework.com/
-* ORM Eloquent http://laravel.su/docs/5.2/eloquent
-* Zend ACL https://zendframework.github.io/zend-permissions-acl/
-* JsonApi https://github.com/neomerx/json-api
-* JWT https://github.com/firebase/php-jwt
-* SwiftMailer http://swiftmailer.org/
-* ApiDocJS http://apidocjs.com/
-
 ## Feature
 * JWT-token authorization
 * Validation request
@@ -22,10 +13,21 @@ This is my JSONAPI skeleton. Built using Slim 3, Eloquent, Zend-ACL
 * Generated documentation
 * Log
 
+## Inside:
+* Slim3 http://www.slimframework.com/
+* ORM Eloquent http://laravel.su/docs/5.2/eloquent
+* Zend ACL https://zendframework.github.io/zend-permissions-acl/
+* JsonApi https://github.com/neomerx/json-api
+* JWT https://github.com/firebase/php-jwt
+* SwiftMailer http://swiftmailer.org/
+* ApiDocJS http://apidocjs.com/
+
 ## Demo
 [Example documentation](http://docs.bootstrapi.demostage.ru/)
 
 [Example client (Ember.js application)](http://bootstrapi.demostage.ru/)
+
+[Client repo](https://github.com/kot13/bootstrapi-client)
 
 ## Requirements
 * PHP >= 5.6

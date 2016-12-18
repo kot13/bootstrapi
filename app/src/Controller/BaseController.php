@@ -141,7 +141,7 @@ abstract class BaseController
                 'count' => $entities->count(),
             ];
 
-            if (($entities->lastPage() - ($pageNumber + 1)) > 0) {
+            if (($entities->lastPage() - ($pageNumber + 1)) >= 0) {
                 $links[LinkInterface::NEXT] = new Link('?page[number]='.($pageNumber + 1).'&page[size]='.$pageSize, null, false);
             }
             if (($pageNumber - 1) > 0) {
