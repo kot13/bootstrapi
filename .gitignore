@@ -22,3 +22,4 @@ config/params.php
 # apidoc
 /docs
 /app/apidoc.json
+tests/_output/*

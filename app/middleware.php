@@ -33,8 +33,7 @@ $app->add(function (Request $request, Response $response, $next) {
                 Auth::setUser($user);
 
                 $isAllowed = false;
-
-                $route = $request->getAttribute('route');
+                $route     = $request->getAttribute('route');
 
                 if ($route) {
                     if ($this->acl->hasResource('route' . $route->getPattern())) {
@@ -60,36 +59,36 @@ $app->add(function (Request $request, Response $response, $next) {
  * Logger
  */
 $app->add(function (Request $request, Response $response, $next) {
-    $logger = $this->logger;
-    $response = $next($request, $response);
-    $uri = $request->getUri()->getPath();
+    $logger     = $this->logger;
+    $response   = $next($request, $response);
+    $uri        = $request->getUri()->getPath();
     $statusCode = $response->getStatusCode();
     switch ($response->getStatusCode()) {
         case 500:
             $logger->addCritical('Oops!!! the server got 500 error', [
-                'ip' => $request->getAttribute('ip_address'),
-                'uri' => $uri,
+                'ip'     => $request->getAttribute('ip_address'),
+                'uri'    => $uri,
                 'status' => $statusCode,
             ]);
             break;
         case 404:
             $logger->addWarning('Someone calling un-existing API action', [
-                'ip' => $request->getAttribute('ip_address'),
-                'uri' => $uri,
+                'ip'     => $request->getAttribute('ip_address'),
+                'uri'    => $uri,
                 'status' => $statusCode,
             ]);
             break;
         case 401:
             $logger->addWarning('Someone calling API action without access', [
-                'ip' => $request->getAttribute('ip_address'),
-                'uri' => $uri,
+                'ip'     => $request->getAttribute('ip_address'),
+                'uri'    => $uri,
                 'status' => $statusCode,
             ]);
             break;
         default:
             $logger->addInfo('Someone calling existing API action', [
-                'ip' => $request->getAttribute('ip_address'),
-                'uri' => $uri,
+                'ip'     => $request->getAttribute('ip_address'),
+                'uri'    => $uri,
                 'status' => $statusCode,
             ]);
             break;
