@@ -1,7 +1,7 @@
 <?php
 // Routes
-$app->group('/api', function () {
-    $this->options('[/{params:.*}]', function ($request, $response) {
+$app->group('/api', function() {
+    $this->options('[/{params:.*}]', function($request, $response) {
         return $response->withHeader('Access-Control-Allow-Origin', '*')
             ->withHeader('Access-Control-Allow-Methods', 'GET, PUT, PATCH, POST, DELETE, OPTIONS')
             ->withHeader('Access-Control-Allow-Credentials', 'true')
@@ -11,7 +11,7 @@ $app->group('/api', function () {
 
     $this->post('/token', 'App\Controller\TokenController:auth');
 
-    $this->group('/{entity:user}', function () {
+    $this->group('/{entity:user}', function() {
         $this->get('', 'App\Controller\UserController:actionIndex');
         $this->post('', 'App\Controller\UserController:actionCreate');
         $this->get('/{id:[0-9]+}', 'App\Controller\UserController:actionGet');
@@ -22,7 +22,7 @@ $app->group('/api', function () {
         $this->post('/reset-password', 'App\Controller\UserController:actionResetPassword');
     });
 
-    $this->group('/{entity:role|right}', function () {
+    $this->group('/{entity:role|right}', function() {
         $this->get('', 'App\Controller\CrudController:actionIndex');
         $this->get('/{id:[0-9]+}', 'App\Controller\CrudController:actionGet');
         $this->post('', 'App\Controller\CrudController:actionCreate');
@@ -30,7 +30,7 @@ $app->group('/api', function () {
         $this->delete('/{id:[0-9]+}', 'App\Controller\CrudController:actionDelete');
     });
 
-    $this->group('/{entity:log}', function () {
+    $this->group('/{entity:log}', function() {
         $this->get('', 'App\Controller\CrudController:actionIndex');
         $this->get('/{id:[0-9]+}', 'App\Controller\CrudController:actionGet');
     });
