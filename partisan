@@ -58,29 +58,33 @@ class Partisan
                 }
                 $this->runGenerate($path, $this->args[3]);
                 break;
+
             case "migrate":
                 $this->runMigrations();
-                if (!isset($this->args[2]) || $this->args[2] != '--seed')
-                    break;
+                if (!isset($this->args[2]) || $this->args[2] != '--seed') {
+                    $this->runSeed();
+                }
+                break;
+
             case "seed":
                 $this->runSeed();
                 break;
-            case "new":
-                if (count($this->args) < 3){
-                    echo "Missing required attributes".PHP_EOL;
-                    return;
-                }
-                $this->newProject($this->args[2]);
-                break;
+
             case "docsgenerate":
                 echo exec('apidoc -i ./app -o ./docs -t ./docstemplate').PHP_EOL;
                 break;
+
+            case "runTest":
+                echo exec('./vendor/bin/codecept run').PHP_EOL;
+                break;
+
             case "help":
             case "--help":
                 $this->help();
                 break;
+
             default:
-                if(in_array($this->args[1], $this->commands)){
+                if (in_array($this->args[1], $this->commands)) {
                     $this->runCommand();
                 } else {
                       echo "Command not found".PHP_EOL;
@@ -104,6 +108,7 @@ class Partisan
         //echo "php partisan down <migrationId>                   -->   Revert a specific migration.".PHP_EOL;
         echo "php partisan <commandsName> <action> [<args>]     -->   Running a specific console commands.".PHP_EOL;
         echo "php partisan docsgenerate                         -->   Generate documentation.".PHP_EOL;
+        echo "php partisan runTest <args>                       -->   Run test suite.".PHP_EOL;
         echo PHP_EOL;
     }
 
@@ -128,8 +133,6 @@ class Partisan
     private function runGenerate($path, $migrationName)
     {
         $templatePath = $path . '/.template.php';
-
-        $className = Helper::underscoreToCamelCase($migrationName, true);
 
         if (!is_writeable($path)) {
             echo 'The directory ' . $path . ' is not writeable'.PHP_EOL;
@@ -168,10 +171,10 @@ class Partisan
             $action = $this->args[2];
         }
 
-        $class = 'App\Commands\\'.ucfirst($this->args[1]).'Controller';
+        $class  = 'App\Commands\\'.ucfirst($this->args[1]).'Controller';
         $action = 'action'.ucfirst($action);
 
-        if(is_callable([$class, $action])){
+        if (is_callable([$class, $action])) {
             $obj = new $class($this->args);
 
             call_user_func([$obj, $action]);
@@ -184,9 +187,10 @@ class Partisan
     {
         foreach ($files as $file) {
             require_once($file);
-            $fileName = explode('_', basename($file, '.php'));
 
-            $class = '';
+            $fileName = explode('_', basename($file, '.php'));
+            $class    = '';
+
             foreach($fileName as $key => $item){
                 if ($key == 0) continue;
                 $class .= ucfirst($item);

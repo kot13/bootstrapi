@@ -5,7 +5,7 @@ if (getenv('APPLICATION_ENV') == 'develop') {
 }
 
 // Super debug func
-function prr($value){
+function prr($value) {
     if (defined('DEBUG_MODE') && DEBUG_MODE == 1) {
         echo '<pre>';
         print_r($value);
