@@ -72,7 +72,7 @@ final class User extends BaseModel
         $user = Auth::getUser();
 
         if ($user) {
-            if ($user->role_id == User::ROLE_ADMIN) {
+            if ($user->role_id == self::ROLE_ADMIN) {
                 return $query;
             }
 
@@ -91,7 +91,7 @@ final class User extends BaseModel
      */
     public static function exist($email)
     {
-        return User::where('email', $email)->count() > 0;
+        return self::where('email', $email)->count() > 0;
     }
 
     /**
@@ -101,7 +101,7 @@ final class User extends BaseModel
      */
     public static function findUserByEmail($email)
     {
-        return User::where('email', $email)->where('status', self::STATUS_ACTIVE)->first();
+        return self::where('email', $email)->where('status', self::STATUS_ACTIVE)->first();
     }
 
     /**
@@ -111,7 +111,7 @@ final class User extends BaseModel
      */
     public static function findUserByAccessToken($accessToken)
     {
-        return User::where('access_token', md5($accessToken))->where('status', self::STATUS_ACTIVE)->first();
+        return self::where('access_token', md5($accessToken))->where('status', self::STATUS_ACTIVE)->first();
     }
 
     /**
@@ -121,11 +121,11 @@ final class User extends BaseModel
      */
     public static function findByPasswordResetToken($resetToken)
     {
-        if (!User::isPasswordResetTokenValid($resetToken)) {
+        if (!self::isPasswordResetTokenValid($resetToken)) {
             return null;
         }
 
-        return User::where('password_reset_token', $resetToken)->where('status', self::STATUS_ACTIVE)->first();
+        return self::where('password_reset_token', $resetToken)->where('status', self::STATUS_ACTIVE)->first();
     }
 
     /**
@@ -140,8 +140,7 @@ final class User extends BaseModel
         }
 
         $timestamp = (int) substr($token, strrpos($token, '_') + 1);
-        // TODO Вынести expire в конфиг
-        $expire = 3600;
+        $expire    = 3600;
         return $timestamp + $expire >= time();
     }
 

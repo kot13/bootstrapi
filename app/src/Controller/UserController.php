@@ -107,7 +107,7 @@ final class UserController extends CrudController
             ->setFrom(['no-reply@example.com' => 'Почтовик example.com'])
             ->setTo([$user->email => $user->full_name])
             ->setBody($this->mailRenderer->render(
-                "/RequestResetPassword.php",
+                '/RequestResetPassword.php',
                 [
                     'host' => $this->settings['params']['host'],
                     'token' => $user->password_reset_token

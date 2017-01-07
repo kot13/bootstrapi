@@ -5,15 +5,15 @@ class Helper
 {
     /**
      * @param string  $string
-     * @param bool    $capitalizeFirstCharacter
+     * @param bool    $capitalizeFirstChar
      *
      * @return string
      */
-    public static function dashesToCamelCase($string, $capitalizeFirstCharacter = false)
+    public static function dashesToCamelCase($string, $capitalizeFirstChar = false)
     {
         $str = str_replace(' ', '', ucwords(str_replace('-', ' ', $string)));
 
-        if (!$capitalizeFirstCharacter) {
+        if (!$capitalizeFirstChar) {
             $str = lcfirst($str);
         }
 
@@ -22,15 +22,15 @@ class Helper
 
     /**
      * @param string $string
-     * @param bool   $capitalizeFirstCharacter
+     * @param bool   $capitalizeFirstChar
      *
      * @return string
      */
-    public static function underscoreToCamelCase($string, $capitalizeFirstCharacter = false)
+    public static function underscoreToCamelCase($string, $capitalizeFirstChar = false)
     {
         $str = str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
 
-        if (!$capitalizeFirstCharacter) {
+        if (!$capitalizeFirstChar) {
             $str = lcfirst($str);
         }
 
@@ -44,11 +44,11 @@ class Helper
      */
     public static function generateRandomString($length=32)
     {
-        $chars = 'abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ023456789';
+        $chars      = 'abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ023456789';
         $charsCount = strlen($chars);
 
         srand((double)microtime()*1000000);
-        $i = 1;
+        $i     = 1;
         $token = '';
 
         while ($i <= $length)

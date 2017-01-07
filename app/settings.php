@@ -28,20 +28,18 @@ return [
                 /*
                  * just a list of generic resources for manual checking
                  * specified here so can be used in the code if needs be
+                 * Example: ['user' => null]
                  */
-                'resources' => [
-//                'user' => null,
-                ],
+                'resources' => [ ],
                 // where we specify the guarding!
                 'guards' => [
                     /*
                      * list of resource to roles to permissions
                      * optional
                      * if included all resources default to deny unless specified.
+                     * Example: ['user', ['admin']]
                      */
-                    'resources' => [
-//                    ['user', ['admin']],
-                    ],
+                    'resources' => [ ],
                     /*
                      * list of literal routes for guarding.
                      * optional
@@ -61,8 +59,8 @@ return [
                      * ['callable', ['roles']]
                      */
                     'callables' => [
-                        ['App\Controller\CrudController',               ['user']], // $app->map(['GET'], '/user',      'App\Controller\UserController'); class with __invoke
-                        ['App\Controller\CrudController:actionIndex',   ['user']], // $app->map(['GET'], '/user/{id}', 'App\Controller\UserController:getAction'); class and method
+                        ['App\Controller\CrudController',               ['user']],
+                        ['App\Controller\CrudController:actionIndex',   ['user']],
                         ['App\Controller\CrudController:actionGet',     ['user']],
                         ['App\Controller\CrudController:actionCreate',  ['user']],
                         ['App\Controller\CrudController:actionUpdate',  ['user']],

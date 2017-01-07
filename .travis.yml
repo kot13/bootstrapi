@@ -17,7 +17,7 @@ install:
 before_script:
   - mysql -e "CREATE DATABASE testapp;" -uroot
   - php partisan migrate --seed
-  - php -S 127.0.0.1:8888 -t /path/to/web/root >/dev/null 2>&1 &
+  - php -S 127.0.0.1:8888 -t ./public >/dev/null 2>&1 &
 
 script:
   - php vendor/codeception/codeception/codecept run
