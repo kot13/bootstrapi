@@ -79,9 +79,9 @@ abstract class BaseController
     }
 
     /**
-     * @param array    $params
-     * @param string   $entity
-     * @param IRequest $request
+     * @param array|null|object $params
+     * @param string            $entity
+     * @param IRequest          $request
      *
      * @return bool
      * @throws JsonException

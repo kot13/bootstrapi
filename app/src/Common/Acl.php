@@ -47,6 +47,5 @@ final class Acl extends ZendAcl
                 $this->allow($roles, $resource, $privileges);
             }
         }
-        return $this;
     }
 }

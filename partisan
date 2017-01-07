@@ -61,7 +61,7 @@ class Partisan
 
             case "migrate":
                 $this->runMigrations();
-                if (!isset($this->args[2]) || $this->args[2] != '--seed') {
+                if (isset($this->args[2]) && $this->args[2] == '--seed') {
                     $this->runSeed();
                 }
                 break;
