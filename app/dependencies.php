@@ -22,7 +22,7 @@ use App\Common\JsonException;
 $container = $app->getContainer();
 
 // render
-$container['renderer'] = function($c){
+$container['renderer'] = function(){
     $renderer = new Renderer();
 
     return $renderer;
@@ -61,7 +61,7 @@ $container['notAllowedHandler'] = function ($c) {
 };
 
 $container['notFoundHandler'] = function ($c) {
-    return function ($request, $response) use ($c) {
+    return function () use ($c) {
         throw new JsonException(null, 404, 'Not found', 'Entity not found');
     };
 };
@@ -106,7 +106,7 @@ $container['validation'] = function($c){
 };
 
 // mailer
-$container['mailer'] = function($c){
+$container['mailer'] = function(){
     $transport = \Swift_MailTransport::newInstance();
     $mailer    = \Swift_Mailer::newInstance($transport);
 

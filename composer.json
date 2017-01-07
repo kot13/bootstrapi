@@ -36,7 +36,8 @@
   },
 
   "require-dev": {
-    "codeception/codeception": "^2.2"
+    "codeception/codeception": "^2.2",
+    "scrutinizer/ocular": "^1.3"
   },
 
   "scripts": {

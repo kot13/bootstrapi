@@ -41,10 +41,7 @@ final class TokenController extends BaseController
     {
         try {
             $payload = JWT::decode($token, getenv('SECRET_KEY'), ['HS256']);
-            if (!in_array($payload->aud, $whiteList)) {
-                return false;
-            }
-            return true;
+            return in_array($payload->aud, $whiteList);
         } catch (\Exception $e){
             return false;
         }
@@ -95,12 +92,11 @@ final class TokenController extends BaseController
     /**
      * @param Request  $request
      * @param Response $response
-     * @param array    $args
      *
      * @return mixed
      * @throws JsonException
      */
-    public function auth(Request $request, Response $response, $args)
+    public function auth(Request $request, Response $response)
     {
         $params = $request->getParsedBody();
 

@@ -1,7 +1,7 @@
 <?php
 // Routes
 $app->group('/api', function () {
-    $this->options('[/{params:.*}]', function ($request, $response, $args) {
+    $this->options('[/{params:.*}]', function ($request, $response) {
         return $response->withHeader('Access-Control-Allow-Origin', '*')
             ->withHeader('Access-Control-Allow-Methods', 'GET, PUT, PATCH, POST, DELETE, OPTIONS')
             ->withHeader('Access-Control-Allow-Credentials', 'true')

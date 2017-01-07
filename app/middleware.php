@@ -11,7 +11,7 @@ use App\Model\User;
 /*
  * Auth && ACL Middleware
  */
-$app->add(function (Request $request, Response $response, $next) {
+$app->add(function(Request $request, Response $response, $next) {
     // If path is "/api/token" or "/api/user/request-password-reset" or "/api/user/reset-password" no need authorization process
     $path = $request->getUri()->getPath();
     if (in_array($path, ['/api/token', '/api/user/request-password-reset', '/api/user/reset-password'])) {
@@ -36,14 +36,14 @@ $app->add(function (Request $request, Response $response, $next) {
                 $route     = $request->getAttribute('route');
 
                 if ($route) {
-                    if ($this->acl->hasResource('route' . $route->getPattern())) {
-                        $isAllowed = $isAllowed || $this->acl->isAllowed($user->role->name, 'route' . $route->getPattern(), strtolower($request->getMethod()));
+                    if ($this->acl->hasResource('route'.$route->getPattern())) {
+                        $isAllowed = $isAllowed || $this->acl->isAllowed($user->role->name, 'route'.$route->getPattern(), strtolower($request->getMethod()));
                     }
-                    if ($this->acl->hasResource('callable/' . $route->getCallable())) {
-                        $isAllowed = $isAllowed || $this->acl->isAllowed($user->role->name, 'callable/' . $route->getCallable());
+                    if ($this->acl->hasResource('callable/'.$route->getCallable())) {
+                        $isAllowed = $isAllowed || $this->acl->isAllowed($user->role->name, 'callable/'.$route->getCallable());
                     }
                     if (!$isAllowed) {
-                        throw new JsonException(null, 403, 'Not allowed', $user->role->name . ' is not allowed access to this location.');
+                        throw new JsonException(null, 403, 'Not allowed', $user->role->name.' is not allowed access to this location.');
                     }
                 }
 
@@ -58,7 +58,7 @@ $app->add(function (Request $request, Response $response, $next) {
 /*
  * Logger
  */
-$app->add(function (Request $request, Response $response, $next) {
+$app->add(function(Request $request, Response $response, $next) {
     $logger     = $this->logger;
     $response   = $next($request, $response);
     $uri        = $request->getUri()->getPath();
@@ -99,10 +99,10 @@ $app->add(function (Request $request, Response $response, $next) {
 /**
  * Custom exception
  */
-$app->add(function (Request $request, Response $response, $next) {
+$app->add(function(Request $request, Response $response, $next) {
     try {
         return $next($request, $response);
-    } catch (JsonException $e){
+    } catch (JsonException $e) {
         return $this->renderer->jsonApiRender($response, $e->statusCode, $e->encodeError());
     }
 });

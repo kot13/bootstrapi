@@ -8,6 +8,14 @@ php:
   - 7.0
   - 7.1
 
+matrix:
+  include:
+    - php: 5.6
+      script:
+        - php vendor/bin/codecept run --report --coverage-xml
+      after_script:
+        - php vendor/bin/ocular code-coverage:upload  --format=php-clover tests/_output/coverage.xml
+
 install:
   - composer self-update
   - composer install
