@@ -6,14 +6,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Class Role
  *
- * @property integer $id
- * @property string  $name
- * @property string  $description
- * @property integer $created_by
- * @property integer $updated_by
- * @property string  $created_at
- * @property string  $updated_at
- * @property string  $deleted_at
+ * @property integer        $id
+ * @property string         $name
+ * @property string         $description
+ * @property integer        $created_by
+ * @property integer        $updated_by
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property \Carbon\Carbon $deleted_at
+ * @property-read Right[]   $rights
  *
  * @package App\Model
  */

@@ -67,7 +67,7 @@ $container['notFoundHandler'] = function ($c) {
 };
 
 // database
-$setting = $container->get('settings');
+$setting = $container['settings'];
 $capsule = new Capsule;
 foreach ($setting['database']['connections'] as $name => $connection){
     $capsule->addConnection($connection, $name);

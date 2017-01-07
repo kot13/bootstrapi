@@ -15,6 +15,7 @@ install:
   - mv config/params-test.php config/params.php
 
 before_script:
+  - echo 'always_populate_raw_post_data = -1' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - mysql -e "CREATE DATABASE testapp;" -uroot
   - php partisan migrate --seed
   - php -S 127.0.0.1:8888 -t ./public >/dev/null 2>&1 &
