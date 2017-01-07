@@ -1,12 +1,26 @@
 language: php
 
+services:
+  - mysql
+
 php:
   - 5.6
   - 7.0
   - 7.1
 
-before_script:
+install:
+  - composer self-update
   - composer install
+  - mv config/db-test.php config/db.php
+  - mv config/params-test.php config/params.php
+
+before_script:
+  - mysql -e "CREATE DATABASE testapp;" -uroot
+  - php partisan migrate --seed
+  - php -S 127.0.0.1:8888 -t /path/to/web/root >/dev/null 2>&1 &
+
+script:
+  - php vendor/codeception/codeception/codecept run
 
 notifications:
   email:

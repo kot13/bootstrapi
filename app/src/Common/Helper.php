@@ -44,7 +44,7 @@ class Helper
      */
     public static function generateRandomString($length=32)
     {
-        $chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ023456789";
+        $chars = 'abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ023456789';
         $charsCount = strlen($chars);
 
         srand((double)microtime()*1000000);

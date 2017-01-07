@@ -1,7 +1,8 @@
 <?php
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-class CreateRightsTable{
+class CreateRightsTable
+{
     /**
     * Do the migration
     */
@@ -12,9 +13,9 @@ class CreateRightsTable{
             $table->increments('id');
             $table->string('name')->unique();
             $table->string('description');
-            $table->timestamps();
             $table->integer('created_by');
             $table->integer('updated_by')->nullable();
+            $table->timestamps();
             $table->softDeletes();
         });
 

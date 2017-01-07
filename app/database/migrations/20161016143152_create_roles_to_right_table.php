@@ -1,7 +1,8 @@
 <?php
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-class CreateRolesToRightTable{
+class CreateRolesToRightTable
+{
     /**
     * Do the migration
     */

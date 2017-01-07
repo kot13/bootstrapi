@@ -13,9 +13,9 @@ class CreateRolesTable
             $table->increments('id');
             $table->string('name')->unique();
             $table->string('description');
-            $table->timestamps();
             $table->integer('created_by');
             $table->integer('updated_by')->nullable();
+            $table->timestamps();
             $table->softDeletes();
         });
     }

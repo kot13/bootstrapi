@@ -19,7 +19,7 @@ class MailRenderer
      * @param string $templatePath
      * @param array $attributes
      */
-    public function __construct($templatePath = "", $attributes = [])
+    public function __construct($templatePath = '', $attributes = [])
     {
         $this->templatePath = rtrim($templatePath, '/\\') . '/';
         $this->attributes = $attributes;
@@ -37,11 +37,11 @@ class MailRenderer
     public function render($template, array $data = [])
     {
         if (isset($data['template'])) {
-            throw new \InvalidArgumentException("Duplicate template key found");
+            throw new \InvalidArgumentException('Duplicate template key found');
         }
 
         if (!is_file($this->templatePath . $template)) {
-            throw new \RuntimeException("View cannot render `$template` because the template does not exist");
+            throw new \RuntimeException('View cannot render `$template` because the template does not exist');
         }
 
         $data = array_merge($this->attributes, $data);

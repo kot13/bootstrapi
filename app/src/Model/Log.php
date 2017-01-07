@@ -1,6 +1,13 @@
 <?php
 namespace App\Model;
 
+/**
+ * Class Log
+ *
+ *
+ *
+ * @package App\Model
+ */
 final class Log extends BaseModel
 {
 

@@ -21,15 +21,15 @@ final class Acl extends ZendAcl
         }
         foreach ($configuration['guards'] as $guardType => $guardRules) {
             if (!in_array($guardType, ['resources', 'routes', 'callables'])) {
-                throw new \Exception("Error Processing Request");
+                throw new \Exception('Error Processing Request');
             }
             foreach ($guardRules as $rule) {
                 if ('callables' === $guardType && 2 !== count($rule)) {
-                    throw new \Exception("Error Processing Request");
+                    throw new \Exception('Error Processing Request');
                 }
                 if ('callables' !== $guardType && 3 !== count($rule)) {
                     if (('resources' === $guardType && 2 !== count($rule)) || 'routes' === $guardType) {
-                        throw new \Exception("Error Processing Request");
+                        throw new \Exception('Error Processing Request');
                     } else {
                         $rule[] = null;
                     }

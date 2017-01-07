@@ -1,7 +1,8 @@
 <?php
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-class CreateUsersTable{
+class CreateUsersTable
+{
     /**
     * Do the migration
     */
@@ -15,7 +16,7 @@ class CreateUsersTable{
             $table->string('password');
             $table->string('access_token')->unique()->nullable();
             $table->string('password_reset_token')->nullable();
-            $table->string('role_id');
+            $table->integer('role_id');
             $table->integer('created_by');
             $table->integer('updated_by')->nullable();
             $table->timestamps();

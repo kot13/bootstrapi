@@ -5,6 +5,25 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Common\Helper;
 use App\Common\Auth;
 
+/**
+ * Class User
+ *
+ * @property integer $id
+ * @property string  $email
+ * @property string  $full_name
+ * @property string  $password
+ * @property string  $access_token
+ * @property string  $password_reset_token
+ * @property integer $role_id
+ * @property integer $created_by
+ * @property integer $updated_by
+ * @property string  $created_at
+ * @property string  $updated_at
+ * @property string  $deleted_at
+ * @property integer $status
+ *
+ * @package App\Model
+ */
 final class User extends BaseModel
 {
     use SoftDeletes;

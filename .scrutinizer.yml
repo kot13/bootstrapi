@@ -256,7 +256,7 @@ checks:
     avoid_aliased_php_functions: true
     argument_type_checks: true
     no_short_method_names:
-      minimum: '3'
+      minimum: '2'
 
 before_commands:
   - "composer install --prefer-source"

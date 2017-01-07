@@ -1,7 +1,8 @@
 <?php
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-class CreateLogsTable{
+class CreateLogsTable
+{
     /**
     * Do the migration
     */
