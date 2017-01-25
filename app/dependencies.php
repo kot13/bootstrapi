@@ -56,7 +56,7 @@ $container['errorHandler'] = function($c) {
 
 $container['notAllowedHandler'] = function($c) {
     return function($request, $response, $methods) use ($c) {
-        throw new JsonException(null, 405, 'Method Not Allowed', 'Method must be one of: ' . implode(', ', $methods));
+        throw new JsonException(null, 405, 'Method Not Allowed', 'Method must be one of: '.implode(', ', $methods));
     };
 };
 

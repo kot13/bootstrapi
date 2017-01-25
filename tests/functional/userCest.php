@@ -11,6 +11,28 @@ class userCest
     {
     }
 
+    public function getList(FunctionalTester $I)
+    {
+        $I->wantTo('test get user list');
+        $I->haveHttpHeader('Authorization', $I->getAccessToken($I));
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->sendGET('/api/user');
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+    }
+
+    public function getOne(FunctionalTester $I)
+    {
+        $I->wantTo('test get one user');
+        $I->haveHttpHeader('Authorization', $I->getAccessToken($I));
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->sendGET('/api/user/1');
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+    }
+
     public function getListAccessDenied(FunctionalTester $I)
     {
         $I->wantTo('test get user list without auth');
