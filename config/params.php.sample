@@ -1,10 +1,11 @@
 <?php
 
 return [
-    'host' => 'http://hostname.domain',
-    'allowHosts' => [
+    'host'               => 'http://hostname.domain',
+    'allowHosts'         => [
         'hostname.domain',
         'docs.hostname.domain',
     ],
-    'tokenExpire' => 3600,
+    'tokenExpire'        => 3600,
+    'refreshTokenExpire' => 3600 * 24 * 7,
 ];

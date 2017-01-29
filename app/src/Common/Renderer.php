@@ -6,6 +6,21 @@ use Psr\Http\Message\ResponseInterface as Response;
 final class Renderer
 {
     /**
+     * @var
+     */
+    private $config;
+
+    /**
+     * Renderer constructor.
+     *
+     * @param $config
+     */
+    public function __construct($config)
+    {
+        $this->config = $config;
+    }
+
+    /**
      * @param Response $response
      * @param int      $statusCode
      * @param string   $data

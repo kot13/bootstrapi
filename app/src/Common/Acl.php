@@ -2,8 +2,8 @@
 namespace App\Common;
 
 use Zend\Permissions\Acl\Acl as ZendAcl;
-use Zend\Permissions\Acl\Role\GenericRole as Role;
-use Zend\Permissions\Acl\Resource\GenericResource as Resource;
+use Zend\Permissions\Acl\Role\GenericRole as GenericRole;
+use Zend\Permissions\Acl\Resource\GenericResource as GenericResource;
 
 final class Acl extends ZendAcl
 {
@@ -11,12 +11,12 @@ final class Acl extends ZendAcl
     {
         // setup roles
         foreach ($configuration['roles'] as $role => $parents) {
-            $this->addRole(new Role($role), $parents);
+            $this->addRole(new GenericRole($role), $parents);
         }
         // setup resources
         if (array_key_exists('resources', $configuration)) {
             foreach ($configuration['resources'] as $resource => $parent) {
-                $this->addResource(new Resource($resource), $parent);
+                $this->addResource(new GenericResource($resource), $parent);
             }
         }
         foreach ($configuration['guards'] as $guardType => $guardRules) {
@@ -38,10 +38,10 @@ final class Acl extends ZendAcl
                 $privileges = (3 === count($rule) ? $rule[2] : null);
                 if ('callables' === $guardType) {
                     $resource = 'callable/'.$resource;
-                    $this->addResource(new Resource($resource));
+                    $this->addResource(new GenericResource($resource));
                 } elseif ('routes' === $guardType) {
                     $resource = 'route'.$resource;
-                    $this->addResource(new Resource($resource));
+                    $this->addResource(new GenericResource($resource));
                     $privileges = array_map('strtolower', $privileges);
                 }
                 $this->allow($roles, $resource, $privileges);

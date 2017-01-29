@@ -9,7 +9,10 @@ $app->group('/api', function() {
             ->withStatus(200);
     });
 
-    $this->post('/token', 'App\Controller\TokenController:auth');
+    $this->post('/token', 'App\Controller\TokenController:getToken');
+    $this->post('/refresh-token', 'App\Controller\TokenController:refreshToken');
+    $this->post('/{entity:user}/request-password-reset', 'App\Controller\UserController:actionRequestResetPassword');
+    $this->post('/{entity:user}/reset-password', 'App\Controller\UserController:actionResetPassword');
 
     $this->group('/{entity:user}', function() {
         $this->get('', 'App\Controller\UserController:actionIndex');
@@ -17,10 +20,7 @@ $app->group('/api', function() {
         $this->get('/{id:[0-9]+}', 'App\Controller\UserController:actionGet');
         $this->patch('/{id:[0-9]+}', 'App\Controller\UserController:actionUpdate');
         $this->delete('/{id:[0-9]+}', 'App\Controller\UserController:actionDelete');
-        $this->post('/change-password', 'App\Controller\UserController:actionChangePassword');
-        $this->post('/request-password-reset', 'App\Controller\UserController:actionRequestResetPassword');
-        $this->post('/reset-password', 'App\Controller\UserController:actionResetPassword');
-    });
+    })->add(new \App\Middleware\Authentication($this->getContainer()->get('acl'), $this->getContainer()->get('settings')));
 
     $this->group('/{entity:role|right}', function() {
         $this->get('', 'App\Controller\CrudController:actionIndex');
@@ -28,10 +28,10 @@ $app->group('/api', function() {
         $this->post('', 'App\Controller\CrudController:actionCreate');
         $this->patch('/{id:[0-9]+}', 'App\Controller\CrudController:actionUpdate');
         $this->delete('/{id:[0-9]+}', 'App\Controller\CrudController:actionDelete');
-    });
+    })->add(new \App\Middleware\Authentication($this->getContainer()->get('acl'), $this->getContainer()->get('settings')));
 
     $this->group('/{entity:log}', function() {
         $this->get('', 'App\Controller\CrudController:actionIndex');
         $this->get('/{id:[0-9]+}', 'App\Controller\CrudController:actionGet');
-    });
+    })->add(new \App\Middleware\Authentication($this->getContainer()->get('acl'), $this->getContainer()->get('settings')));
 });

@@ -14,7 +14,6 @@ class CreateUsersTable
             $table->string('email')->unique();
             $table->string('full_name');
             $table->string('password');
-            $table->string('access_token')->unique()->nullable();
             $table->string('password_reset_token')->nullable();
             $table->integer('role_id');
             $table->integer('created_by');

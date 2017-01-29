@@ -77,7 +77,7 @@ class CrudController extends BaseController
             $entities = $query->get();
         }
 
-        $result = $this->encode($request, $entities, $pageNumber, $pageSize);
+        $result = $this->encoder->encode($request, $entities, $pageNumber, $pageSize);
 
         return $this->renderer->jsonApiRender($response, 200, $result);
     }
@@ -100,7 +100,7 @@ class CrudController extends BaseController
             throw new JsonException($args['entity'], 404, 'Not found', 'Entity not found');
         }
 
-        $result = $this->encode($request, $entity);
+        $result = $this->encoder->encode($request, $entity);
 
         return $this->renderer->jsonApiRender($response, 200, $result);
     }
@@ -122,7 +122,7 @@ class CrudController extends BaseController
         $this->validationRequest($params, $args['entity'], new $requestClass());
 
         $entity = $modelName::create($params['data']['attributes']);
-        $result = $this->encode($request, $entity);
+        $result = $this->encoder->encode($request, $entity);
 
         return $this->renderer->jsonApiRender($response, 200, $result);
 
@@ -152,7 +152,7 @@ class CrudController extends BaseController
 
         $entity->update($params['data']['attributes']);
 
-        $result = $this->encode($request, $entity);
+        $result = $this->encoder->encode($request, $entity);
 
         return $this->renderer->jsonApiRender($response, 200, $result);
     }

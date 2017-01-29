@@ -12,7 +12,6 @@ use App\Common\Auth;
  * @property string         $email
  * @property string         $full_name
  * @property string         $password
- * @property string         $access_token
  * @property string         $password_reset_token
  * @property integer        $role_id
  * @property integer        $created_by
@@ -47,7 +46,6 @@ final class User extends BaseModel
 
     protected $hidden = [
         'password',
-        'access_token',
         'password_reset_token',
     ];
 
@@ -66,6 +64,14 @@ final class User extends BaseModel
     public function role()
     {
         return $this->hasOne('App\Model\Role', 'id', 'role_id');
+    }
+
+    public function access_tokens(){
+        return $this->hasMany('App\Model\AccessToken', 'user_id', 'id');
+    }
+
+    public function refresh_tokens(){
+        return $this->hasMany('App\Model\RefreshToken', 'user_id', 'id');
     }
 
     public function scopeCurrentUser($query)
@@ -103,16 +109,6 @@ final class User extends BaseModel
     public static function findUserByEmail($email)
     {
         return self::where('email', $email)->where('status', self::STATUS_ACTIVE)->first();
-    }
-
-    /**
-     * @param string $accessToken
-     *
-     * @return User|null
-     */
-    public static function findUserByAccessToken($accessToken)
-    {
-        return self::where('access_token', md5($accessToken))->where('status', self::STATUS_ACTIVE)->first();
     }
 
     /**

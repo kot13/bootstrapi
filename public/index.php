@@ -13,17 +13,31 @@ function prr($value) {
     };
 }
 
+// Load all class
 require __DIR__.'/../vendor/autoload.php';
 
+// Load application settings
 $settings = require __DIR__.'/../app/settings.php';
 
-$app = new \Slim\App($settings);
+// Create container for application
+$container = new \Slim\Container($settings);
 
-// Set up dependencies
-require __DIR__.'/../app/dependencies.php';
+// Register service providers & factories
+$container->register(new \App\Providers\LogServiceProvider());
+$container->register(new \App\Providers\RendererServiceProvider());
+$container->register(new \App\Providers\AclServiceProvider());
+$container->register(new \App\Providers\DatabaseServiceProvider());
+$container->register(new \App\Providers\ValidationServiceProvider());
+$container->register(new \App\Providers\MailerServiceProvider());
+$container->register(new \App\Providers\ErrorHandlerServiceProvider());
+$container->register(new \App\Providers\EncoderServiceProvider());
+
+// Create new application
+$app = new \Slim\App($container);
 
 // Register middleware
-require __DIR__.'/../app/middleware.php';
+$app->add(new \App\Middleware\Logger($app->getContainer()->get('logger')));
+$app->add(new \App\Middleware\CustomException($app->getContainer()->get('renderer')));
 
 // Register routes
 require __DIR__.'/../app/routes.php';

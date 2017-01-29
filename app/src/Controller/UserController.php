@@ -38,7 +38,7 @@ final class UserController extends CrudController
         $user->setPassword($params['data']['attributes']['password']);
         $user->save();
 
-        $result = $this->encode($request, $user);
+        $result = $this->encoder->encode($request, $user);
 
         return $this->renderer->jsonApiRender($response, 200, $result);
     }
@@ -70,7 +70,7 @@ final class UserController extends CrudController
             $user->save();
         }
 
-        $result = $this->encode($request, $user);
+        $result = $this->encoder->encode($request, $user);
 
         return $this->renderer->jsonApiRender($response, 200, $result);
     }

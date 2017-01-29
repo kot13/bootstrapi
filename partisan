@@ -145,6 +145,7 @@ class Partisan
         };
 
         $baseName  = date('YmdHis') . '_' . $migrationName . '.php';
+        $className = $migrationName; // need for template
 
         if (file_exists($baseName)) {
             echo 'The file ' . $templatePath . ' already exists'.PHP_EOL;
