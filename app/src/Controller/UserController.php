@@ -3,12 +3,10 @@ namespace App\Controller;
 
 use App\Model\User;
 use App\Common\JsonException;
-
 use App\Requests\RequestResetPasswordRequest;
 use App\Requests\ResetPasswordRequest;
 use App\Requests\UserCreateRequest;
 use App\Requests\UserUpdateRequest;
-
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -19,7 +17,7 @@ final class UserController extends CrudController
      * @param Response $response
      * @param array    $args
      *
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      * @throws JsonException
      */
     public function actionCreate(Request $request, Response $response, $args)
@@ -48,7 +46,7 @@ final class UserController extends CrudController
      * @param Response $response
      * @param array    $args
      *
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      * @throws JsonException
      */
     public function actionUpdate(Request $request, Response $response, $args)
@@ -80,7 +78,7 @@ final class UserController extends CrudController
      * @param Response $response
      * @param array    $args
      *
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      * @throws JsonException
      */
     public function actionRequestResetPassword(Request $request, Response $response, $args)
@@ -126,7 +124,7 @@ final class UserController extends CrudController
      * @param Response $response
      * @param array    $args
      *
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      * @throws JsonException
      */
     public function actionResetPassword(Request $request, Response $response, $args)
@@ -141,7 +139,7 @@ final class UserController extends CrudController
             $user->setPassword($params['data']['attributes']['password']);
             $user->removePasswordResetToken();
 
-            if($user->save()){
+            if ($user->save()) {
                 return $this->renderer->jsonApiRender($response, 204);
             };
         }

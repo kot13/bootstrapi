@@ -4,7 +4,6 @@ namespace App\Controller;
 use App\Common\Helper;
 use App\Common\JsonException;
 use App\Scopes\MaxPerPageScope;
-
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -15,7 +14,7 @@ class CrudController extends BaseController
      * @param Response $response
      * @param array    $args
      *
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function actionIndex(Request $request, Response $response, $args)
     {
@@ -34,7 +33,9 @@ class CrudController extends BaseController
                 $filter['operator']  = trim(strtolower($filter['operator']));
                 $filter['attribute'] = trim($filter['attribute']);
 
-                if (empty($filter['operator']) || empty($filter['attribute']) || empty($filter['value'])) continue;
+                if (empty($filter['operator']) || empty($filter['attribute']) || empty($filter['value'])) {
+                    continue;
+                }
 
                 switch ($filter['operator']) {
                     case 'in':
@@ -44,7 +45,7 @@ class CrudController extends BaseController
                         $query = $query->whereNotIn($filter['attribute'], $filter['value']);
                         break;
                     case 'like':
-                        $query = $query->where($filter['attribute'], 'like', '%' . $filter['value'] . '%');
+                        $query = $query->where($filter['attribute'], 'like', '%'.$filter['value'] . '%');
                         break;
                     case '=':
                     case '!=':
@@ -87,7 +88,7 @@ class CrudController extends BaseController
      * @param Response $response
      * @param array    $args
      *
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      * @throws JsonException
      */
     public function actionGet(Request $request, Response $response, $args)
@@ -133,7 +134,7 @@ class CrudController extends BaseController
      * @param Response $response
      * @param array    $args
      *
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      * @throws JsonException
      */
     public function actionUpdate(Request $request, Response $response, $args)
@@ -162,7 +163,7 @@ class CrudController extends BaseController
      * @param Response $response
      * @param array    $args
      *
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      * @throws JsonException
      */
     public function actionDelete(Request $request, Response $response, $args)

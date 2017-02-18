@@ -24,7 +24,8 @@ final class RefreshToken extends BaseModel
 
     public $timestamps = false;
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo('App\Model\User');
     }
 
@@ -52,7 +53,7 @@ final class RefreshToken extends BaseModel
      */
     public static function createRefreshToken(User $user)
     {
-        $refreshToken = md5(Helper::generateRandomString() . '_' . time());
+        $refreshToken = md5(Helper::generateRandomString().'_'.time());
 
         $user->refresh_tokens()->create([
             'refresh_token' => $refreshToken,

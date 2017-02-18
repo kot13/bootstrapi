@@ -21,7 +21,7 @@ final class ValidationServiceProvider extends BaseServiceProvider
         $config = $container['settings'];
 
         // translation
-        $container['translator'] = function () use ($config) {
+        $container['translator'] = function() use ($config) {
             $translateFileLoader = new FileLoader(new Filesystem, $config['translate']['path']);
             $translator          = new Translator($translateFileLoader, $config['translate']['locale']);
 
@@ -29,9 +29,9 @@ final class ValidationServiceProvider extends BaseServiceProvider
         };
 
         // validation
-        $container['validation'] = function (Container $c) use ($config) {
-            $validation = new Factory($c->get('translator'));
-            $presence   = new DatabasePresenceVerifier($c->get('databaseManager'));
+        $container['validation'] = function(Container $container) use ($config) {
+            $validation = new Factory($container->get('translator'));
+            $presence   = new DatabasePresenceVerifier($container->get('databaseManager'));
             $validation->setPresenceVerifier($presence);
 
             return $validation;

@@ -101,7 +101,7 @@ final class LogSchema extends BaseSchema
     {
         return [
             'action'      => $log->action,
-            'entity_id'   => (int) $log->entity_id,
+            'entity_id'   => (int)$log->entity_id,
             'entity_type' => $log->entity_type,
             'state'       => $log->state,
             'created_at'  => Carbon::parse($log->created_at)->setTimezone('UTC')->format(Carbon::ISO8601),

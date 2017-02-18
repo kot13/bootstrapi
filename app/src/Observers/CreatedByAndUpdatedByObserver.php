@@ -15,7 +15,7 @@ final class CreatedByAndUpdatedByObserver extends BaseObserver
     public function creating(BaseModel $model)
     {
         $user = Auth::getUser();
-        if(!is_null($user)){
+        if (!is_null($user)) {
             $model->created_by = $user->id;
         }
     }
@@ -30,7 +30,7 @@ final class CreatedByAndUpdatedByObserver extends BaseObserver
     public function updating(BaseModel $model)
     {
         $user = Auth::getUser();
-        if(!is_null($user)){
+        if (!is_null($user)) {
             $model->updated_by = $user->id;
         }
     }

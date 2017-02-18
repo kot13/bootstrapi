@@ -4,12 +4,11 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 class CreateUsersTable
 {
     /**
-    * Do the migration
-    */
+     * Do the migration
+     */
     public function up()
     {
-        Capsule::schema()->create('users', function($table)
-        {
+        Capsule::schema()->create('users', function($table) {
             $table->increments('id');
             $table->string('email')->unique();
             $table->string('full_name');
@@ -26,8 +25,8 @@ class CreateUsersTable
     }
 
     /**
-    * Undo the migration
-    */
+     * Undo the migration
+     */
     public function down()
     {
         Capsule::schema()->drop('users');

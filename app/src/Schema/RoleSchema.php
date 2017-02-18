@@ -196,25 +196,25 @@ use \Carbon\Carbon;
  */
 
 /**
-     * @api {delete} /role/:id Удаление роли
-     * @apiName DeleteRole
-     * @apiGroup Role
-     *
-     * @apiDescription Метод для удаления роли.
-     *
-     * @apiPermission admin
-     *
-     * @apiParam {Number} id Id роли
-     *
-     * @apiHeader {String} Authorization Токен.
-     *
-     * @apiSuccessExample {json} Успешно (204)
-     *     HTTP/1.1 204 OK
-     *
-     * @apiUse UnauthorizedError
-     * @apiUse StandardErrors
-     * @apiUse NotFoundError
-     */
+ * @api {delete} /role/:id Удаление роли
+ * @apiName DeleteRole
+ * @apiGroup Role
+ *
+ * @apiDescription Метод для удаления роли.
+ *
+ * @apiPermission admin
+ *
+ * @apiParam {Number} id Id роли
+ *
+ * @apiHeader {String} Authorization Токен.
+ *
+ * @apiSuccessExample {json} Успешно (204)
+ *     HTTP/1.1 204 OK
+ *
+ * @apiUse UnauthorizedError
+ * @apiUse StandardErrors
+ * @apiUse NotFoundError
+ */
 final class RoleSchema extends BaseSchema
 {
     protected $resourceType = 'role';

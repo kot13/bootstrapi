@@ -8,12 +8,18 @@ final class Auth
     /**
      * Forbidden to create new instances
      */
-    private function __construct() {}
+    private function __construct()
+    {
+
+    }
 
     /**
      * Forbidden to cloned instances
      */
-    private function __clone() {}
+    private function __clone()
+    {
+
+    }
 
     /**
      * @var User
@@ -49,7 +55,7 @@ final class Auth
      */
     public static function getUserId()
     {
-        if(self::checkUser()){
+        if (self::checkUser()) {
             return self::$user->id;
         } else {
             return null;

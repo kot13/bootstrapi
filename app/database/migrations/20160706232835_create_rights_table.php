@@ -4,12 +4,11 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 class CreateRightsTable
 {
     /**
-    * Do the migration
-    */
+     * Do the migration
+     */
     public function up()
     {
-        Capsule::schema()->create('rights', function($table)
-        {
+        Capsule::schema()->create('rights', function($table) {
             $table->increments('id');
             $table->string('name')->unique();
             $table->string('description');
@@ -22,8 +21,8 @@ class CreateRightsTable
     }
 
     /**
-    * Undo the migration
-    */
+     * Undo the migration
+     */
     public function down()
     {
         Capsule::schema()->drop('rights');

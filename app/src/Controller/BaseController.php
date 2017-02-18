@@ -82,7 +82,8 @@ abstract class BaseController
     /**
      * Register model observers
      */
-    private function registerModelObservers(){
+    private function registerModelObservers()
+    {
         $observers = [
             Observers\CreatedByAndUpdatedByObserver::class => [
                 Model\Right::class,
@@ -97,8 +98,8 @@ abstract class BaseController
             ]
         ];
 
-        foreach($observers as $observer => $models){
-            foreach($models as $model){
+        foreach ($observers as $observer => $models) {
+            foreach ($models as $model) {
                 call_user_func($model. '::observe', $observer);
             }
         }

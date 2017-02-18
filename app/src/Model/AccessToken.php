@@ -24,7 +24,8 @@ final class AccessToken extends BaseModel
 
     public $timestamps = false;
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo('App\Model\User');
     }
 
@@ -56,7 +57,7 @@ final class AccessToken extends BaseModel
         try {
             $payload = JWT::decode($token, getenv('SECRET_KEY'), ['HS256']);
             return in_array($payload->aud, $whiteList);
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             return false;
         }
     }

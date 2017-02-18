@@ -28,12 +28,14 @@ final class User extends BaseModel
 {
     use SoftDeletes;
 
-    const STATUS_BLOCKED = 0;
-    const STATUS_ACTIVE  = 1;
-    const STATUS_WAIT    = 2;
+    const STATUS_BLOCKED     = 0;
+    const STATUS_ACTIVE      = 1;
+    const STATUS_WAIT        = 2;
 
-    const ROLE_ADMIN     = 1;
-    const ROLE_USER      = 2;
+    const ROLE_ADMIN         = 1;
+    const ROLE_USER          = 2;
+
+    const EXPIRE_RESET_TOKEN = 3600;
 
     protected $table = 'users';
 
@@ -138,8 +140,8 @@ final class User extends BaseModel
             return false;
         }
 
-        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
-        $expire    = 3600;
+        $timestamp = (int)substr($token, strrpos($token, '_') + 1);
+        $expire    = self::EXPIRE_RESET_TOKEN;
         return $timestamp + $expire >= time();
     }
 
@@ -148,7 +150,7 @@ final class User extends BaseModel
      */
     public function generatePasswordResetToken()
     {
-        $this->password_reset_token = Helper::generateRandomString() . '_' . time();
+        $this->password_reset_token = Helper::generateRandomString().'_'.time();
     }
 
     /**

@@ -4,12 +4,11 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 class CreateLogsTable
 {
     /**
-    * Do the migration
-    */
+     * Do the migration
+     */
     public function up()
     {
-        Capsule::schema()->create('logs', function($table)
-        {
+        Capsule::schema()->create('logs', function($table) {
             $table->increments('id');
             $table->string('action');
             $table->morphs('entity');
@@ -21,8 +20,8 @@ class CreateLogsTable
     }
 
     /**
-    * Undo the migration
-    */
+     * Undo the migration
+     */
     public function down()
     {
         Capsule::schema()->drop('logs');

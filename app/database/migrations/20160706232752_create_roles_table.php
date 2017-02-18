@@ -8,8 +8,7 @@ class CreateRolesTable
      */
     public function up()
     {
-        Capsule::schema()->create('roles', function($table)
-        {
+        Capsule::schema()->create('roles', function($table) {
             $table->increments('id');
             $table->string('name')->unique();
             $table->string('description');

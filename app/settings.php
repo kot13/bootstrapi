@@ -8,14 +8,14 @@ return [
         // monolog settings
         'logger' => [
             'name'  => 'app',
-            'path'  => __DIR__ . '/../log/app.log',
+            'path'  => __DIR__.'/../log/app.log',
             'level' => Monolog\Logger::DEBUG,
         ],
 
-        'mailTemplate' => __DIR__ . '/../mail',
+        'mailTemplate' => __DIR__.'/../mail',
 
         // DB
-        'database' => require(__DIR__ . '/../config/db.php'),
+        'database' => require(__DIR__.'/../config/db.php'),
 
         // ACL
         'acl' => [
@@ -30,7 +30,7 @@ return [
              * specified here so can be used in the code if needs be
              * Example: ['user' => null]
              */
-            'resources' => [ ],
+            'resources' => [],
             // where we specify the guarding!
             'guards' => [
                 /**
@@ -39,7 +39,7 @@ return [
                  * if included all resources default to deny unless specified.
                  * Example: ['user', ['admin']]
                  */
-                'resources' => [ ],
+                'resources' => [],
                 /**
                  * list of literal routes for guarding.
                  * optional
@@ -48,8 +48,8 @@ return [
                  * ['route', ['roles'], ['methods',' methods1']]
                  */
                 'routes' => [
-                    ['/api/token',  ['guest'],  ['post']],
-                    ['/api/user',   ['user'],   ['get']],
+                    ['/api/token', ['guest'], ['post']],
+                    ['/api/user', ['user'], ['get']],
                 ],
                 /**
                  * list of callables to resolve against
@@ -91,10 +91,10 @@ return [
         ],
 
         'translate' => [
-            'path' => __DIR__ . '/../lang',
+            'path' => __DIR__.'/../lang',
             'locale' => 'ru',
         ],
 
-        'params' => require(__DIR__ . '/../config/params.php'),
+        'params' => require(__DIR__.'/../config/params.php'),
     ],
 ];

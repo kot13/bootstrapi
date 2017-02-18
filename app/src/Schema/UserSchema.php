@@ -312,7 +312,7 @@ final class UserSchema extends BaseSchema
         return [
             'full_name'  => $user->full_name,
             'email'      => $user->email,
-            'role_id'    => (int) $user->role_id,
+            'role_id'    => (int)$user->role_id,
             'created_at' => Carbon::parse($user->created_at)->setTimezone('UTC')->format(Carbon::ISO8601),
             'updated_at' => Carbon::parse($user->updated_at)->setTimezone('UTC')->format(Carbon::ISO8601),
             'created_by' => $user->created_by,

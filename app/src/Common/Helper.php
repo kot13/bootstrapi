@@ -42,17 +42,16 @@ class Helper
      *
      * @return string
      */
-    public static function generateRandomString($length=32)
+    public static function generateRandomString($length = 32)
     {
         $chars      = 'abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ023456789';
         $charsCount = strlen($chars);
 
-        srand((double)microtime()*1000000);
+        srand((double)microtime() * 1000000);
         $i     = 1;
         $token = '';
 
-        while ($i <= $length)
-        {
+        while ($i <= $length) {
             $num = rand() % $charsCount;
             $tmp = substr($chars, $num, 1);
             $token .= $tmp;

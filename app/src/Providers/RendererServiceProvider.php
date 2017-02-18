@@ -17,13 +17,13 @@ final class RendererServiceProvider extends BaseServiceProvider
     {
         $config = $container['settings'];
 
-        $container['renderer'] = function () use ($config) {
+        $container['renderer'] = function() use ($config) {
             $renderer = new Renderer($config);
 
             return $renderer;
         };
 
-        $container['mailRenderer'] = function () use ($config) {
+        $container['mailRenderer'] = function() use ($config) {
             $renderer = new MailRenderer($config['mailTemplate']);
 
             return $renderer;

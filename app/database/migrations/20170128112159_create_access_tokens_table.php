@@ -4,12 +4,11 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 class CreateAccessTokensTable
 {
     /**
-    * Do the migration
-    */
+     * Do the migration
+     */
     public function up()
     {
-        Capsule::schema()->create('access_tokens', function($table)
-        {
+        Capsule::schema()->create('access_tokens', function($table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index();
             $table->string('access_token')->unique()->nullable();
@@ -19,8 +18,8 @@ class CreateAccessTokensTable
     }
 
     /**
-    * Undo the migration
-    */
+     * Undo the migration
+     */
     public function down()
     {
         Capsule::schema()->drop('access_tokens');

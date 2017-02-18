@@ -16,7 +16,7 @@ final class AclServiceProvider extends BaseServiceProvider
     {
         $config = $container['settings']['acl'];
 
-        $container['acl'] = function () use ($config) {
+        $container['acl'] = function() use ($config) {
             $acl = new Acl($config);
 
             return $acl;

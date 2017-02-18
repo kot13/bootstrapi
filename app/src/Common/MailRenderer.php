@@ -21,7 +21,7 @@ class MailRenderer
      */
     public function __construct($templatePath = '', $attributes = [])
     {
-        $this->templatePath = rtrim($templatePath, '/\\') . '/';
+        $this->templatePath = rtrim($templatePath, '/\\').'/';
         $this->attributes = $attributes;
     }
 
@@ -40,7 +40,7 @@ class MailRenderer
             throw new \InvalidArgumentException('Duplicate template key found');
         }
 
-        if (!is_file($this->templatePath . $template)) {
+        if (!is_file($this->templatePath.$template)) {
             throw new \RuntimeException('View cannot render `$template` because the template does not exist');
         }
 
@@ -48,12 +48,14 @@ class MailRenderer
 
         try {
             ob_start();
-            $this->protectedIncludeScope($this->templatePath . $template, $data);
+            $this->protectedIncludeScope($this->templatePath.$template, $data);
             $output = ob_get_clean();
-        } catch(\Throwable $e) { // PHP 7+
+        } catch (\Throwable $e) {
+            // PHP 7+
             ob_end_clean();
             throw $e;
-        } catch(\Exception $e) { // PHP < 7
+        } catch (\Exception $e) {
+            // PHP < 7
             ob_end_clean();
             throw $e;
         }
