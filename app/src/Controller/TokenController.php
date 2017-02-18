@@ -53,7 +53,7 @@ final class TokenController extends BaseController
      * @param Request  $request
      * @param Response $response
      *
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      * @throws JsonException
      */
     public function getToken(Request $request, Response $response)
@@ -67,8 +67,8 @@ final class TokenController extends BaseController
         if ($user && password_verify($params['data']['attributes']['password'], $user->password)) {
             $token = AccessToken::createToken(
                 $request->getUri()->getHost(),
-                $this->settings['params']['tokenExpire'],
-                $user
+                $user,
+                $this->settings['params']['tokenExpire']
             );
             $refreshToken = RefreshToken::createRefreshToken($user);
         } else {
@@ -113,7 +113,7 @@ final class TokenController extends BaseController
      * @param Request  $request
      * @param Response $response
      *
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      * @throws JsonException
      */
     public function refreshToken(Request $request, Response $response)
@@ -127,8 +127,8 @@ final class TokenController extends BaseController
         if ($user) {
             $token = AccessToken::createToken(
                 $request->getUri()->getHost(),
-                $this->settings['params']['tokenExpire'],
-                $user
+                $user,
+                $this->settings['params']['tokenExpire']
             );
             $refreshToken = RefreshToken::createRefreshToken($user);
         } else {

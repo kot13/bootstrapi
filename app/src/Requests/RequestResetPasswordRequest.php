@@ -4,7 +4,7 @@ namespace App\Requests;
 class RequestResetPasswordRequest implements IRequest
 {
     /**
-     * @return array
+     * @return array<string,string>
      */
     public function rules()
     {

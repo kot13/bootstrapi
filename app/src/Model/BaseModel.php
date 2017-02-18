@@ -4,6 +4,13 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use App\Scopes\MaxPerPageScope;
 
+/**
+ * Class BaseModel
+ *
+ * @property integer $id
+ *
+ * @package App\Model
+ */
 abstract class BaseModel extends Model
 {
     /**

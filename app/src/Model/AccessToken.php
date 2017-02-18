@@ -63,12 +63,12 @@ final class AccessToken extends BaseModel
 
     /**
      * @param string $host
-     * @param int    $tokenExpire
      * @param User   $user
+     * @param int    $tokenExpire
      *
      * @return string
      */
-    public static function createToken($host, $tokenExpire = 3600, User $user)
+    public static function createToken($host, User $user, $tokenExpire = 3600)
     {
         $secret_key = getenv('SECRET_KEY');
         $token      = [

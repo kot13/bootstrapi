@@ -4,7 +4,7 @@ namespace App\Requests;
 class RoleCreateRequest implements IRequest
 {
     /**
-     * @return array
+     * @return array<string,string>
      */
     public function rules()
     {

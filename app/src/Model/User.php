@@ -66,11 +66,13 @@ final class User extends BaseModel
         return $this->hasOne('App\Model\Role', 'id', 'role_id');
     }
 
-    public function access_tokens(){
+    public function access_tokens()
+    {
         return $this->hasMany('App\Model\AccessToken', 'user_id', 'id');
     }
 
-    public function refresh_tokens(){
+    public function refresh_tokens()
+    {
         return $this->hasMany('App\Model\RefreshToken', 'user_id', 'id');
     }
 
@@ -162,7 +164,9 @@ final class User extends BaseModel
      */
     public function setPassword($password)
     {
-        $this->access_token = null;
+        AccessToken::where('user_id', $this->id)->delete();
+        RefreshToken::where('user_id', $this->id)->delete();
+
         $this->password = password_hash($password, PASSWORD_DEFAULT, ['cost' => 13]);
     }
 }

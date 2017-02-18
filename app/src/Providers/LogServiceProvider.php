@@ -18,7 +18,7 @@ final class LogServiceProvider extends BaseServiceProvider
     {
         $config = $container['settings']['logger'];
 
-        $container['logger'] = function (Container $c) use ($config) {
+        $container['logger'] = function () use ($config) {
             $logger = new Logger($config['name']);
             $logger->pushProcessor(new UidProcessor());
             $logger->pushHandler(new StreamHandler($config['path'], $config['level']));

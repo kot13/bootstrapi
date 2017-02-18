@@ -15,7 +15,7 @@ final class MailerServiceProvider extends BaseServiceProvider
     {
         $config = $container['settings'];
 
-        $container['mailer'] = function (Container $c) use ($config) {
+        $container['mailer'] = function () use ($config) {
             $transport = \Swift_MailTransport::newInstance();
             $mailer    = \Swift_Mailer::newInstance($transport);
 
