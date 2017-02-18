@@ -1,4 +1,8 @@
 <?php
+if (php_sapi_name() == 'cli-server') {
+    putenv('SECRET_KEY=test-key');
+}
+
 if (getenv('APPLICATION_ENV') == 'develop') {
     define('DEBUG_MODE', 1);
     error_reporting(E_ALL);
