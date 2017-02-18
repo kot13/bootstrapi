@@ -1,6 +1,8 @@
 <?php
 namespace App\Model;
 
+use Firebase\JWT\JWT;
+
 /**
  * Class AccessToken
  *
@@ -41,5 +43,48 @@ final class AccessToken extends BaseModel
         }
 
         return $user;
+    }
+
+    /**
+     * @param string $token
+     * @param array  $whiteList
+     *
+     * @return bool
+     */
+    public static function validateToken($token, $whiteList = [])
+    {
+        try {
+            $payload = JWT::decode($token, getenv('SECRET_KEY'), ['HS256']);
+            return in_array($payload->aud, $whiteList);
+        } catch (\Exception $e){
+            return false;
+        }
+    }
+
+    /**
+     * @param string $host
+     * @param int    $tokenExpire
+     * @param User   $user
+     *
+     * @return string
+     */
+    public static function createToken($host, $tokenExpire = 3600, User $user)
+    {
+        $secret_key = getenv('SECRET_KEY');
+        $token      = [
+            'iss' => getenv('AUTH_ISS'),
+            'aud' => $host,
+            'iat' => time(),
+            'exp' => time() + $tokenExpire,
+        ];
+
+        $jwt = JWT::encode($token, $secret_key);
+
+        $user->access_tokens()->create([
+            'access_token' => md5($jwt),
+            'created_at'   => date('Y-m-d H:i:s'),
+        ]);
+
+        return $jwt;
     }
 }

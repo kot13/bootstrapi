@@ -14,8 +14,6 @@ final class ErrorHandlerServiceProvider extends BaseServiceProvider
      */
     public function register(Container $container)
     {
-        $config = $container['settings'];
-
         $container['errorHandler'] = function (Container $c) {
             return function($request, $response, $exception) use ($c) {
                 $details = (defined('DEBUG_MODE') && DEBUG_MODE == 1) ? $exception->getMessage() : 'Internal server error';

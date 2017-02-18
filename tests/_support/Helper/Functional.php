@@ -6,6 +6,8 @@ namespace Helper;
 
 class Functional extends \Codeception\Module
 {
+    const prefix = 'Bearer ';
+
     private $access_token = null;
 
     function getAccessToken(\FunctionalTester $I)
@@ -26,6 +28,6 @@ class Functional extends \Codeception\Module
             $this->access_token = isset($response['access_token']) ? $response['access_token'] : null;
         }
 
-        return $this->access_token;
+        return self::prefix.$this->access_token;
     }
 }

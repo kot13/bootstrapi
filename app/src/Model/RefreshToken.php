@@ -1,6 +1,8 @@
 <?php
 namespace App\Model;
 
+use App\Common\Helper;
+
 /**
  * Class RefreshToken
  *
@@ -41,5 +43,22 @@ final class RefreshToken extends BaseModel
         }
 
         return $user;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return string
+     */
+    public static function createRefreshToken(User $user)
+    {
+        $refreshToken = md5(Helper::generateRandomString() . '_' . time());
+
+        $user->refresh_tokens()->create([
+            'refresh_token' => $refreshToken,
+            'created_at'    => date('Y-m-d H:i:s'),
+        ]);
+
+        return $refreshToken;
     }
 }

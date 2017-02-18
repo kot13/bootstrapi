@@ -1,37 +1,20 @@
 <?php
 namespace App\Controller;
 
-use App\Model\RefreshToken;
 use App\Requests\GetTokenRequest;
 use App\Requests\RefreshTokenRequest;
-use Firebase\JWT\JWT;
 use App\Model\User;
+use App\Model\AccessToken;
+use App\Model\RefreshToken;
 
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 use App\Common\JsonException;
-use App\Common\Helper;
 
 final class TokenController extends BaseController
 {
     const TOKEN_TYPE = 'Bearer';
-
-    /**
-     * @param string $token
-     * @param array  $whiteList
-     *
-     * @return bool
-     */
-    public static function validateToken($token, $whiteList = [])
-    {
-        try {
-            $payload = JWT::decode($token, getenv('SECRET_KEY'), ['HS256']);
-            return in_array($payload->aud, $whiteList);
-        } catch (\Exception $e){
-            return false;
-        }
-    }
 
     /**
      * @api {post} /token Получение токена
@@ -82,19 +65,12 @@ final class TokenController extends BaseController
         $user = User::findUserByEmail($params['data']['attributes']['username']);
 
         if ($user && password_verify($params['data']['attributes']['password'], $user->password)) {
-            $token = self::createToken($request->getUri()->getHost(), $this->settings['params']['tokenExpire']);
-
-            $user->access_tokens()->create([
-                'access_token' => md5($token),
-                'created_at'   => date('Y-m-d H:i:s'),
-            ]);
-
-            $refreshToken = self::createRefreshToken();
-
-            $user->refresh_tokens()->create([
-                'refresh_token' => $refreshToken,
-                'created_at'   => date('Y-m-d H:i:s'),
-            ]);
+            $token = AccessToken::createToken(
+                $request->getUri()->getHost(),
+                $this->settings['params']['tokenExpire'],
+                $user
+            );
+            $refreshToken = RefreshToken::createRefreshToken($user);
         } else {
             throw new JsonException('token', 400, 'Invalid Attribute', 'Invalid password or username');
         };
@@ -149,19 +125,12 @@ final class TokenController extends BaseController
         $user = RefreshToken::getUserByRefreshToken($params['data']['attributes']['refresh_token']);
 
         if ($user) {
-            $token = self::createToken($request->getUri()->getHost(), $this->settings['params']['tokenExpire']);
-
-            $user->access_tokens()->create([
-                'access_token' => md5($token),
-                'created_at'   => date('Y-m-d H:i:s'),
-            ]);
-
-            $refreshToken = self::createRefreshToken();
-
-            $user->refresh_tokens()->create([
-                'refresh_token' => $refreshToken,
-                'created_at'    => date('Y-m-d H:i:s'),
-            ]);
+            $token = AccessToken::createToken(
+                $request->getUri()->getHost(),
+                $this->settings['params']['tokenExpire'],
+                $user
+            );
+            $refreshToken = RefreshToken::createRefreshToken($user);
         } else {
             throw new JsonException('token', 400, 'Invalid Attribute', 'Invalid refresh_token');
         };
@@ -169,34 +138,6 @@ final class TokenController extends BaseController
         $result = $this->buildResponse($token, $refreshToken);
 
         return $this->renderer->jsonApiRender($response, 200, json_encode($result));
-    }
-
-    /**
-     * @param string $host
-     * @param int    $tokenExpire
-     *
-     * @return string
-     */
-    private static function createToken($host, $tokenExpire = 3600)
-    {
-        $secret_key = getenv('SECRET_KEY');
-        $token      = [
-            'iss' => getenv('AUTH_ISS'),
-            'aud' => $host,
-            'iat' => time(),
-            'exp' => time() + $tokenExpire,
-        ];
-
-        $jwt = JWT::encode($token, $secret_key);
-        return $jwt;
-    }
-
-    /**
-     * @return string
-     */
-    private static function createRefreshToken()
-    {
-        return md5(Helper::generateRandomString() . '_' . time());
     }
 
     /**

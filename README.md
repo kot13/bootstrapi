@@ -54,7 +54,7 @@ $ nano app/apidoc.json # require set "url"
 $ nano version.sh
 ```
 
-3) configure nginx
+3) configure server
 
 Be sure to define environment variables:
 ```
@@ -62,7 +62,7 @@ APPLICATION_ENV
 SECRET_KEY
 ```
 
-Example configuration:
+Example configuration for nginx:
 ```
 server {
     listen 80 ;
@@ -112,6 +112,57 @@ server {
         try_files $uri =404;
     }
 }
+```
+
+Example configuration for apache:
+```
+<VirtualHost *:80>
+   ServerName hostname
+   DocumentRoot "/path/to/projects/hostname/"
+
+   <Directory "/path/to/projects/hostname/public/">
+       # use mod_env for define environment variables
+       SetEnv APPLICATION_ENV develop
+       SetEnv SECRET_KEY mysecretkey
+   
+       # use mod_rewrite for pretty URL support
+       RewriteEngine on
+       # If a directory or a file exists, use the request directly
+       RewriteCond %{REQUEST_FILENAME} !-f
+       RewriteCond %{REQUEST_FILENAME} !-d
+       # Otherwise forward the request to index.php
+       RewriteRule ^api/(.*)$ /index.php?q=$1 [L]
+
+       # use index.php as index file
+       DirectoryIndex index.php
+
+       # ...other settings...
+       # Apache 2.4
+       Require all granted
+
+       ## Apache 2.2
+       # Order allow,deny
+       # Allow from all
+   </Directory>
+</VirtualHost>
+
+<VirtualHost *:80>
+   ServerName docs.hostname
+   DocumentRoot "/path/to/projects/hostname/docs"
+
+   <Directory "/path/to/projects/hostname/docs">
+       # use index.html as index file
+       DirectoryIndex index.html
+
+       # ...other settings...
+       # Apache 2.4
+       Require all granted
+
+       ## Apache 2.2
+       # Order allow,deny
+       # Allow from all
+   </Directory>
+</VirtualHost>
 ```
 
 4) migration

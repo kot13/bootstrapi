@@ -5,9 +5,7 @@ namespace App\Middleware;
 use App\Common\Acl;
 use App\Common\Auth;
 use App\Common\JsonException;
-use App\Controller\TokenController as Token;
 use App\Model\AccessToken;
-use App\Model\User;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -53,7 +51,7 @@ class Authentication
             $token = explode(' ', $request->getHeader('Authorization')[0]);
             $token = $token[count($token) - 1];
 
-            if (Token::validateToken($token, $this->settings['params']['allowHosts'])) {
+            if (AccessToken::validateToken($token, $this->settings['params']['allowHosts'])) {
                 $user = AccessToken::getUserByAccessToken($token);
                 if ($user) {
                     Auth::setUser($user);
