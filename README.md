@@ -7,7 +7,7 @@
 This is my JSON API skeleton. Built using Slim 3, Eloquent, Zend-ACL
 
 ## Feature
-* JWT-token authorization
+* JWT authentication
 * Validation request
 * ACL role based
 * Support base CRUD operation
