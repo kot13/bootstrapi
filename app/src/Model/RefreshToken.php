@@ -34,7 +34,7 @@ final class RefreshToken extends BaseModel
      *
      * @return User|null
      */
-    public static function getUserByRefreshToken($refreshToken)
+    public static function getUserByToken($refreshToken)
     {
         $user         = null;
         $refreshToken = self::where('refresh_token', $refreshToken)->first();
@@ -51,7 +51,7 @@ final class RefreshToken extends BaseModel
      *
      * @return string
      */
-    public static function createRefreshToken(User $user)
+    public static function createToken(User $user)
     {
         $refreshToken = md5(Helper::generateRandomString().'_'.time());
 

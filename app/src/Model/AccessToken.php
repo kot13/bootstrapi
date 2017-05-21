@@ -34,7 +34,7 @@ final class AccessToken extends BaseModel
      *
      * @return User|null
      */
-    public static function getUserByAccessToken($accessToken)
+    public static function getUserByToken($accessToken)
     {
         $user        = null;
         $accessToken = self::where('access_token', md5($accessToken))->first();
