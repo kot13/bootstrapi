@@ -166,6 +166,7 @@ final class User extends BaseModel
      */
     public function setPassword($password)
     {
+        // we need to invalidate tokens when changing password
         AccessToken::where('user_id', $this->id)->delete();
         RefreshToken::where('user_id', $this->id)->delete();
 

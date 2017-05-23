@@ -178,6 +178,7 @@ class CrudController extends BaseController
 
         $entity->delete();
 
+        // return 204 No Content as successful result
         return $this->renderer->jsonApiRender($response, 204);
     }
 

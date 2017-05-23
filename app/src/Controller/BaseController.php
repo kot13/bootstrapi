@@ -66,7 +66,7 @@ abstract class BaseController
     public function validationRequest($params, $entity, $request)
     {
         if (!isset($params['data']['attributes'])) {
-            throw new JsonException($entity, 400, 'Invalid Attribute', 'Not required attributes - data.');
+            throw new JsonException($entity, 400, 'Invalid Attribute', 'Do not see required attributes - data.');
         }
 
         $validator = $this->validation->make($params['data']['attributes'], $request->rules());

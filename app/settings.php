@@ -15,7 +15,7 @@ return [
         'mailTemplate' => __DIR__.'/../mail',
 
         // DB
-        'database' => require(__DIR__.'/../config/db.php'),
+        'database' => @file_exists(__DIR__.'/../config/db.php') ? require(__DIR__.'/../config/db.php') : die("ERROR - can't find file " . __DIR__.'/../config/db.php' . PHP_EOL),
 
         // ACL
         'acl' => [
@@ -95,6 +95,6 @@ return [
             'locale' => 'ru',
         ],
 
-        'params' => require(__DIR__.'/../config/params.php'),
+        'params' => @file_exists(__DIR__.'/../config/params.php') ? require(__DIR__.'/../config/params.php') : die("ERROR - can't find file " . __DIR__.'/../config/params.php' . PHP_EOL),
     ],
 ];

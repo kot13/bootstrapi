@@ -52,7 +52,7 @@ class Authentication
             $token = $token[count($token) - 1];
 
             if (AccessToken::validateToken($token, $this->settings['params']['allowHosts'])) {
-                $user = AccessToken::getUserByAccessToken($token);
+                $user = AccessToken::getUserByToken($token);
                 if ($user) {
                     Auth::setUser($user);
 

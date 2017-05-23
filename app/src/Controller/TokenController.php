@@ -21,9 +21,12 @@ final class TokenController extends BaseController
      * @apiName CreateToken
      * @apiGroup Token
      *
-     * @apiDescription Метод для получения авторизационного токена. Он отправляется в заголовке запроса:
+     * @apiDescription Метод для получения авторизационного токена. Токен необходим для выполнения запросов к АПИ.
+     * Полученный токен отправляется в заголовке запроса:
+     * <br/>
+     * <strong>Authorization: Bearer xxxxxxxxxxxxxxxxxxxxxxxxxxxxx</strong>
      *
-     * Authorization: Bearer xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+     * @apiHeader {String} Content-Type application/vnd.api+json <br/> application/json
      *
      * @apiParam {String} username Логин
      * @apiParam {String} password Пароль
@@ -65,17 +68,17 @@ final class TokenController extends BaseController
         $user = User::findUserByEmail($params['data']['attributes']['username']);
 
         if ($user && password_verify($params['data']['attributes']['password'], $user->password)) {
-            $token = AccessToken::createToken(
+            $accessToken = AccessToken::createToken(
                 $request->getUri()->getHost(),
                 $user,
                 $this->settings['params']['tokenExpire']
             );
-            $refreshToken = RefreshToken::createRefreshToken($user);
+            $refreshToken = RefreshToken::createToken($user);
         } else {
             throw new JsonException('token', 400, 'Invalid Attribute', 'Invalid password or username');
         };
 
-        $result = $this->buildResponse($token, $refreshToken);
+        $result = $this->buildResponse($accessToken, $refreshToken);
 
         return $this->renderer->jsonApiRender($response, 200, json_encode($result));
     }
@@ -86,6 +89,8 @@ final class TokenController extends BaseController
      * @apiGroup Token
      *
      * @apiDescription Метод для обновления access_token по refresh_token
+     *
+     * @apiHeader {String} Content-Type application/vnd.api+json <br/> application/json
      *
      * @apiParam {String} refresh_token Токен для обновления
      *
@@ -109,6 +114,7 @@ final class TokenController extends BaseController
      *
      * @apiUse StandardErrors
      */
+
     /**
      * @param Request  $request
      * @param Response $response
@@ -122,7 +128,7 @@ final class TokenController extends BaseController
 
         $this->validationRequest($params, 'token', new RefreshTokenRequest());
 
-        $user = RefreshToken::getUserByRefreshToken($params['data']['attributes']['refresh_token']);
+        $user = RefreshToken::getUserByToken($params['data']['attributes']['refresh_token']);
 
         if ($user) {
             $token = AccessToken::createToken(
@@ -130,7 +136,7 @@ final class TokenController extends BaseController
                 $user,
                 $this->settings['params']['tokenExpire']
             );
-            $refreshToken = RefreshToken::createRefreshToken($user);
+            $refreshToken = RefreshToken::createToken($user);
         } else {
             throw new JsonException('token', 400, 'Invalid Attribute', 'Invalid refresh_token');
         };

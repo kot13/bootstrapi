@@ -12,7 +12,7 @@ use \Carbon\Carbon;
  *
  * @apiPermission user
  *
- * @apiHeader {String} Authorization Токен.
+ * @apiHeader {String} Authorization Bearer TOKEN
  *
  * @apiSuccessExample {json} Успешно (200)
  *     HTTP/1.1 200 OK
@@ -61,7 +61,7 @@ use \Carbon\Carbon;
  *
  * @apiParam {Number} id Id лога
  *
- * @apiHeader {String} Authorization Токен.
+ * @apiHeader {String} Authorization Bearer TOKEN
  *
  * @apiSuccessExample {json} Успешно (200)
  *     HTTP/1.1 200 OK

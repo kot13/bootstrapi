@@ -12,7 +12,7 @@ use \Carbon\Carbon;
  *
  * @apiPermission user
  *
- * @apiHeader {String} Authorization Токен.
+ * @apiHeader {String} Authorization Bearer TOKEN
  *
  * @apiSuccessExample {json} Успешно (200)
  *     HTTP/1.1 200 OK
@@ -61,7 +61,7 @@ use \Carbon\Carbon;
  *
  * @apiParam {Number} id Id пользователя
  *
- * @apiHeader {String} Authorization Токен.
+ * @apiHeader {String} Authorization Bearer TOKEN
  *
  * @apiSuccessExample {json} Успешно (200)
  *     HTTP/1.1 200 OK
@@ -109,7 +109,7 @@ use \Carbon\Carbon;
  *
  * @apiParam {Number} id Id пользователя
  *
- * @apiHeader {String} Authorization Токен.
+ * @apiHeader {String} Authorization Bearer TOKEN
  *
  * @apiSuccessExample {json} Успешно (204)
  *     HTTP/1.1 204 OK
@@ -146,7 +146,8 @@ use \Carbon\Carbon;
  *      }
  *    }
  *
- * @apiHeader {String} Authorization Токен.
+ * @apiHeader {String} Authorization Bearer TOKEN
+ * @apiHeader {String} Content-Type application/vnd.api+json <br/> application/json
  *
  * @apiSuccessExample {json} Успешно (200)
  *     HTTP/1.1 200 OK
@@ -183,11 +184,12 @@ use \Carbon\Carbon;
  */
 
 /**
- * @api {patch} /user/:id Изменение пользователя
+ * @api {patch / put} /user/:id Изменение пользователя
  * @apiName UpdateUser
  * @apiGroup User
  *
  * @apiDescription Метод для изменения пользователя.
+ *
  *
  * @apiPermission admin
  *
@@ -238,7 +240,8 @@ use \Carbon\Carbon;
  *       }
  *     }
  *
- * @apiHeader {String} Authorization Токен.
+ * @apiHeader {String} Authorization Bearer TOKEN
+ * @apiHeader {String} Content-Type application/vnd.api+json <br/> application/json
  *
  * @apiUse StandardErrors
  * @apiUse UnauthorizedError
@@ -252,7 +255,7 @@ use \Carbon\Carbon;
  *
  * @apiDescription Метод высылающий на email пользователя письмо со ссылкой для изменения пароля.
  *
- * В ссылке отправляется токен для сброса пароля. Его нужно отправить в методе /user/reset-password
+ * В ссылке отправляется токен для сброса пароля. Его нужно отправить в методе /user/password-reset
  *
  * @apiParam {String} email Email пользователя
  *
@@ -268,12 +271,14 @@ use \Carbon\Carbon;
  * @apiSuccessExample {json} Успешно (204)
  *     HTTP/1.1 204 OK
  *
+ * @apiHeader {String} Content-Type application/vnd.api+json <br/> application/json
+ *
  * @apiUse StandardErrors
  */
 
 /**
- * @api {post} /user/reset-password Сброс пароля
- * @apiName ResetPassword
+ * @api {post} /user/password-reset Сброс пароля
+ * @apiName PasswordReset
  * @apiGroup User
  *
  * @apiDescription Метод для изменения пароля.
@@ -294,6 +299,8 @@ use \Carbon\Carbon;
  *
  * @apiSuccessExample {json} Успешно (204)
  *     HTTP/1.1 204 OK
+ *
+ * @apiHeader {String} Content-Type application/vnd.api+json <br/> application/json
  *
  * @apiUse StandardErrors
  */
