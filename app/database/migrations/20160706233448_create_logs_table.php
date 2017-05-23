@@ -14,7 +14,7 @@ class CreateLogsTable
             $table->morphs('entity');
             $table->text('state')->nullable();
             $table->timestamp('created_at');
-            $table->integer('created_by');
+            $table->integer('created_by')->nullable();
         });
 
     }

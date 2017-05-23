@@ -22,3 +22,8 @@ config/params.php
 /docs
 /app/apidoc.json
 tests/_output/*
+
+# frontend
+/frontend
+/frontend/*
+

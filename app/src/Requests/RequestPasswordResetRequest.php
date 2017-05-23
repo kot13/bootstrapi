@@ -1,7 +1,7 @@
 <?php
 namespace App\Requests;
 
-class RequestResetPasswordRequest implements IRequest
+class RequestPasswordResetRequest implements IRequest
 {
     /**
      * @return array<string,string>

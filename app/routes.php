@@ -11,13 +11,14 @@ $app->group('/api', function() {
 
     $this->post('/token', 'App\Controller\TokenController:getToken');
     $this->post('/refresh-token', 'App\Controller\TokenController:refreshToken');
-    $this->post('/{entity:user}/request-password-reset', 'App\Controller\UserController:actionRequestResetPassword');
-    $this->post('/{entity:user}/reset-password', 'App\Controller\UserController:actionResetPassword');
+    $this->post('/{entity:user}/request-password-reset', 'App\Controller\UserController:actionRequestPasswordReset');
+    $this->post('/{entity:user}/password-reset', 'App\Controller\UserController:actionPasswordReset');
 
     $this->group('/{entity:user}', function() {
         $this->get('', 'App\Controller\UserController:actionIndex');
         $this->post('', 'App\Controller\UserController:actionCreate');
         $this->get('/{id:[0-9]+}', 'App\Controller\UserController:actionGet');
+        $this->put('/{id:[0-9]+}', 'App\Controller\UserController:actionUpdate');
         $this->patch('/{id:[0-9]+}', 'App\Controller\UserController:actionUpdate');
         $this->delete('/{id:[0-9]+}', 'App\Controller\UserController:actionDelete');
     })->add(new \App\Middleware\Authentication($this->getContainer()->get('acl'), $this->getContainer()->get('settings')));
@@ -26,6 +27,7 @@ $app->group('/api', function() {
         $this->get('', 'App\Controller\CrudController:actionIndex');
         $this->get('/{id:[0-9]+}', 'App\Controller\CrudController:actionGet');
         $this->post('', 'App\Controller\CrudController:actionCreate');
+        $this->put('/{id:[0-9]+}', 'App\Controller\CrudController:actionUpdate');
         $this->patch('/{id:[0-9]+}', 'App\Controller\CrudController:actionUpdate');
         $this->delete('/{id:[0-9]+}', 'App\Controller\CrudController:actionDelete');
     })->add(new \App\Middleware\Authentication($this->getContainer()->get('acl'), $this->getContainer()->get('settings')));

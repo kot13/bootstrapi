@@ -3,8 +3,8 @@ namespace App\Controller;
 
 use App\Model\User;
 use App\Common\JsonException;
-use App\Requests\RequestResetPasswordRequest;
-use App\Requests\ResetPasswordRequest;
+use App\Requests\RequestPasswordResetRequest;
+use App\Requests\PasswordResetRequest;
 use App\Requests\UserCreateRequest;
 use App\Requests\UserUpdateRequest;
 use Slim\Http\Request;
@@ -32,7 +32,7 @@ final class UserController extends CrudController
             throw new JsonException($args['entity'], 400, 'User already exists', 'User already exists');
         }
 
-        $user = User::create($params['data']['attributes']);
+        $user = new User($params['data']['attributes']);
         $user->setPassword($params['data']['attributes']['password']);
         $user->save();
 
@@ -81,11 +81,11 @@ final class UserController extends CrudController
      * @return \Psr\Http\Message\ResponseInterface
      * @throws JsonException
      */
-    public function actionRequestResetPassword(Request $request, Response $response, $args)
+    public function actionRequestPasswordReset(Request $request, Response $response, $args)
     {
         $params = $request->getParsedBody();
 
-        $this->validationRequest($params, $args['entity'], new RequestResetPasswordRequest());
+        $this->validationRequest($params, $args['entity'], new RequestPasswordResetRequest());
 
         $user = User::findUserByEmail($params['data']['attributes']['email']);
 
@@ -105,9 +105,9 @@ final class UserController extends CrudController
             ->setFrom(['no-reply@example.com' => 'Почтовик example.com'])
             ->setTo([$user->email => $user->full_name])
             ->setBody($this->mailRenderer->render(
-                '/RequestResetPassword.php',
+                '/RequestPasswordReset.php',
                 [
-                    'host' => $this->settings['params']['host'],
+                    'host'  => $this->settings['params']['host'],
                     'token' => $user->password_reset_token
                 ]
             ), 'text/html');
@@ -127,11 +127,11 @@ final class UserController extends CrudController
      * @return \Psr\Http\Message\ResponseInterface
      * @throws JsonException
      */
-    public function actionResetPassword(Request $request, Response $response, $args)
+    public function actionPasswordReset(Request $request, Response $response, $args)
     {
         $params = $request->getParsedBody();
 
-        $this->validationRequest($params, $args['entity'], new ResetPasswordRequest());
+        $this->validationRequest($params, $args['entity'], new PasswordResetRequest());
 
         $user = User::findByPasswordResetToken($params['data']['attributes']['token']);
 

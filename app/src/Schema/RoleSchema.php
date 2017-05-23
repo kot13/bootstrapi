@@ -12,7 +12,7 @@ use \Carbon\Carbon;
  *
  * @apiPermission user
  *
- * @apiHeader {String} Authorization Токен.
+ * @apiHeader {String} Authorization Bearer TOKEN
  *
  * @apiSuccessExample {json} Успешно (200)
  *     HTTP/1.1 200 OK
@@ -56,7 +56,7 @@ use \Carbon\Carbon;
  *
  * @apiParam {Number} id Id роли
  *
- * @apiHeader {String} Authorization Токен.
+ * @apiHeader {String} Authorization Bearer TOKEN
  *
  * @apiSuccessExample {json} Успешно (200)
  *     HTTP/1.1 200 OK
@@ -110,7 +110,8 @@ use \Carbon\Carbon;
  *      }
  *    }
  *
- * @apiHeader {String} Authorization Токен.
+ * @apiHeader {String} Authorization Bearer TOKEN
+ * @apiHeader {String} Content-Type application/vnd.api+json <br/> application/json
  *
  * @apiSuccessExample {json} Успешно (200)
  *     HTTP/1.1 200 OK
@@ -142,7 +143,7 @@ use \Carbon\Carbon;
  */
 
 /**
- * @api {patch} /role/:id Изменение роли
+ * @api {patch / put} /role/:id Изменение роли
  * @apiName UpdateRole
  * @apiGroup Role
  *
@@ -163,7 +164,8 @@ use \Carbon\Carbon;
  *      }
  *    }
  *
- * @apiHeader {String} Authorization Токен.
+ * @apiHeader {String} Authorization Bearer TOKEN
+ * @apiHeader {String} Content-Type application/vnd.api+json <br/> application/json
  *
  * @apiSuccessExample {json} Успешно (200)
  *     HTTP/1.1 200 OK
@@ -206,7 +208,7 @@ use \Carbon\Carbon;
  *
  * @apiParam {Number} id Id роли
  *
- * @apiHeader {String} Authorization Токен.
+ * @apiHeader {String} Authorization Bearer TOKEN
  *
  * @apiSuccessExample {json} Успешно (204)
  *     HTTP/1.1 204 OK

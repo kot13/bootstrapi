@@ -15,7 +15,7 @@ class CreateUsersTable
             $table->string('password');
             $table->string('password_reset_token')->nullable();
             $table->integer('role_id');
-            $table->integer('created_by');
+            $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
