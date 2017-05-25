@@ -22,7 +22,7 @@ final class ValidationServiceProvider extends BaseServiceProvider
 
         // translation
         $container['translator'] = function() use ($config) {
-            $translateFileLoader = new FileLoader(new Filesystem, $config['translate']['path']);
+            $translateFileLoader = new FileLoader(new Filesystem(), $config['translate']['path']);
             $translator          = new Translator($translateFileLoader, $config['translate']['locale']);
 
             return $translator;

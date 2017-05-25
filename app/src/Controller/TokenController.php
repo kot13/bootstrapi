@@ -63,7 +63,7 @@ final class TokenController extends BaseController
     {
         $params = $request->getParsedBody();
 
-        $this->validationRequest($params, 'token', new GetTokenRequest());
+        $this->validateRequestParams($params, 'token', new GetTokenRequest());
 
         $user = User::findUserByEmail($params['data']['attributes']['username']);
 
@@ -80,7 +80,7 @@ final class TokenController extends BaseController
 
         $result = $this->buildResponse($accessToken, $refreshToken);
 
-        return $this->renderer->jsonApiRender($response, 200, json_encode($result));
+        return $this->apiRenderer->jsonResponse($response, 200, json_encode($result));
     }
 
     /**
@@ -126,7 +126,7 @@ final class TokenController extends BaseController
     {
         $params = $request->getParsedBody();
 
-        $this->validationRequest($params, 'token', new RefreshTokenRequest());
+        $this->validateRequestParams($params, 'token', new RefreshTokenRequest());
 
         $user = RefreshToken::getUserByToken($params['data']['attributes']['refresh_token']);
 
@@ -143,7 +143,7 @@ final class TokenController extends BaseController
 
         $result = $this->buildResponse($token, $refreshToken);
 
-        return $this->renderer->jsonApiRender($response, 200, json_encode($result));
+        return $this->apiRenderer->jsonResponse($response, 200, json_encode($result));
     }
 
     /**

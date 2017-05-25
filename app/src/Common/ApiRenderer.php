@@ -3,7 +3,7 @@ namespace App\Common;
 
 use Psr\Http\Message\ResponseInterface as Response;
 
-final class Renderer
+final class ApiRenderer
 {
     /**
      * @var
@@ -27,9 +27,9 @@ final class Renderer
      *
      * @return Response
      */
-    public function jsonApiRender(Response $response, $statusCode = 200, $data = '')
+    public function jsonResponse(Response $response, $statusCode = 200, $data = '')
     {
-        $jsonApiResponse = $response
+        $jsonResponse = $response
             ->withHeader('Access-Control-Allow-Origin', '*')
             ->withHeader('Access-Control-Allow-Methods', 'GET, PUT, PATCH, POST, DELETE, OPTIONS')
             ->withHeader('Access-Control-Allow-Credentials', 'true')
@@ -37,8 +37,8 @@ final class Renderer
             ->withHeader('Content-Type', 'application/vnd.api+json')
             ->withStatus($statusCode);
 
-        $jsonApiResponse->getBody()->write($data);
+        $jsonResponse->getBody()->write($data);
 
-        return $jsonApiResponse;
+        return $jsonResponse;
     }
 }

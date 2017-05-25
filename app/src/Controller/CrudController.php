@@ -80,7 +80,7 @@ class CrudController extends BaseController
 
         $result = $this->encoder->encode($request, $entities, $pageNumber, $pageSize);
 
-        return $this->renderer->jsonApiRender($response, 200, $result);
+        return $this->apiRenderer->jsonResponse($response, 200, $result);
     }
 
     /**
@@ -103,7 +103,7 @@ class CrudController extends BaseController
 
         $result = $this->encoder->encode($request, $entity);
 
-        return $this->renderer->jsonApiRender($response, 200, $result);
+        return $this->apiRenderer->jsonResponse($response, 200, $result);
     }
 
     /**
@@ -120,12 +120,12 @@ class CrudController extends BaseController
         $requestClass = 'App\Requests\\'.Helper::dashesToCamelCase($args['entity'], true).'CreateRequest';
         $params       = $request->getParsedBody();
 
-        $this->validationRequest($params, $args['entity'], new $requestClass());
+        $this->validateRequestParams($params, $args['entity'], new $requestClass());
 
         $entity = $modelName::create($params['data']['attributes']);
         $result = $this->encoder->encode($request, $entity);
 
-        return $this->renderer->jsonApiRender($response, 200, $result);
+        return $this->apiRenderer->jsonResponse($response, 200, $result);
 
     }
 
@@ -149,13 +149,13 @@ class CrudController extends BaseController
             throw new JsonException($args['entity'], 404, 'Not found', 'Entity not found');
         }
 
-        $this->validationRequest($params, $args['entity'], new $requestClass());
+        $this->validateRequestParams($params, $args['entity'], new $requestClass());
 
         $entity->update($params['data']['attributes']);
 
         $result = $this->encoder->encode($request, $entity);
 
-        return $this->renderer->jsonApiRender($response, 200, $result);
+        return $this->apiRenderer->jsonResponse($response, 200, $result);
     }
 
     /**
@@ -179,7 +179,7 @@ class CrudController extends BaseController
         $entity->delete();
 
         // return 204 No Content as successful result
-        return $this->renderer->jsonApiRender($response, 204);
+        return $this->apiRenderer->jsonResponse($response, 204);
     }
 
 }

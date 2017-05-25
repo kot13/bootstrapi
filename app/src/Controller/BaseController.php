@@ -19,9 +19,9 @@ abstract class BaseController
     public $encoder;
 
     /**
-     * @var \App\Common\Renderer
+     * @var \App\Common\ApiRenderer
      */
-    public $renderer;
+    public $apiRenderer;
 
     /**
      * @var array
@@ -45,7 +45,7 @@ abstract class BaseController
      */
     public function __construct($container)
     {
-        $this->renderer     = $container['renderer'];
+        $this->apiRenderer  = $container['apiRenderer'];
         $this->validation   = $container['validation'];
         $this->settings     = $container['settings'];
         $this->mailer       = $container['mailer'];
@@ -63,10 +63,10 @@ abstract class BaseController
      * @return bool
      * @throws JsonException
      */
-    public function validationRequest($params, $entity, $request)
+    public function validateRequestParams($params, $entity, $request)
     {
         if (!isset($params['data']['attributes'])) {
-            throw new JsonException($entity, 400, 'Invalid Attribute', 'Do not see required attributes - data.');
+            throw new JsonException($entity, 400, 'Invalid Attribute', 'Do not see required attribute - data.');
         }
 
         $validator = $this->validation->make($params['data']['attributes'], $request->rules());
