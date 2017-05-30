@@ -6,13 +6,7 @@ if (!@include_once __DIR__ . '/vendor/autoload.php') {
     exit(1);
 }
 
-// PATH aliases
-define('ROOT_PATH',       __DIR__ );
-define('MIGRATIONS_PATH', __DIR__ . '/app/database/migrations');
-define('SEEDS_PATH',      __DIR__ . '/app/database/seeds');
-define('COMMANDS_PATH',   __DIR__ . '/app/src/Commands');
-define('CONFIG_PATH',     __DIR__ . '/config');
-define('APP_PATH',        __DIR__ . '/app');
+require_once __DIR__.'/app.paths.conf.php';
 
 // Maintenance table names
 define('MIGRATIONS_TABLE', 'migrations');
@@ -357,7 +351,7 @@ class Partisan
     {
         if (empty($this->config)) {
             echo "Include config ", PHP_EOL;
-            $this->config  = require_once APP_PATH . '/settings.php';
+            $this->config = \App\Common\Config\Settings::build();
         }
 
         if (empty($this->capsule)) {

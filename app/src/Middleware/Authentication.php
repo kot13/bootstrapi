@@ -61,7 +61,7 @@ class Authentication
         }
 
         // provided token must be valid
-        if (!AccessToken::validateToken($token, $this->settings['params']['allowHosts'])) {
+        if (!AccessToken::validateToken($token, $this->settings['accessToken'])) {
             return $this->failNotAuthorized();
         }
 

@@ -1,5 +1,7 @@
 <?php
-$settings = require __DIR__ . '/../app/settings.php';
+
+require_once __DIR__.'/../app.paths.conf.php';
+$settings = App\Common\Config\Settings::build();
 
 \Codeception\Configuration::append([
     'modules' => [

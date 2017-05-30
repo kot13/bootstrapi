@@ -1,11 +1,22 @@
 <?php
 
 return [
-    'host'               => 'http://hostname.domain',
-    'allowHosts'         => [
-        'hostname.domain',
-        'docs.hostname.domain',
+    'params' => [
+        'host' => 'http://hostname.domain',
+        'env'  => 'dev',
     ],
-    'tokenExpire'        => 3600,
-    'refreshTokenExpire' => 3600 * 24 * 7,
+
+    'accessToken' => [
+        'ttl'        => 3600,
+        'iss'        => null,
+        'secret_key' => 'secret key',
+        'allowHosts' => [
+            'hostname.domain',
+            'docs.hostname.domain',
+        ],
+    ],
+
+    'refreshToken' => [
+        'ttl' => 3600 * 24 * 7,
+    ],
 ];
