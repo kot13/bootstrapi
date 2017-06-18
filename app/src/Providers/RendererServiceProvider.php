@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Pimple\Container;
-use App\Common\Renderer;
+use App\Common\ApiRenderer;
 use App\Common\MailRenderer;
 
 final class RendererServiceProvider extends BaseServiceProvider
@@ -17,8 +17,8 @@ final class RendererServiceProvider extends BaseServiceProvider
     {
         $config = $container['settings'];
 
-        $container['renderer'] = function() use ($config) {
-            $renderer = new Renderer($config);
+        $container['apiRenderer'] = function() use ($config) {
+            $renderer = new ApiRenderer($config);
 
             return $renderer;
         };

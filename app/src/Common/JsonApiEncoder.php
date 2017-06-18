@@ -34,17 +34,17 @@ final class JsonApiEncoder
      */
     public function encode(Request $request, $entities, $pageNumber = null, $pageSize = null)
     {
-        $factory        = new Factory();
-        $parameters     = $factory->createQueryParametersParser()->parse($request);
-        $user           = Auth::getUser();
-        $encodeEntities = $this->settings['encoder']['default'];
+        $factory    = new Factory();
+        $parameters = $factory->createQueryParametersParser()->parse($request);
+        $user       = Auth::getUser();
+        $schemas    = $this->settings['encoder']['schemas']['default'];
 
         if ($user && $user->role_id == User::ROLE_ADMIN) {
-            $encodeEntities = $this->settings['encoder']['extended'];
+            $schemas = $this->settings['encoder']['schemas']['extended'];
         }
 
         $encoder = Encoder::instance(
-            $encodeEntities,
+            $schemas,
             new EncoderOptions(
                 JSON_PRETTY_PRINT,
                 $this->settings['params']['host'].'/api'

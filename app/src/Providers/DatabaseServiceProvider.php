@@ -17,11 +17,11 @@ final class DatabaseServiceProvider extends BaseServiceProvider
     public function register(Container $container)
     {
         $config  = $container['settings'];
-        $capsule = new Capsule;
+        $capsule = new Capsule();
         foreach ($config['database']['connections'] as $name => $connection) {
             $capsule->addConnection($connection, $name);
         }
-        $capsule->setEventDispatcher(new Dispatcher(new IlluminateContainer));
+        $capsule->setEventDispatcher(new Dispatcher(new IlluminateContainer()));
         $capsule->setAsGlobal();
         $capsule->bootEloquent();
 

@@ -46,36 +46,78 @@ class Authentication
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
-        // If request has the correct token, passed it to action
-        if ($request->getHeader('Authorization')) {
-            $token = explode(' ', $request->getHeader('Authorization')[0]);
-            $token = $token[count($token) - 1];
+        // Request has to have Authorization header
+        if (!$request->getHeader('Authorization')) {
+            return $this->failNotAuthorized();
+        }
 
-            if (AccessToken::validateToken($token, $this->settings['params']['allowHosts'])) {
-                $user = AccessToken::getUserByToken($token);
-                if ($user) {
-                    Auth::setUser($user);
+        // HTTP Authorization header available
+        // Authorization: Bearer XXXXXXXXXXXXXXXXXXX
+        // fetch XXXXXXXXXXXXX part
+        $token = @explode(' ', @$request->getHeader('Authorization')[0]);
+        $token = is_array($token) && (count($token) == 2) ? $token[1] : null;
+        if (empty($token)) {
+            return $this->failNotAuthorized();
+        }
 
-                    $isAllowed = false;
-                    $route     = $request->getAttribute('route');
+        // provided token must be valid
+        if (!AccessToken::validateToken($token, $this->settings['params']['allowHosts'])) {
+            return $this->failNotAuthorized();
+        }
 
-                    if ($route) {
-                        if ($this->acl->hasResource('route'.$route->getPattern())) {
-                            $isAllowed = $isAllowed || $this->acl->isAllowed($user->role->name, 'route'.$route->getPattern(), strtolower($request->getMethod()));
-                        }
-                        if ($this->acl->hasResource('callable/'.$route->getCallable())) {
-                            $isAllowed = $isAllowed || $this->acl->isAllowed($user->role->name, 'callable/'.$route->getCallable());
-                        }
-                        if (!$isAllowed) {
-                            throw new JsonException(null, 403, 'Not allowed', $user->role->name.' is not allowed access to this location.');
-                        }
-                    }
+        // find user by token
+        $user = AccessToken::getUserByToken($token);
+        if (empty($user)) {
+            return $this->failNotAuthorized();
+        }
 
-                    return $next($request, $response);
-                }
+        Auth::setUser($user);
+
+        $isAllowed = false;
+        $route     = $request->getAttribute('route');
+
+        if ($route) {
+            // check access for the route
+            $resource = Acl::buildResourceName(Acl::GUARD_TYPE_ROUTE, $route->getPattern());
+            $privilege = Acl::getPrivilegeByHTTPMethod($request->getMethod());
+            if ($this->acl->hasResource($resource)) {
+                $isAllowed = $isAllowed || $this->acl->isAllowed($user->role->name, $resource, $privilege);
+            }
+
+            // check access for the callable
+            $resource = Acl::buildResourceName(Acl::GUARD_TYPE_CALLABLE, $route->getCallable());
+            $privilege = null;
+            if ($this->acl->hasResource($resource)) {
+                $isAllowed = $isAllowed || $this->acl->isAllowed($user->role->name, $resource, $privilege);
+            }
+
+            if (!$isAllowed) {
+                // access is not allowed
+                return $this->failNotAllowed();
             }
         }
 
+        // access allowed, move to next middleware
+        return $next($request, $response);
+    }
+
+    /**
+     * Produce HTTP 401 Not authorized
+     *
+     * @throws JsonException
+     */
+    protected function failNotAuthorized()
+    {
         throw new JsonException(null, 401, 'Not authorized', 'The user must be authorized');
+    }
+
+    /**
+     * Produce HTTP 403 Not allowed
+     *
+     * @throws JsonException
+     */
+    protected function failNotAllowed()
+    {
+        throw new JsonException(null, 403, 'Not allowed', ' Access to this location is not allowed');
     }
 }

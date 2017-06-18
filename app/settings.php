@@ -1,4 +1,7 @@
 <?php
+
+use App\Common\Acl;
+
 return [
     'settings' => [
         // Slim Settings
@@ -20,26 +23,36 @@ return [
         // ACL
         'acl' => [
             'default_role' => 'guest',
+
             'roles' => [
+                // role => [parents]
                 'guest' => [],
                 'user'  => ['guest'],
                 'admin' => ['user'],
             ],
+
             /**
              * just a list of generic resources for manual checking
              * specified here so can be used in the code if needs be
              * Example: ['user' => null]
              */
-            'resources' => [],
+            'resources' => [
+                // resource => parent
+            ],
+
             // where we specify the guarding!
             'guards' => [
+
                 /**
                  * list of resource to roles to permissions
                  * optional
                  * if included all resources default to deny unless specified.
                  * Example: ['user', ['admin']]
                  */
-                'resources' => [],
+                Acl::GUARD_TYPE_RESOURCE => [
+
+                ],
+
                 /**
                  * list of literal routes for guarding.
                  * optional
@@ -47,10 +60,12 @@ return [
                  * Similar format to resource 'resource' route, roles, 'permission' action
                  * ['route', ['roles'], ['methods',' methods1']]
                  */
-                'routes' => [
-                    ['/api/token', ['guest'], ['post']],
-                    ['/api/user', ['user'], ['get']],
+                Acl::GUARD_TYPE_ROUTE => [
+                    // resource, roles, privileges
+                    ['/api/token', ['guest'], [Acl::PRIVILEGE_POST]],
+                    ['/api/user',  ['user'],  [Acl::PRIVILEGE_GET]],
                 ],
+
                 /**
                  * list of callables to resolve against
                  * optional
@@ -58,7 +73,8 @@ return [
                  * 'permission' section is combined into the callable section
                  * ['callable', ['roles']]
                  */
-                'callables' => [
+                Acl::GUARD_TYPE_CALLABLE => [
+                    // resource, roles, privileges
                     ['App\Controller\CrudController',              ['user']],
                     ['App\Controller\CrudController:actionIndex',  ['user']],
                     ['App\Controller\CrudController:actionGet',    ['user']],
@@ -76,18 +92,20 @@ return [
         ],
 
         'encoder' => [
-            'default' => [
-                'App\Model\Log'   => 'App\Schema\LogSchema',
-                'App\Model\Right' => 'App\Schema\RightSchema',
-                'App\Model\Role'  => 'App\Schema\RoleSchema',
-                'App\Model\User'  => 'App\Schema\UserSchema',
+            'schemas' => [
+                'default' => [
+                    'App\Model\Log'   => 'App\Schema\LogSchema',
+                    'App\Model\Right' => 'App\Schema\RightSchema',
+                    'App\Model\Role'  => 'App\Schema\RoleSchema',
+                    'App\Model\User'  => 'App\Schema\UserSchema',
+                ],
+                'extended' => [
+                    'App\Model\Log'   => 'App\Schema\LogSchema',
+                    'App\Model\Right' => 'App\Schema\RightSchema',
+                    'App\Model\Role'  => 'App\Schema\RoleSchema',
+                    'App\Model\User'  => 'App\Schema\UserSchemaExtended',
+                ],
             ],
-            'extended' => [
-                'App\Model\Log'   => 'App\Schema\LogSchema',
-                'App\Model\Right' => 'App\Schema\RightSchema',
-                'App\Model\Role'  => 'App\Schema\RoleSchema',
-                'App\Model\User'  => 'App\Schema\UserSchemaExtended',
-            ]
         ],
 
         'translate' => [

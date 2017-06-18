@@ -6,6 +6,11 @@ use App\Model\User;
 final class Auth
 {
     /**
+     * @var User
+     */
+    private static $user = null;
+
+    /**
      * Forbidden to create new instances
      */
     private function __construct()
@@ -20,11 +25,6 @@ final class Auth
     {
 
     }
-
-    /**
-     * @var User
-     */
-    private static $user = null;
 
     /**
      * @param User $user

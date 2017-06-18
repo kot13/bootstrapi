@@ -41,7 +41,7 @@ class MailRenderer
         }
 
         if (!is_file($this->templatePath.$template)) {
-            throw new \RuntimeException('View cannot render `$template` because the template does not exist');
+            throw new \RuntimeException("View cannot render template `$template` because it does not exist");
         }
 
         $data = array_merge($this->attributes, $data);

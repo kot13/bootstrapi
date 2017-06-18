@@ -24,7 +24,7 @@ final class UserController extends CrudController
     {
         $params = $request->getParsedBody();
 
-        $this->validationRequest($params, $args['entity'], new UserCreateRequest());
+        $this->validateRequestParams($params, $args['entity'], new UserCreateRequest());
 
         $exist = User::exist($params['data']['attributes']['email']);
 
@@ -38,7 +38,7 @@ final class UserController extends CrudController
 
         $result = $this->encoder->encode($request, $user);
 
-        return $this->renderer->jsonApiRender($response, 200, $result);
+        return $this->apiRenderer->jsonResponse($response, 200, $result);
     }
 
     /**
@@ -59,7 +59,7 @@ final class UserController extends CrudController
 
         $params = $request->getParsedBody();
 
-        $this->validationRequest($params, $args['entity'], new UserUpdateRequest());
+        $this->validateRequestParams($params, $args['entity'], new UserUpdateRequest());
 
         $user->update($params['data']['attributes']);
 
@@ -70,7 +70,7 @@ final class UserController extends CrudController
 
         $result = $this->encoder->encode($request, $user);
 
-        return $this->renderer->jsonApiRender($response, 200, $result);
+        return $this->apiRenderer->jsonResponse($response, 200, $result);
     }
 
     /**
@@ -85,7 +85,7 @@ final class UserController extends CrudController
     {
         $params = $request->getParsedBody();
 
-        $this->validationRequest($params, $args['entity'], new RequestPasswordResetRequest());
+        $this->validateRequestParams($params, $args['entity'], new RequestPasswordResetRequest());
 
         $user = User::findUserByEmail($params['data']['attributes']['email']);
 
@@ -113,7 +113,7 @@ final class UserController extends CrudController
             ), 'text/html');
 
         if ($this->mailer->send($message)) {
-            return $this->renderer->jsonApiRender($response, 204);
+            return $this->apiRenderer->jsonResponse($response, 204);
         };
 
         throw new JsonException($args['entity'], 400, 'Bad request', 'Bad request');
@@ -131,7 +131,7 @@ final class UserController extends CrudController
     {
         $params = $request->getParsedBody();
 
-        $this->validationRequest($params, $args['entity'], new PasswordResetRequest());
+        $this->validateRequestParams($params, $args['entity'], new PasswordResetRequest());
 
         $user = User::findByPasswordResetToken($params['data']['attributes']['token']);
 
@@ -140,7 +140,7 @@ final class UserController extends CrudController
             $user->removePasswordResetToken();
 
             if ($user->save()) {
-                return $this->renderer->jsonApiRender($response, 204);
+                return $this->apiRenderer->jsonResponse($response, 204);
             };
         }
 

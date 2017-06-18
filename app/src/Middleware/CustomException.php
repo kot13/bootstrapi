@@ -3,7 +3,7 @@
 namespace App\Middleware;
 
 use App\Common\JsonException;
-use App\Common\Renderer;
+use App\Common\ApiRenderer;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -11,16 +11,16 @@ use Psr\Http\Message\ResponseInterface;
 class CustomException
 {
     /**
-     * @var Renderer
+     * @var ApiRenderer
      */
     private $renderer;
 
     /**
      * CustomException constructor.
      *
-     * @param Renderer $renderer
+     * @param ApiRenderer $renderer
      */
-    public function __construct(Renderer $renderer)
+    public function __construct(ApiRenderer $renderer)
     {
         $this->renderer = $renderer;
     }
@@ -37,7 +37,7 @@ class CustomException
         try {
             return $next($request, $response);
         } catch (JsonException $e) {
-            return $this->renderer->jsonApiRender($response, $e->statusCode, $e->encodeError());
+            return $this->renderer->jsonResponse($response, $e->statusCode, $e->encodeError());
         }
     }
 }
