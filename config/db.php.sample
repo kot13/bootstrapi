@@ -1,16 +1,16 @@
 <?php
 
-use App\Common\Config\Definition\DBConfigDefinition;
+use App\Common\Config\Definition\DbConfigDefinition;
 
 return [
-    'definition' => DBConfigDefinition::class,
+    'definition' => DbConfigDefinition::class,
 
     'database' => [
         'connections' => [
             'default' => [
                 'driver'    => 'mysql',
                 'host'      => 'localhost',
-                'database'  => 'database',
+                'database'  => 'bootstrapi_database',
                 'username'  => 'user',
                 'password'  => 'password',
                 'charset'   => 'utf8',

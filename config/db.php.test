@@ -1,9 +1,9 @@
 <?php
 
-use App\Common\Config\Definition\DBConfigDefinition;
+use App\Common\Config\Definition\DbConfigDefinition;
 
 return [
-    'definition' => DBConfigDefinition::class,
+    'definition' => DbConfigDefinition::class,
 
     'database' => [
         'connections' => [
@@ -12,7 +12,7 @@ return [
                 'host'      => 'localhost',
                 'database'  => 'testapp',
                 'username'  => 'root',
-                'password'  => '',
+                'password'  => 'qwerty',
                 'charset'   => 'utf8',
                 'collation' => 'utf8_unicode_ci',
                 'prefix'    => '',

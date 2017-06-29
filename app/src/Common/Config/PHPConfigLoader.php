@@ -47,12 +47,12 @@ class PHPConfigLoader extends FileLoader
                     $processor = new Processor();
                     $configDefinition = new $config['definition']();
                     // process config according to specified definition
-file_put_contents('/tmp/log', print_r($config, true), FILE_APPEND);
+//file_put_contents('/tmp/log', print_r($config, true), FILE_APPEND);
                     $config = $processor->processConfiguration(
                         $configDefinition,
                         [$config]
                     );
-file_put_contents('/tmp/log', print_r($config, true), FILE_APPEND);
+//file_put_contents('/tmp/log', print_r($config, true), FILE_APPEND);
                 }
 
                 // combine all configs into one "unified general config"
