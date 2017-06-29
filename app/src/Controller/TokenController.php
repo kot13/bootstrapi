@@ -69,9 +69,9 @@ final class TokenController extends BaseController
 
         if ($user && password_verify($params['data']['attributes']['password'], $user->password)) {
             $accessToken = AccessToken::createToken(
-                $request->getUri()->getHost(),
                 $user,
-                $this->settings['params']['tokenExpire']
+                $request->getUri()->getHost(),
+                $this->settings['accessToken']
             );
             $refreshToken = RefreshToken::createToken($user);
         } else {
@@ -132,9 +132,9 @@ final class TokenController extends BaseController
 
         if ($user) {
             $token = AccessToken::createToken(
-                $request->getUri()->getHost(),
                 $user,
-                $this->settings['params']['tokenExpire']
+                $request->getUri()->getHost(),
+                $this->settings['accessToken']
             );
             $refreshToken = RefreshToken::createToken($user);
         } else {
@@ -147,16 +147,16 @@ final class TokenController extends BaseController
     }
 
     /**
-     * @param string $token
+     * @param string $accessToken
      * @param string $refreshToken
      *
      * @return array
      */
-    private function buildResponse($token, $refreshToken)
+    private function buildResponse($accessToken, $refreshToken)
     {
         return [
-            'access_token'  => $token,
-            'expires_in'    => $this->settings['params']['tokenExpire'],
+            'access_token'  => $accessToken,
+            'expires_in'    => $this->settings['accessToken']['ttl'],
             'token_type'    => self::TOKEN_TYPE,
             'refresh_token' => $refreshToken,
         ];

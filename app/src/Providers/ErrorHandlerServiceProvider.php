@@ -16,7 +16,7 @@ final class ErrorHandlerServiceProvider extends BaseServiceProvider
     {
         $container['errorHandler'] = function(Container $container) {
             return function($request, $response, $exception) use ($container) {
-                $details = (defined('DEBUG_MODE') && DEBUG_MODE == 1) ? $exception->getMessage() : 'Internal server error';
+                $details = $container['settings']['displayErrorDetails'] ? $exception->getMessage() : 'Internal server error';
                 $error   = new JsonException(null, 500, 'Internal server error', $details);
 
                 return $container->get('apiRenderer')->jsonResponse($response, $error->statusCode, $error->encodeError());

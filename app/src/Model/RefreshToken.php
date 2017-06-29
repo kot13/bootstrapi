@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model;
 
 use App\Common\Helper;
@@ -24,6 +25,9 @@ final class RefreshToken extends BaseModel
 
     public $timestamps = false;
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user()
     {
         return $this->belongsTo('App\Model\User');
