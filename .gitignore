@@ -25,9 +25,7 @@ config/params.php
 
 # tests
 tests/_output
-tests/_output/*
 tests/_support/_generated
-tests/_support/_generated/*
 
 # frontend
 /frontend
