@@ -12,7 +12,7 @@ return [
                 'host'      => 'localhost',
                 'database'  => 'testapp',
                 'username'  => 'root',
-                'password'  => 'qwerty',
+                'password'  => '',
                 'charset'   => 'utf8',
                 'collation' => 'utf8_unicode_ci',
                 'prefix'    => '',
