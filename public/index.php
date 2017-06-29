@@ -1,31 +1,10 @@
 <?php
-if (php_sapi_name() == 'cli-server') {
-    putenv('SECRET_KEY=test-key');
-}
-
-if (getenv('APPLICATION_ENV') == 'develop') {
-    define('DEBUG_MODE', 1);
-    error_reporting(E_ALL);
-}
-
-// Super debug func
-function prr($value)
-{
-    if (defined('DEBUG_MODE') && DEBUG_MODE == 1) {
-        echo '<pre>';
-        print_r($value);
-        echo '</pre>';
-    };
-}
-
 // Load all class
-require __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/../app.paths.conf.php';
 
-// Load application settings
-$settings = require __DIR__.'/../app/settings.php';
-
-// Create container for application
-$container = new \Slim\Container($settings);
+// Create container for application based on settings
+$container = new \Slim\Container(App\Common\Config\Settings::build());
 
 // Register service providers & factories
 $container->register(new \App\Providers\LogServiceProvider());

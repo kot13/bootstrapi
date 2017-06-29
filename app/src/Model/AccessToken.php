@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model;
 
 use Firebase\JWT\JWT;
@@ -24,6 +25,9 @@ final class AccessToken extends BaseModel
 
     public $timestamps = false;
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user()
     {
         return $this->belongsTo('App\Model\User');
@@ -47,39 +51,38 @@ final class AccessToken extends BaseModel
     }
 
     /**
-     * @param string $token
-     * @param array  $whiteList
+     * @param $token
+     * @param array $settings
      *
      * @return bool
      */
-    public static function validateToken($token, $whiteList = [])
+    public static function validateToken($token, array $settings)
     {
         try {
-            $payload = JWT::decode($token, getenv('SECRET_KEY'), ['HS256']);
-            return in_array($payload->aud, $whiteList);
+            $payload = JWT::decode($token, $settings['secret_key'], ['HS256']);
+            return in_array($payload->aud, $settings['allowHosts']);
         } catch (\Exception $e) {
             return false;
         }
     }
 
     /**
-     * @param string $host
-     * @param User   $user
-     * @param int    $tokenExpire
+     * @param User $user
+     * @param $host
+     * @param array $settings
      *
      * @return string
      */
-    public static function createToken($host, User $user, $tokenExpire = 3600)
+    public static function createToken(User $user, $host, array $settings)
     {
-        $secret_key = getenv('SECRET_KEY');
-        $token      = [
-            'iss' => getenv('AUTH_ISS'),
+        $token = [
+            'iss' => $settings['iss'],
             'aud' => $host,
             'iat' => time(),
-            'exp' => time() + $tokenExpire,
+            'exp' => time() + $settings['ttl'],
         ];
 
-        $jwt = JWT::encode($token, $secret_key);
+        $jwt = JWT::encode($token, $settings['secret_key']);
 
         $user->access_tokens()->create([
             'access_token' => md5($jwt),
