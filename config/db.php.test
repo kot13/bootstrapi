@@ -1,6 +1,10 @@
 <?php
 
+use App\Common\Config\Definition\DBConfigDefinition;
+
 return [
+    'definition' => DBConfigDefinition::class,
+
     'database' => [
         'connections' => [
             'default' => [

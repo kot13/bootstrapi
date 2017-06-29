@@ -1,14 +1,17 @@
 <?php
 
 use App\Common\Acl;
+use App\Common\Config\Definition\AclConfigDefinition;
 
 // ACL
 return [
+    'definition' => AclConfigDefinition::class,
+
     'acl' => [
         'default_role' => 'guest',
 
         'roles' => [
-            // role => [parents]
+            // role => [multiple parents specification as array]
             'guest' => [],
             'user'  => ['guest'],
             'admin' => ['user'],
@@ -41,10 +44,10 @@ return [
              * optional
              * if included all routes default to deny unless specified.
              * Similar format to resource 'resource' route, roles, 'permission' action
-             * ['route', ['roles'], ['methods',' methods1']]
+             * ['route', ['roles'], ['privilege1', 'privilege2']]
              */
             Acl::GUARD_TYPE_ROUTE => [
-                // resource, roles, privileges
+                // resource, [roles as array], [privileges as array]
                 ['/api/token', ['guest'], [Acl::PRIVILEGE_POST]],
                 ['/api/user',  ['user'],  [Acl::PRIVILEGE_GET]],
             ],
@@ -57,7 +60,7 @@ return [
              * ['callable', ['roles']]
              */
             Acl::GUARD_TYPE_CALLABLE => [
-                // resource, roles, privileges
+                // resource, [roles as array], [privileges as array]
                 ['App\Controller\CrudController',              ['user']],
                 ['App\Controller\CrudController:actionIndex',  ['user']],
                 ['App\Controller\CrudController:actionGet',    ['user']],

@@ -2,7 +2,7 @@
 
 namespace App\Common\Config;
 
-use Symfony\Component\Config\FileLocator;
+use Exception;
 
 class Settings
 {
@@ -26,17 +26,9 @@ class Settings
             // Load config file into an array
             $loader = new PHPConfigLoader($locator);
 
-            // Load all config sections
-            $settings = array_merge(
-                $loader->load($locator->locate('acl.php')),
-                $loader->load($locator->locate('db.php')),
-                $loader->load($locator->locate('encoder.php')),
-                $loader->load($locator->locate('logger.php')),
-                $loader->load($locator->locate('mail.php')),
-                $loader->load($locator->locate('params.php')),
-                $loader->load($locator->locate('slim.php')),
-                $loader->load($locator->locate('translate.php'))
-            );
+            // Import all config sections
+            $settings = $loader->importAll();
+
         } catch (Exception $ex) {
             die($ex->getMessage());
         }
