@@ -10,6 +10,7 @@ Thumbs.db
 # composer
 /vendor
 composer.phar
+composer.lock
 
 # version info file
 version.json
