@@ -9,7 +9,6 @@ Thumbs.db
 
 # composer
 /vendor
-composer.lock
 composer.phar
 
 # version info file

@@ -52,7 +52,6 @@ abstract class BaseController
      */
     public function __construct(Container $container)
     {
-        // fetch settings
         $this->settings     = $container['settings'];
 
         // register providers
@@ -62,7 +61,6 @@ abstract class BaseController
         $this->mailRenderer = $container['mailRenderer'];
         $this->encoder      = $container['encoder'];
 
-        // register obervers
         $this->registerModelObservers();
     }
 

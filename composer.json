@@ -33,7 +33,7 @@
     "neomerx/json-api": "^0.8.2",
     "doctrine/dbal": "^2.5",
     "swiftmailer/swiftmailer": "^5.4",
-    "symfony/config": "*"
+    "symfony/config": "^3.3"
   },
 
   "require-dev": {
