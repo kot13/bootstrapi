@@ -96,6 +96,25 @@ final class User extends BaseModel
     }
 
     /**
+     * Create new User instance and save it
+     *
+     * @param $attributes
+     * @param $password
+     * @return User|null
+     */
+    public static function create($attributes, $password)
+    {
+        $user = new self($attributes);
+        $user->setPassword($password);
+        if (!$user->save()) {
+            return null;
+        }
+
+        return $user;
+    }
+
+
+    /**
      * @param $email
      *
      * @return bool
