@@ -10,6 +10,7 @@ Thumbs.db
 # composer
 /vendor
 composer.phar
+composer.lock
 
 # version info file
 version.json
@@ -21,7 +22,10 @@ config/params.php
 # apidoc
 /docs
 /app/apidoc.json
-tests/_output/*
+
+# tests
+tests/_output
+tests/_support/_generated
 
 # frontend
 /frontend

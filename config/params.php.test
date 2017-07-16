@@ -2,7 +2,7 @@
 
 return [
     'params' => [
-        'host' => 'http://hostname.domain',
+        'host' => 'http://127.0.0.1:8888',
         'env'  => 'dev',
     ],
 
@@ -11,8 +11,7 @@ return [
         'iss'        => null,
         'secret_key' => 'secret key',
         'allowHosts' => [
-            'hostname.domain',
-            'docs.hostname.domain',
+            '127.0.0.1',
         ],
     ],
 

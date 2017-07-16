@@ -32,7 +32,8 @@
     "zendframework/zend-permissions-acl": "^2.6",
     "neomerx/json-api": "^0.8.2",
     "doctrine/dbal": "^2.5",
-    "swiftmailer/swiftmailer": "^5.4"
+    "swiftmailer/swiftmailer": "^5.4",
+    "symfony/config": "^3.3"
   },
 
   "require-dev": {

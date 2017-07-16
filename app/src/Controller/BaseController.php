@@ -6,10 +6,17 @@ use App\Model;
 use App\Common\JsonException;
 use App\Requests\IRequest;
 
+use Slim\Container;
+
+/**
+ * Class BaseController
+ *
+ * @package App\Controller
+ */
 abstract class BaseController
 {
     /**
-     * @var \Illuminate\Validation\Factory;
+     * @var \Illuminate\Validation\Factory
      */
     public $validation;
 
@@ -41,13 +48,15 @@ abstract class BaseController
     /**
      * BaseController constructor.
      *
-     * @param $container
+     * @param \Slim\Container $container
      */
-    public function __construct($container)
+    public function __construct(Container $container)
     {
+        $this->settings     = $container['settings'];
+
+        // register providers
         $this->apiRenderer  = $container['apiRenderer'];
         $this->validation   = $container['validation'];
-        $this->settings     = $container['settings'];
         $this->mailer       = $container['mailer'];
         $this->mailRenderer = $container['mailRenderer'];
         $this->encoder      = $container['encoder'];
