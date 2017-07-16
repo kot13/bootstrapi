@@ -7,7 +7,7 @@ use Exception;
 class Settings
 {
     /**
-     * @return array of settings
+     * @return array - array of settings
      */
     public static function build()
     {
