@@ -11,7 +11,7 @@ class Helper
      */
     public static function dashesToCamelCase($string, $capitalizeFirstChar = false)
     {
-        return static::replace($string, '-', $capitalizeFirstChar);
+        return self::replace($string, '-', $capitalizeFirstChar);
     }
 
     /**
@@ -22,7 +22,7 @@ class Helper
      */
     public static function underscoreToCamelCase($string, $capitalizeFirstChar = false)
     {
-        return static::replace($string, '_', $capitalizeFirstChar);
+        return self::replace($string, '_', $capitalizeFirstChar);
     }
 
     /**
@@ -54,7 +54,7 @@ class Helper
      * @param string $symbol
      * @param bool   $capitalizeFirstChar
      *
-     * @return mixed|string
+     * @return string
      */
     private static function replace($string, $symbol, $capitalizeFirstChar = false)
     {

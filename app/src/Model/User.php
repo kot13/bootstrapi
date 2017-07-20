@@ -74,7 +74,7 @@ final class User extends BaseModel
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function access_tokens()
+    public function accessTokens()
     {
         return $this->hasMany('App\Model\AccessToken', 'user_id', 'id');
     }
@@ -82,7 +82,7 @@ final class User extends BaseModel
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function refresh_tokens()
+    public function refreshTokens()
     {
         return $this->hasMany('App\Model\RefreshToken', 'user_id', 'id');
     }
