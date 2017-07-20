@@ -16,9 +16,9 @@ class Settings
         // Load settings from files
         try {
             // Directories list where config files located
-            $directories = array(
+            $directories = [
                 CONFIG_PATH,
-            );
+            ];
 
             // Locator to find files
             $locator = new FileLocator($directories);
@@ -49,7 +49,7 @@ class Settings
 
         // Adjust settings as Slim wants to have it - inside ['settings'] section
         $settings = [
-            'settings' => $settings
+            'settings' => $settings,
         ];
 
         // Settings are ready

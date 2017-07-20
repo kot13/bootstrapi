@@ -63,21 +63,35 @@ final class User extends BaseModel
         ]
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function role()
     {
         return $this->hasOne('App\Model\Role', 'id', 'role_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function access_tokens()
     {
         return $this->hasMany('App\Model\AccessToken', 'user_id', 'id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function refresh_tokens()
     {
         return $this->hasMany('App\Model\RefreshToken', 'user_id', 'id');
     }
 
+    /**
+     * @param $query
+     *
+     * @return mixed
+     */
     public function scopeCurrentUser($query)
     {
         $user = Auth::getUser();

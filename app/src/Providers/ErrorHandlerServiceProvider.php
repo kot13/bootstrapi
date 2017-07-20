@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Common\JsonException;
 use Pimple\Container;
+use Exception;
 
 final class ErrorHandlerServiceProvider extends BaseServiceProvider
 {
@@ -15,11 +16,11 @@ final class ErrorHandlerServiceProvider extends BaseServiceProvider
     public function register(Container $container)
     {
         $container['errorHandler'] = function(Container $container) {
-            return function($request, $response, $exception) use ($container) {
+            return function($request, $response, Exception $exception) use ($container) {
                 $details = $container['settings']['displayErrorDetails'] ? $exception->getMessage() : 'Internal server error';
                 $error   = new JsonException(null, 500, 'Internal server error', $details);
 
-                return $container->get('apiRenderer')->jsonResponse($response, $error->statusCode, $error->encodeError());
+                return $container['apiRenderer']->jsonResponse($response, $error->statusCode, $error->encodeError());
             };
         };
 

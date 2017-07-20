@@ -28,14 +28,14 @@ final class Acl extends ZendAcl
     const GUARD_TYPE_ROUTE = 'routes';
 
     /**
-     * @var guard can be applied to callables
+     * @var string guard can be applied to callables
      */
     const GUARD_TYPE_CALLABLE = 'callables';
 
     /**
      * Acl constructor.
      *
-     * @param $configuration ACL configuration - see app settings ACL section
+     * @param array $configuration ACL configuration - see app settings ACL section
      * @throws \Exception
      */
     public function __construct($configuration)
@@ -140,8 +140,8 @@ final class Acl extends ZendAcl
     /**
      * Build name of the resource based on guard type
      *
-     * @param $guardType guard type
-     * @param $base base part of the resource name to be built
+     * @param string $guardType guard type
+     * @param string $base base part of the resource name to be built
      * @return string ready resource name
      * @throws \Exception
      */
@@ -149,10 +149,10 @@ final class Acl extends ZendAcl
     {
         switch ($guardType) {
             case static::GUARD_TYPE_CALLABLE:
-                return "callable//$base";
+                return sprintf('callable//%s', $base);
 
             case static::GUARD_TYPE_ROUTE:
-                return "route//$base";
+                return sprintf('route//%s', $base);
         }
 
         // unknown guard type
@@ -162,7 +162,7 @@ final class Acl extends ZendAcl
     /**
      * Get one of PRIVILEGE_XXX constants based on HTTP method - GET, POST, PUT, etc
      *
-     * @param $method HTTP method GET, POST, PUT, etc
+     * @param string $method HTTP method GET, POST, PUT, etc
      * @return null|string
      */
     public static function getPrivilegeByHTTPMethod($method)

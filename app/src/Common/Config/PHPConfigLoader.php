@@ -65,7 +65,10 @@ class PHPConfigLoader extends FileLoader
     }
 
     /**
-     * @inheritdoc
+     * @param mixed $resource
+     * @param null  $type
+     *
+     * @return mixed
      */
     public function load($resource, $type = null)
     {
