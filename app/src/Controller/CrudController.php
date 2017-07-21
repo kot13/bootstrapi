@@ -45,7 +45,7 @@ class CrudController extends BaseController
                         $query = $query->whereNotIn($filter['attribute'], $filter['value']);
                         break;
                     case 'like':
-                        $query = $query->where($filter['attribute'], 'like', '%'.$filter['value'] . '%');
+                        $query = $query->where($filter['attribute'], 'like', '%'.$filter['value'].'%');
                         break;
                     case '=':
                     case '!=':
@@ -111,7 +111,7 @@ class CrudController extends BaseController
      * @param Response $response
      * @param array    $args
      *
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      * @throws JsonException
      */
     public function actionCreate(Request $request, Response $response, $args)

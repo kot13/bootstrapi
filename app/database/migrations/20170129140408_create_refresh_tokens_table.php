@@ -20,7 +20,8 @@ class CreateRefreshTokensTable
     /**
      * Undo the migration
      */
-    public function down() {
+    public function down()
+    {
         Capsule::schema()->drop('refresh_tokens');
     }
 }

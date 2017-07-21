@@ -51,8 +51,8 @@ final class AccessToken extends BaseModel
     }
 
     /**
-     * @param $token
-     * @param array $settings
+     * @param string $token
+     * @param array  $settings
      *
      * @return bool
      */
@@ -67,9 +67,9 @@ final class AccessToken extends BaseModel
     }
 
     /**
-     * @param User $user
-     * @param $host
-     * @param array $settings
+     * @param User   $user
+     * @param string $host
+     * @param array  $settings
      *
      * @return string
      */

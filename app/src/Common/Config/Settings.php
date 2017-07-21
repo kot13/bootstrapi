@@ -39,7 +39,7 @@ class Settings
         $settings['accessToken']['iss'] = @getenv('AUTH_ISS');
 
         // Adjust error reporting
-        if (@stripos($settings['params']['env'],  'dev') !== false) {
+        if (@stripos($settings['params']['env'], 'dev') !== false) {
             $settings['displayErrorDetails'] = true;
         }
 

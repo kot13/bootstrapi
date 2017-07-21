@@ -121,7 +121,8 @@ class Partisan
                 return static::EXIT_CODE_OK;
 
             case "runTest":
-                echo exec('./vendor/bin/codecept run').PHP_EOL;
+                exec('./vendor/bin/codecept run', $output);
+                echo implode(PHP_EOL, $output).PHP_EOL;
                 return static::EXIT_CODE_OK;
 
             case "help":

@@ -67,7 +67,7 @@ class MailRenderer
      * @param string $template
      * @param array $data
      */
-    protected function protectedIncludeScope ($template, array $data)
+    protected function protectedIncludeScope($template, array $data)
     {
         extract($data);
         include $template;

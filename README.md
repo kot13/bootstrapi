@@ -5,7 +5,7 @@
 [![License](https://poser.pugx.org/pmurkin/bootstrapi/license)](https://packagist.org/packages/pmurkin/bootstrapi)
 
 # bootstrapi
-This is my JSON API skeleton. Built using Slim 3, Eloquent, Zend-ACL
+A better framework for building API with PHP. Built using Slim 3, Eloquent, Zend-ACL
 
 ## Feature
 * JWT authentication
