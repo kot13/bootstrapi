@@ -8,15 +8,10 @@ if (!@include_once __DIR__ . '/vendor/autoload.php') {
 
 require_once __DIR__.'/app.paths.conf.php';
 
-// Maintenance table names
-define('MIGRATIONS_TABLE', 'migrations');
-define('SEEDS_TABLE',      'seeds');
-
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
-use App\Commands;
-use App\Common\Helper;
+use App\Common\Config\Settings;
 
 class Partisan
 {
@@ -66,7 +61,18 @@ class Partisan
     const ACTION_TYPE_SEED = 2;
 
     /**
+     * @var string Table name where migrations info is kept
+     */
+    const MIGRATIONS_TABLE = 'migrations';
+
+    /**
+     * @var string Table name where seeds into is kept
+     */
+    const SEEDS_TABLE = 'seeds';
+
+    /**
      * Partisan constructor.
+     *
      * @param $args
      */
     function __construct($args)
@@ -78,9 +84,11 @@ class Partisan
     }
 
     /**
+     * Main function - class's entry point
+     *
      * @return int|mixed|null|void
      */
-    public function exec()
+    public function run()
     {
         if (count($this->args) <= 1) {
             $this->help();
@@ -107,20 +115,27 @@ class Partisan
             case "migrate":
                 $ret = $this->runMigrations();
 
+                if ($ret !== static::EXIT_CODE_OK) {
+                    // migrations failed
+                    return $ret;
+                }
+
                 // run seeding only in case migrations are OK
-                if ($ret === static::EXIT_CODE_OK && isset($this->args[2]) && $this->args[2] == '--seed') {
+
+                if (isset($this->args[2]) && $this->args[2] == '--seed') {
                     $ret = $this->runSeeds();
                 }
+
                 return $ret;
 
             case "seed":
                 return $this->runSeeds();
 
-            case "docsgenerate":
-                echo exec('apidoc -i ./app -o ./docs -t ./docstemplate').PHP_EOL;
+            case "generateDocs":
+                echo exec('apidoc -i ./app -o ./docs -t ./docstemplate'), PHP_EOL;
                 return static::EXIT_CODE_OK;
 
-            case "runTest":
+            case "runTests":
                 exec('./vendor/bin/codecept run', $output);
                 echo implode(PHP_EOL, $output).PHP_EOL;
                 return static::EXIT_CODE_OK;
@@ -134,13 +149,14 @@ class Partisan
                 if (in_array($this->args[1], $this->commands)) {
                     return $this->runCommand();
                 } else {
-                    echo "Command not found".PHP_EOL;
+                    echo "Command not found", PHP_EOL;
                     return static::EXIT_CODE_ARGS_LIST;
                 }
         }
     }
 
     /**
+     * Display usage/help screen
      *
      */
     private function help()
@@ -149,32 +165,41 @@ class Partisan
         echo "syntaxis: php partisan <command> [<args>]", PHP_EOL;
         echo PHP_EOL;
         echo "Commands: ", PHP_EOL;
-        echo "php partisan --help                               -->   Displays the help menu.",              PHP_EOL;
-        echo "php partisan generate migration <migrationName>   -->   Generate a new migration.",            PHP_EOL;
-        echo "php partisan generate seed <seedName>             -->   Generate a new seed.",                 PHP_EOL;
-        echo "php partisan migrate                              -->   Migrate the database.",                PHP_EOL;
-        echo "php partisan seed                                 -->   Seed the database tables.",            PHP_EOL;
-        echo "php partisan migrate --seed                       -->   Migrate and seed the database.",       PHP_EOL;
-        //echo "php partisan down <migrationId>                   -->   Revert a specific migration.", PHP_EOL;
-        echo "php partisan <commandsName> <action> [<args>]     -->   Running a specific console commands.", PHP_EOL;
-        echo "php partisan docsgenerate                         -->   Generate documentation.",              PHP_EOL;
-        echo "php partisan runTest <args>                       -->   Run test suite.",                      PHP_EOL;
+        echo "php partisan --help                             -->   Displays the help menu.",              PHP_EOL;
+        echo "php partisan generate migration <migrationName> -->   Generate a new migration.",            PHP_EOL;
+        echo "php partisan generate seed <seedName>           -->   Generate a new seed.",                 PHP_EOL;
+        echo "php partisan migrate                            -->   Migrate the database.",                PHP_EOL;
+        echo "php partisan seed                               -->   Seed the database tables.",            PHP_EOL;
+        echo "php partisan migrate --seed                     -->   Migrate and seed the database.",       PHP_EOL;
+        echo "php partisan <commandsName> <action> [<args>]   -->   Running a specific console commands.", PHP_EOL;
+        echo "php partisan generateDocs                       -->   Generate documentation.",              PHP_EOL;
+        echo "php partisan runTests <args>                    -->   Run test suite.",                      PHP_EOL;
         echo PHP_EOL;
     }
 
     /**
-     * Run all migration commands
+     * Run migration commands from provided $path
      *
+     * @param string|null $path where migration files are located
      * @return int
      */
-    private function runMigrations()
+    private function runMigrations($path = null)
     {
-        echo "Run migrations", PHP_EOL;
-        $this->dbConnect();
-        $this->safeCreateTable(MIGRATIONS_TABLE);
+        if (empty($path)) {
+            $path = MIGRATIONS_PATH;
+        }
 
-        $files = glob(MIGRATIONS_PATH.'/*.php');
-        return $this->run($files, static::ACTION_TYPE_MIGRATION);
+        if (!@is_dir($path) || !@is_readable($path)) {
+            echo "Migrations path $path is not good", PHP_EOL;
+            return static::EXIT_CODE_ACCESS_ERROR;
+        }
+
+        echo "Run migrations for $path", PHP_EOL;
+        $this->dbConnect();
+        $this->safeCreateTable(static::MIGRATIONS_TABLE);
+
+        $files = glob($path.'/*.php');
+        return $this->runActionFiles($files, static::ACTION_TYPE_MIGRATION);
     }
 
     /**
@@ -187,10 +212,10 @@ class Partisan
         echo "Run seeds", PHP_EOL;
 
         $this->dbConnect();
-        $this->safeCreateTable(SEEDS_TABLE);
+        $this->safeCreateTable(static::SEEDS_TABLE);
 
         $files = glob(SEEDS_PATH.'/*.php');
-        return $this->run($files, static::ACTION_TYPE_SEED);
+        return $this->runActionFiles($files, static::ACTION_TYPE_SEED);
     }
 
     /**
@@ -265,17 +290,15 @@ class Partisan
      * @param int $action on of ACTION_XXX constants
      * @return int exit code one of EXIT_CODE_XXX constants
      */
-    private function run(array $files, $action = self::ACTION_TYPE_MIGRATION)
+    private function runActionFiles(array $files, $action = self::ACTION_TYPE_MIGRATION)
     {
         foreach ($files as $file) {
             // file = path/to/20160706231338_create_users_table.php
 
-            if (!is_readable($file)) {
+            if (!@is_readable($file)) {
                 // file is not read-accessible
                 continue;
             }
-
-            require_once($file);
 
             // action_token = 20160706231338_create_users_table
             $action_token = basename($file, '.php');
@@ -296,11 +319,13 @@ class Partisan
 
             echo "Running ", $action_token;
 
-            $table = ($action == static::ACTION_TYPE_MIGRATION) ? MIGRATIONS_TABLE : SEEDS_TABLE;
+            $table = ($action == static::ACTION_TYPE_MIGRATION) ? static::MIGRATIONS_TABLE : static::SEEDS_TABLE;
 
             if ($this->isRowExist($action_token, $table)) {
                 echo ' - already exists.', PHP_EOL;
             } else {
+                require_once($file);
+
                 $obj = new $class();
                 if($action == static::ACTION_TYPE_MIGRATION){
                     $obj->up();
@@ -318,7 +343,8 @@ class Partisan
     }
 
     /**
-     * Create list of available commands
+     * Create list of available commands from the list of files.
+     * Each file provides set of commands to be included into general list of commands
      *
      * @param $files
      * @return array
@@ -346,28 +372,31 @@ class Partisan
     }
 
     /**
-     *
+     * Internal function - setup connection to DB
      */
     private function dbConnect()
     {
-        if (empty($this->config)) {
-            echo "Include config ", PHP_EOL;
-            $this->config = \App\Common\Config\Settings::build();
+        if (!empty($this->capsule)) {
+            // already initialized - do nothing
+            return;
         }
 
-        if (empty($this->capsule)) {
-            echo "Instantiate Capsule() ", PHP_EOL;
+        if (empty($this->config)) {
+            echo "Include config ", PHP_EOL;
+            $this->config = Settings::build();
+        }
 
-            $this->capsule = new Capsule();
+        echo "Instantiate Capsule() ", PHP_EOL;
 
-            try {
-                $this->capsule->addConnection($this->config['settings']['database']['connections']['default'], 'default');
-                $this->capsule->setEventDispatcher(new Dispatcher(new Container));
-                $this->capsule->setAsGlobal();
-                $this->capsule->bootEloquent();
-            } catch (Exception $ex) {
-                echo "ERROR - can't init Capsule() - ", $ex->getMessage(), PHP_EOL;
-            }
+        $this->capsule = new Capsule();
+
+        try {
+            $this->capsule->addConnection($this->config['settings']['database']['connections']['default'], 'default');
+            $this->capsule->setEventDispatcher(new Dispatcher(new Container));
+            $this->capsule->setAsGlobal();
+            $this->capsule->bootEloquent();
+        } catch (Exception $ex) {
+            echo "ERROR - can't init Capsule() - ", $ex->getMessage(), PHP_EOL;
         }
     }
 
@@ -420,4 +449,4 @@ class Partisan
 }
 
 $partisan = new Partisan($argv);
-exit ($partisan->exec());
+exit ($partisan->run());

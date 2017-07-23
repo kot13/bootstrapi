@@ -29,12 +29,12 @@ class PHPConfigLoader extends FileLoader
         // in order to import all we need to have locator to locate these "all"
         // locator need
         if (empty($this->locator)) {
-            throw new FileLoaderLoadException("importAll()");
+            throw new FileLoaderLoadException('importAll()');
         }
 
         // locator must be capable of locating all
         if (!is_callable([$this->locator, 'locateAll'])) {
-            throw new FileLoaderLoadException("locateAll()");
+            throw new FileLoaderLoadException('locateAll()');
         }
 
         // build list of 'all' files
@@ -52,12 +52,10 @@ class PHPConfigLoader extends FileLoader
                     $processor = new Processor();
                     $configDefinition = new $config['definition']();
                     // process config according to specified definition
-//file_put_contents('/tmp/log', print_r($config, true), FILE_APPEND);
                     $config = $processor->processConfiguration(
                         $configDefinition,
                         [$config]
                     );
-//file_put_contents('/tmp/log', print_r($config, true), FILE_APPEND);
                 }
 
                 // combine all configs into one "unified general config"
@@ -70,10 +68,8 @@ class PHPConfigLoader extends FileLoader
     }
 
     /**
-     * @param mixed $resource
-     * @param null  $type
-     *
-     * @return mixed
+     * @inheritdoc
+     * @return array|\StdClass loaded object
      */
     public function load($resource, $type = null)
     {

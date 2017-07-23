@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Requests\GetTokenRequest;
@@ -12,7 +13,7 @@ use Slim\Http\Response;
 
 use App\Common\JsonException;
 
-final class TokenController extends BaseController
+class TokenController extends BaseController
 {
     const TOKEN_TYPE = 'Bearer';
 
@@ -66,21 +67,12 @@ final class TokenController extends BaseController
         $this->validateRequestParams($params, 'token', new GetTokenRequest());
 
         $user = User::findUserByEmail($params['data']['attributes']['username']);
+        // ensure user and password are good
+        if (!$user || !password_verify($params['data']['attributes']['password'], $user->password)) {
+            $this->failUnknownUser();
+        }
 
-        if ($user && password_verify($params['data']['attributes']['password'], $user->password)) {
-            $accessToken = AccessToken::createToken(
-                $user,
-                $request->getUri()->getHost(),
-                $this->settings['accessToken']
-            );
-            $refreshToken = RefreshToken::createToken($user);
-        } else {
-            throw new JsonException('token', 400, 'Invalid Attribute', 'Invalid password or username');
-        };
-
-        $result = $this->buildResponse($accessToken, $refreshToken);
-
-        return $this->apiRenderer->jsonResponse($response, 200, json_encode($result));
+        return $this->buildTokens($request, $response, $user);
     }
 
     /**
@@ -129,36 +121,55 @@ final class TokenController extends BaseController
         $this->validateRequestParams($params, 'token', new RefreshTokenRequest());
 
         $user = RefreshToken::getUserByToken($params['data']['attributes']['refresh_token']);
+        // ensure user is good
+        if (!$user) {
+            $this->failUnknownToken();
+        }
 
-        if ($user) {
-            $token = AccessToken::createToken(
-                $user,
-                $request->getUri()->getHost(),
-                $this->settings['accessToken']
-            );
-            $refreshToken = RefreshToken::createToken($user);
-        } else {
-            throw new JsonException('token', 400, 'Invalid Attribute', 'Invalid refresh_token');
-        };
+        return $this->buildTokens($request, $response, $user);
+    }
 
-        $result = $this->buildResponse($token, $refreshToken);
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param User $user
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function buildTokens(Request $request, Response $response, User $user)
+    {
+        // build tokens
+        $accessToken = AccessToken::createToken(
+            $user,
+            $request->getUri()->getHost(),
+            $this->settings['accessToken']
+        );
+        $refreshToken = RefreshToken::createToken($user);
 
+        // prepare response structure
+        $result = [
+            'token_type'    => self::TOKEN_TYPE,
+            'access_token'  => $accessToken,
+            'refresh_token' => $refreshToken,
+            'expires_in'    => $this->settings['accessToken']['ttl'],
+        ];
+
+        // render response
         return $this->apiRenderer->jsonResponse($response, 200, json_encode($result));
     }
 
     /**
-     * @param string $accessToken
-     * @param string $refreshToken
-     *
-     * @return array
+     * @throws JsonException
      */
-    private function buildResponse($accessToken, $refreshToken)
+    protected function failUnknownUser()
     {
-        return [
-            'access_token'  => $accessToken,
-            'expires_in'    => $this->settings['accessToken']['ttl'],
-            'token_type'    => self::TOKEN_TYPE,
-            'refresh_token' => $refreshToken,
-        ];
+        throw new JsonException('token', 400, 'Invalid Attribute', 'Invalid password or username');
+    }
+
+    /**
+     * @throws JsonException
+     */
+    protected function failUnknownToken()
+    {
+        throw new JsonException('token', 400, 'Invalid Attribute', 'Invalid refresh_token');
     }
 }
