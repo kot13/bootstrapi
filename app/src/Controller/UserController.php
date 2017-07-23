@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Model\User;
@@ -10,7 +11,7 @@ use App\Requests\UserUpdateRequest;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-final class UserController extends CrudController
+class UserController extends CrudController
 {
     /**
      * @param Request  $request
@@ -32,9 +33,7 @@ final class UserController extends CrudController
             throw new JsonException($args['entity'], 400, 'User already exists', 'User already exists');
         }
 
-        $user = new User($params['data']['attributes']);
-        $user->setPassword($params['data']['attributes']['password']);
-        $user->save();
+        $user = User::create($params['data']['attributes'], $params['data']['attributes']['password']);
 
         $result = $this->encoder->encode($request, $user);
 
