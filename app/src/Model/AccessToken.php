@@ -51,8 +51,8 @@ final class AccessToken extends BaseModel
     }
 
     /**
-     * @param $token
-     * @param array $settings
+     * @param string $token
+     * @param array  $settings
      *
      * @return bool
      */
@@ -67,9 +67,9 @@ final class AccessToken extends BaseModel
     }
 
     /**
-     * @param User $user
-     * @param $host
-     * @param array $settings
+     * @param User   $user
+     * @param string $host
+     * @param array  $settings
      *
      * @return string
      */
@@ -84,7 +84,7 @@ final class AccessToken extends BaseModel
 
         $jwt = JWT::encode($token, $settings['secret_key']);
 
-        $user->access_tokens()->create([
+        $user->accessTokens()->create([
             'access_token' => md5($jwt),
             'created_at'   => date('Y-m-d H:i:s'),
         ]);

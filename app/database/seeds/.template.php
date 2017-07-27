@@ -1,6 +1,7 @@
 <?= "<?php";?>
 
-class <?= $className ?> {
+class <?= $className ?>
+{
     public function run()
     {
 

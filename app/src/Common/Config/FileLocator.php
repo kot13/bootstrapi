@@ -27,7 +27,7 @@ class FileLocator extends \Symfony\Component\Config\FileLocator
             $dir_entries = scandir($path);
             foreach ($dir_entries as $dir_entry) {
                 // include paths to files into result set
-                $filename = $path . DIRECTORY_SEPARATOR . $dir_entry;
+                $filename = $path.DIRECTORY_SEPARATOR.$dir_entry;
                 if (@is_file($filename) && @is_readable($filename)) {
                     $res[] = $filename;
                 }

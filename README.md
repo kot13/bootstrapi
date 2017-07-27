@@ -1,10 +1,11 @@
+[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/bootstrapi/Lobby)
 [![Build Status](https://travis-ci.org/kot13/bootstrapi.svg?branch=master)](https://travis-ci.org/kot13/bootstrapi)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/kot13/bootstrapi/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/kot13/bootstrapi/?branch=master)
 [![Total Downloads](https://poser.pugx.org/pmurkin/bootstrapi/downloads)](https://packagist.org/packages/pmurkin/bootstrapi)
 [![License](https://poser.pugx.org/pmurkin/bootstrapi/license)](https://packagist.org/packages/pmurkin/bootstrapi)
 
 # bootstrapi
-This is my JSON API skeleton. Built using Slim 3, Eloquent, Zend-ACL
+A better framework for building API with PHP. Built using Slim 3, Eloquent, Zend-ACL
 
 ## Feature
 * JWT authentication

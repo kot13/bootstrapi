@@ -14,6 +14,11 @@ use Symfony\Component\Config\Definition\Processor;
 class PHPConfigLoader extends FileLoader
 {
     /**
+     * @var FileLocator
+     */
+    protected $locator;
+
+    /**
      * Import all loadable resources
      *
      * @return array
@@ -64,7 +69,7 @@ class PHPConfigLoader extends FileLoader
 
     /**
      * @inheritdoc
-     * @return array|StdClass loaded object
+     * @return array|\StdClass loaded object
      */
     public function load($resource, $type = null)
     {

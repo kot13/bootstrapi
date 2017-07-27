@@ -110,7 +110,7 @@ abstract class BaseController
 
         foreach ($observers as $observer => $models) {
             foreach ($models as $model) {
-                call_user_func($model. '::observe', $observer);
+                call_user_func($model.'::observe', $observer);
             }
         }
     }

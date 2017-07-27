@@ -2,7 +2,8 @@
 use App\Model\Role;
 use App\Model\User;
 
-class CreateRolesRightsUsers {
+class CreateRolesRightsUsers
+{
     public function run()
     {
         Role::create([

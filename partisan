@@ -56,7 +56,7 @@ class Partisan
     const ACTION_TYPE_MIGRATION = 1;
 
     /**
-     * @var available action - DB seed
+     * @var int available action - DB seed
      */
     const ACTION_TYPE_SEED = 2;
 
@@ -136,7 +136,8 @@ class Partisan
                 return static::EXIT_CODE_OK;
 
             case "runTests":
-                echo exec('./vendor/bin/codecept run'), PHP_EOL;
+                exec('./vendor/bin/codecept run', $output);
+                echo implode(PHP_EOL, $output).PHP_EOL;
                 return static::EXIT_CODE_OK;
 
             case "help":
@@ -285,7 +286,7 @@ class Partisan
     /**
      * Run list of commands in files
      *
-     * @param $files list of files to run
+     * @param array $files list of files to run
      * @param int $action on of ACTION_XXX constants
      * @return int exit code one of EXIT_CODE_XXX constants
      */

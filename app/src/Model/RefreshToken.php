@@ -59,7 +59,7 @@ final class RefreshToken extends BaseModel
     {
         $refreshToken = md5(Helper::generateRandomString().'_'.time());
 
-        $user->refresh_tokens()->create([
+        $user->refreshTokens()->create([
             'refresh_token' => $refreshToken,
             'created_at'    => date('Y-m-d H:i:s'),
         ]);

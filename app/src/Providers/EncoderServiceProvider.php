@@ -14,7 +14,7 @@ final class EncoderServiceProvider extends BaseServiceProvider
      */
     public function register(Container $container)
     {
-        $config  = $container['settings'];
+        $config = $container['settings'];
 
         $container['encoder'] = function() use ($config) {
             $encoder = new JsonApiEncoder($config);

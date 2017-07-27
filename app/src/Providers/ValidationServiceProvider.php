@@ -30,8 +30,8 @@ final class ValidationServiceProvider extends BaseServiceProvider
 
         // validation
         $container['validation'] = function(Container $container) use ($config) {
-            $validation = new Factory($container->get('translator'));
-            $presence   = new DatabasePresenceVerifier($container->get('databaseManager'));
+            $validation = new Factory($container['translator']);
+            $presence   = new DatabasePresenceVerifier($container['databaseManager']);
             $validation->setPresenceVerifier($presence);
 
             return $validation;

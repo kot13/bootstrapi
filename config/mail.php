@@ -1,4 +1,4 @@
 <?php
 return [
-    'mailTemplate' => __DIR__.'/../mail',
+    'mailTemplate' => __DIR__.'/../app/templates/mail',
 ];

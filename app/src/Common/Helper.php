@@ -11,13 +11,7 @@ class Helper
      */
     public static function dashesToCamelCase($string, $capitalizeFirstChar = false)
     {
-        $str = str_replace(' ', '', ucwords(str_replace('-', ' ', $string)));
-
-        if (!$capitalizeFirstChar) {
-            $str = lcfirst($str);
-        }
-
-        return $str;
+        return self::replace($string, '-', $capitalizeFirstChar);
     }
 
     /**
@@ -28,13 +22,7 @@ class Helper
      */
     public static function underscoreToCamelCase($string, $capitalizeFirstChar = false)
     {
-        $str = str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
-
-        if (!$capitalizeFirstChar) {
-            $str = lcfirst($str);
-        }
-
-        return $str;
+        return self::replace($string, '_', $capitalizeFirstChar);
     }
 
     /**
@@ -59,5 +47,23 @@ class Helper
         }
 
         return $token;
+    }
+
+    /**
+     * @param string $string
+     * @param string $symbol
+     * @param bool   $capitalizeFirstChar
+     *
+     * @return string
+     */
+    private static function replace($string, $symbol, $capitalizeFirstChar = false)
+    {
+        $str = str_replace(' ', '', ucwords(str_replace($symbol, ' ', $string)));
+
+        if (!$capitalizeFirstChar) {
+            $str = lcfirst($str);
+        }
+
+        return $str;
     }
 }

@@ -2,7 +2,7 @@
 
 return [
     'translate' => [
-        'path' => __DIR__.'/../lang',
+        'path' => __DIR__.'/../app/lang',
         'locale' => 'ru',
     ],
 ];
