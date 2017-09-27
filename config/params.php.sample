@@ -3,6 +3,7 @@
 return [
     'params' => [
         'host' => 'http://hostname.domain',
+        'api'  => 'http://hostname.domain/api',
         'env'  => 'dev',
     ],
 

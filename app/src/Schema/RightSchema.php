@@ -101,7 +101,6 @@ use \Carbon\Carbon;
  *    }
  *
  * @apiHeader {String} Authorization Bearer TOKEN
- * @apiHeader {String} Content-Type application/vnd.api+json <br/> application/json
  *
  * @apiSuccessExample {json} Успешно (200)
  *     HTTP/1.1 200 OK
@@ -128,7 +127,7 @@ use \Carbon\Carbon;
  */
 
 /**
- * @api {patch / put} /right/:id Изменение права
+ * @api {patch} /right/:id Изменение права
  * @apiName UpdateRight
  * @apiGroup Right
  *
@@ -150,7 +149,6 @@ use \Carbon\Carbon;
  *    }
  *
  * @apiHeader {String} Authorization Bearer TOKEN
- * @apiHeader {String} Content-Type application/vnd.api+json <br/> application/json
  *
  * @apiSuccessExample {json} Успешно (200)
  *     HTTP/1.1 200 OK

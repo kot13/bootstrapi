@@ -147,7 +147,6 @@ use \Carbon\Carbon;
  *    }
  *
  * @apiHeader {String} Authorization Bearer TOKEN
- * @apiHeader {String} Content-Type application/vnd.api+json <br/> application/json
  *
  * @apiSuccessExample {json} Успешно (200)
  *     HTTP/1.1 200 OK
@@ -184,7 +183,7 @@ use \Carbon\Carbon;
  */
 
 /**
- * @api {patch / put} /user/:id Изменение пользователя
+ * @api {patch} /user/:id Изменение пользователя
  * @apiName UpdateUser
  * @apiGroup User
  *
@@ -241,7 +240,6 @@ use \Carbon\Carbon;
  *     }
  *
  * @apiHeader {String} Authorization Bearer TOKEN
- * @apiHeader {String} Content-Type application/vnd.api+json <br/> application/json
  *
  * @apiUse StandardErrors
  * @apiUse UnauthorizedError
@@ -271,8 +269,6 @@ use \Carbon\Carbon;
  * @apiSuccessExample {json} Успешно (204)
  *     HTTP/1.1 204 OK
  *
- * @apiHeader {String} Content-Type application/vnd.api+json <br/> application/json
- *
  * @apiUse StandardErrors
  */
 
@@ -299,8 +295,6 @@ use \Carbon\Carbon;
  *
  * @apiSuccessExample {json} Успешно (204)
  *     HTTP/1.1 204 OK
- *
- * @apiHeader {String} Content-Type application/vnd.api+json <br/> application/json
  *
  * @apiUse StandardErrors
  */

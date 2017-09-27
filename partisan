@@ -132,8 +132,7 @@ class Partisan
                 return $this->runSeeds();
 
             case "generateDocs":
-                echo exec('apidoc -i ./app -o ./docs -t ./docstemplate'), PHP_EOL;
-                return static::EXIT_CODE_OK;
+                return $this->runGenerateDocs();
 
             case "runTests":
                 exec('./vendor/bin/codecept run', $output);
@@ -258,6 +257,46 @@ class Partisan
 
         return static::EXIT_CODE_OK;
     }
+
+    /**
+     * Run generate documentation
+     * @return int
+     */
+    private function runGenerateDocs()
+    {
+        if (empty($this->config)) {
+            echo "Include config ", PHP_EOL;
+            $this->config = Settings::build();
+        }
+
+        $apidocPath = CONFIG_PATH . '/apidoc.php';
+        if (false === file_exists($apidocPath)) {
+            echo 'The apidoc file ' . $apidocPath . ' not found'.PHP_EOL;
+            return static::EXIT_CODE_ACCESS_ERROR;
+        };
+
+        $path = APP_PATH;
+        if (!is_writeable($path)) {
+            echo 'The directory ' . $path . ' is not writeable'.PHP_EOL;
+            return static::EXIT_CODE_ACCESS_ERROR;
+        }
+
+        $baseName = $path . '/apidoc.json';
+        $content  = require($apidocPath);
+
+        $content['url']       = $this->config['settings']['params']['api'];
+        $content['sampleUrl'] = $this->config['settings']['params']['api'];
+
+        $content  = json_encode($content);
+        if (false === file_put_contents($baseName, $content)) {
+            echo 'The file ' . $baseName . ' could not be written to'.PHP_EOL;
+            return static::EXIT_CODE_ACCESS_ERROR;
+        };
+
+        echo exec('apidoc -i ./app -o ./docs -t ./docstemplate'), PHP_EOL;
+        return static::EXIT_CODE_OK;
+    }
+
 
     /**
      * @return mixed|null

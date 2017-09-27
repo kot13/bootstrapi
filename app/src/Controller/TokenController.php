@@ -27,8 +27,6 @@ class TokenController extends BaseController
      * <br/>
      * <strong>Authorization: Bearer xxxxxxxxxxxxxxxxxxxxxxxxxxxxx</strong>
      *
-     * @apiHeader {String} Content-Type application/vnd.api+json <br/> application/json
-     *
      * @apiParam {String} username Логин
      * @apiParam {String} password Пароль
      *
@@ -81,8 +79,6 @@ class TokenController extends BaseController
      * @apiGroup Token
      *
      * @apiDescription Метод для обновления access_token по refresh_token
-     *
-     * @apiHeader {String} Content-Type application/vnd.api+json <br/> application/json
      *
      * @apiParam {String} refresh_token Токен для обновления
      *

@@ -51,7 +51,7 @@ $ composer create-project -n -s dev pmurkin/bootstrapi my-api
 ```
 $ nano config/db.php
 $ nano config/params.php
-$ nano app/apidoc.json # require set "url"
+$ nano config/apidoc.php
 $ nano version.sh
 ```
 
