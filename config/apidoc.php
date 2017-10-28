@@ -5,8 +5,6 @@ return [
     'version'     => '1.0.0',
     'description' => 'Bootstrapi docs',
     'title'       => 'Bootstrapi docs',
-    'url'         => 'http://skeleton.dev/api',
-    'sampleUrl'   => 'http://skeleton.dev/api',
     'template'    => [
         'withCompare'   => false,
         'withGenerator' => false,

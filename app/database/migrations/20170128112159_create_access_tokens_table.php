@@ -12,7 +12,7 @@ class CreateAccessTokensTable
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index();
             $table->string('access_token')->unique()->nullable();
-            $table->timestamp('created_at');
+            $table->timestamp('created_at')->useCurrent();
         });
 
     }

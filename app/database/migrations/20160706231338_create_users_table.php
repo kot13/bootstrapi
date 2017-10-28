@@ -19,7 +19,7 @@ class CreateUsersTable
             $table->integer('updated_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->integer('status');
+            $table->integer('status')->default(0);
         });
 
     }

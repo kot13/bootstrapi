@@ -13,7 +13,7 @@ class CreateLogsTable
             $table->string('action');
             $table->morphs('entity');
             $table->text('state')->nullable();
-            $table->timestamp('created_at');
+            $table->timestamp('created_at')->useCurrent();
             $table->integer('created_by')->nullable();
         });
 

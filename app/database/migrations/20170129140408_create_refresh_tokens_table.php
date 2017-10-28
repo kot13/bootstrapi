@@ -12,7 +12,7 @@ class CreateRefreshTokensTable
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index();
             $table->string('refresh_token')->unique()->nullable();
-            $table->timestamp('created_at');
+            $table->timestamp('created_at')->useCurrent();
         });
 
     }

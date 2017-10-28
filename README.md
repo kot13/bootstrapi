@@ -41,6 +41,9 @@ A better framework for building API with PHP. Built using Slim 3, Eloquent, Zend
 * MySQL / PostgreSQL
 * NodeJs && NPM && ApiDocJs (for docs generate)
 
+## Donate
+Bitcoin payments: 1LLw4WuBz1oUSjQFntfQutD2T8mGZiA7pZ
+
 ## Installing
 1) create new project
 ```
@@ -173,5 +176,5 @@ $ php partisan migrate --seed
 
 5) generate documentation (optional)
 ```
-$ php partisan docsgenerate
+$ php partisan generate docs
 ```

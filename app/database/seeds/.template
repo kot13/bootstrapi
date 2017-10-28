@@ -1,6 +1,6 @@
 <?= "<?php";?>
 
-class <?= $className ?>
+class <?= $className.PHP_EOL; ?>
 {
     public function run()
     {

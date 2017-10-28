@@ -12,6 +12,7 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
 use App\Common\Config\Settings;
+use App\Common\Helper;
 
 class Partisan
 {
@@ -97,20 +98,44 @@ class Partisan
         }
 
         switch ($this->args[1]) {
-
             case "generate":
+                if ($this->args[2] === 'docs') {
+                    return $this->runGenerateDocs();
+                }
+
                 if (count($this->args) < 4){
                     echo "Missing required attributes".PHP_EOL;
                     return static::EXIT_CODE_ARGS_LIST;
                 }
 
-                if ($this->args[2] == 'seed'){
-                    $path = SEEDS_PATH;
-                } else {
-                    $path = MIGRATIONS_PATH;
+                switch ($this->args[2]) {
+                    case 'seed':
+                        $baseName = date('YmdHis') . '_' . $this->args[3] . '.php';
+                        $params   = [
+                            'className' => Helper::underscoreToCamelCase($this->args[3], true),
+                        ];
+
+                        return $this->runGenerate($baseName, SEEDS_PATH, $params);
+
+                    case 'migration':
+                        $baseName = date('YmdHis') . '_' . $this->args[3] . '.php';
+                        $params   = [
+                            'className' => Helper::underscoreToCamelCase($this->args[3], true),
+                            'tableName' => strtolower($this->args[3]),
+                        ];
+
+                        return $this->runGenerate($baseName, MIGRATIONS_PATH, $params);
+
+                    case 'model':
+                        return $this->runGenerateModel($this->args[3]);
+
+                    case 'schema':
+                        return $this->runGenerateSchema($this->args[3]);
+
                 }
 
-                return $this->runGenerate($path, $this->args[3]);
+                echo "Missing required attributes".PHP_EOL;
+                return static::EXIT_CODE_ARGS_LIST;
 
             case "migrate":
                 $ret = $this->runMigrations();
@@ -130,9 +155,6 @@ class Partisan
 
             case "seed":
                 return $this->runSeeds();
-
-            case "generateDocs":
-                return $this->runGenerateDocs();
 
             case "runTests":
                 exec('./vendor/bin/codecept run', $output);
@@ -156,7 +178,6 @@ class Partisan
 
     /**
      * Display usage/help screen
-     *
      */
     private function help()
     {
@@ -167,6 +188,9 @@ class Partisan
         echo "php partisan --help                             -->   Displays the help menu.",              PHP_EOL;
         echo "php partisan generate migration <migrationName> -->   Generate a new migration.",            PHP_EOL;
         echo "php partisan generate seed <seedName>           -->   Generate a new seed.",                 PHP_EOL;
+        echo "php partisan generate model <tableName>         -->   Generate a new model.",                PHP_EOL;
+        echo "php partisan generate schema <tableName>        -->   Generate a new schema.",               PHP_EOL;
+        echo "php partisan generate docs                      -->   Generate documentation.",              PHP_EOL;
         echo "php partisan migrate                            -->   Migrate the database.",                PHP_EOL;
         echo "php partisan seed                               -->   Seed the database tables.",            PHP_EOL;
         echo "php partisan migrate --seed                     -->   Migrate and seed the database.",       PHP_EOL;
@@ -218,13 +242,107 @@ class Partisan
     }
 
     /**
-     * @param $path
-     * @param $migrationName
+     * Run generate model
+     * @param $tableName
+     *
      * @return int
      */
-    private function runGenerate($path, $migrationName)
+    private function runGenerateModel($tableName)
     {
-        $templatePath = $path . '/.template.php';
+        $this->dbConnect();
+
+        $table = Capsule::schema()->getColumnListing($tableName);
+        if (count($table) === 0) {
+            echo "Not found table ".$tableName.PHP_EOL;
+            return static::EXIT_CODE_ARGS_LIST;
+        }
+        $columns = [];
+        foreach ($table as $columnName) {
+            $columnType = Capsule::schema()->getColumnType($tableName, $columnName);
+            $columns[] = [
+                'name' => $columnName,
+                'type' => $columnType !== 'datetime' ? $columnType : '\Carbon\Carbon',
+            ];
+        }
+
+        $modelName = substr($this->args[3], 0, -1);
+        $className = Helper::underscoreToCamelCase($modelName, true);
+        $baseName  = $className . '.php';
+        $params    = [
+            'className' => $className,
+            'tableName' => strtolower($tableName),
+            'columns'   => $columns,
+        ];
+
+        return $this->runGenerate($baseName, MODELS_PATH, $params);
+    }
+
+    /**
+     * Run generate schema
+     * @param $tableName
+     *
+     * @return int
+     */
+    private function runGenerateSchema($tableName)
+    {
+        $this->dbConnect();
+
+        $table = Capsule::schema()->getColumnListing($tableName);
+        if (count($table) === 0) {
+            echo "Not found table ".$tableName.PHP_EOL;
+            return static::EXIT_CODE_ARGS_LIST;
+        }
+
+        $columns = [];
+        foreach ($table as $columnName) {
+            $columnType = Capsule::schema()->getColumnType($tableName, $columnName);
+
+            switch ($columnType) {
+                case 'string':
+                case 'text':
+                    $fake = '"String"';
+                    break;
+                case 'integer':
+                    $fake = '1';
+                    break;
+                case 'decimal':
+                    $fake = '1.0';
+                    break;
+                case 'datetime':
+                    $fake = '"2016-10-17T07:38:21+0000"';
+                    break;
+                default:
+                    $fake = '';
+            }
+
+            $columns[] = [
+                'name' => $columnName,
+                'type' => $columnType,
+                'fake' => $fake,
+            ];
+        }
+
+        $modelName = substr($this->args[3], 0, -1);
+        $className = Helper::underscoreToCamelCase($modelName, true);
+        $baseName  = $className . 'Schema.php';
+        $params    = [
+            'className'    => $className . 'Schema',
+            'resourceType' => str_replace('_', '-', strtolower($modelName)),
+            'columns'      => $columns,
+        ];
+
+        return $this->runGenerate($baseName, SCHEMAS_PATH, $params);
+    }
+
+    /**
+     * @param string $baseName
+     * @param string $path
+     * @param array  $params
+     * @return int
+     */
+    private function runGenerate($baseName, $path, $params)
+    {
+        $templatePath = $path . '/.template';
 
         if (!is_writeable($path)) {
             echo 'The directory ' . $path . ' is not writeable'.PHP_EOL;
@@ -236,13 +354,12 @@ class Partisan
             return static::EXIT_CODE_ACCESS_ERROR;
         };
 
-        $baseName  = date('YmdHis') . '_' . $migrationName . '.php';
-        $className = $migrationName; // need for template
-
-        if (file_exists($baseName)) {
-            echo 'The file ' . $templatePath . ' already exists'.PHP_EOL;
+        if (file_exists($path . '/' . $baseName)) {
+            echo 'The file ' . $baseName . ' already exists'.PHP_EOL;
             return static::EXIT_CODE_ACCESS_ERROR;
         };
+
+        extract($params);
 
         ob_start();
         include($templatePath);
