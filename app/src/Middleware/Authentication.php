@@ -48,7 +48,7 @@ class Authentication
     {
         // Request has to have Authorization header
         if (!$request->getHeader('Authorization')) {
-            return $this->failNotAuthorized();
+            throw new JsonException(null, 401, 'Not authorized', 'The user must be authorized');
         }
 
         // HTTP Authorization header available
@@ -57,18 +57,18 @@ class Authentication
         $token = @explode(' ', @$request->getHeader('Authorization')[0]);
         $token = is_array($token) && (count($token) == 2) ? $token[1] : null;
         if (empty($token)) {
-            return $this->failNotAuthorized();
+            throw new JsonException(null, 401, 'Not authorized', 'The user must be authorized');
         }
 
         // provided token must be valid
         if (!AccessToken::validateToken($token, $this->settings['accessToken'])) {
-            return $this->failNotAuthorized();
+            throw new JsonException(null, 401, 'Not authorized', 'The user must be authorized');
         }
 
         // find user by token
         $user = AccessToken::getUserByToken($token);
         if (empty($user)) {
-            return $this->failNotAuthorized();
+            throw new JsonException(null, 401, 'Not authorized', 'The user must be authorized');
         }
 
         Auth::setUser($user);
@@ -92,32 +92,11 @@ class Authentication
             }
 
             if (!$isAllowed) {
-                // access is not allowed
-                return $this->failNotAllowed();
+                throw new JsonException(null, 403, 'Not allowed', 'Access to this location is not allowed');
             }
         }
 
         // access allowed, move to next middleware
         return $next($request, $response);
-    }
-
-    /**
-     * Produce HTTP 401 Not authorized
-     *
-     * @throws JsonException
-     */
-    protected function failNotAuthorized()
-    {
-        throw new JsonException(null, 401, 'Not authorized', 'The user must be authorized');
-    }
-
-    /**
-     * Produce HTTP 403 Not allowed
-     *
-     * @throws JsonException
-     */
-    protected function failNotAllowed()
-    {
-        throw new JsonException(null, 403, 'Not allowed', ' Access to this location is not allowed');
     }
 }
