@@ -5,7 +5,6 @@ namespace App\Console;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Finder\Finder;
 use Slim\Container;
-use App\Console\Commands\GenerateCommand;
 
 class Partisan extends Application
 {
@@ -90,9 +89,6 @@ class Partisan extends Application
      */
     protected function getDefaultCommands()
     {
-        $defaultCommands   = parent::getDefaultCommands();
-        $defaultCommands[] = new GenerateCommand();
-
-        return $defaultCommands;
+        return parent::getDefaultCommands();
     }
 }
