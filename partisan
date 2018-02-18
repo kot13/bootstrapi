@@ -195,7 +195,6 @@ class Partisan
         echo "php partisan seed                               -->   Seed the database tables.",            PHP_EOL;
         echo "php partisan migrate --seed                     -->   Migrate and seed the database.",       PHP_EOL;
         echo "php partisan <commandsName> <action> [<args>]   -->   Running a specific console commands.", PHP_EOL;
-        echo "php partisan generateDocs                       -->   Generate documentation.",              PHP_EOL;
         echo "php partisan runTests <args>                    -->   Run test suite.",                      PHP_EOL;
         echo PHP_EOL;
     }

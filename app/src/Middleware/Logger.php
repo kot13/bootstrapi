@@ -2,8 +2,6 @@
 
 namespace App\Middleware;
 
-use App\Common\JsonException;
-
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -14,6 +12,10 @@ class Logger
      */
     private $logger;
 
+    /**
+     * Logger constructor.
+     * @param \Monolog\Logger $logger
+     */
     public function __construct(\Monolog\Logger $logger)
     {
         $this->logger = $logger;
@@ -27,43 +29,30 @@ class Logger
      * @param callable               $next
      *
      * @return ResponseInterface
-     * @throws JsonException
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
         $logger     = $this->logger;
         $response   = $next($request, $response);
-        $uri        = $request->getUri()->getPath();
         $statusCode = $response->getStatusCode();
+        $log        = [
+            'ip'     => $request->getAttribute('ip_address'),
+            'uri'    => $request->getUri()->getPath(),
+            'status' => $statusCode,
+        ];
 
         switch ($statusCode) {
             case 500:
-                $logger->addCritical('Oops!!! the server got 500 error', [
-                    'ip'     => $request->getAttribute('ip_address'),
-                    'uri'    => $uri,
-                    'status' => $statusCode,
-                ]);
+                $logger->addCritical('Oops!!! the server got 500 error', $log);
                 break;
             case 404:
-                $logger->addWarning('Someone calling un-existing API action', [
-                    'ip'     => $request->getAttribute('ip_address'),
-                    'uri'    => $uri,
-                    'status' => $statusCode,
-                ]);
+                $logger->addWarning('Someone calling un-existing API action', $log);
                 break;
             case 401:
-                $logger->addWarning('Someone calling API action without access', [
-                    'ip'     => $request->getAttribute('ip_address'),
-                    'uri'    => $uri,
-                    'status' => $statusCode,
-                ]);
+                $logger->addWarning('Someone calling API action without access', $log);
                 break;
             default:
-                $logger->addInfo('Someone calling existing API action', [
-                    'ip'     => $request->getAttribute('ip_address'),
-                    'uri'    => $uri,
-                    'status' => $statusCode,
-                ]);
+                $logger->addInfo('Someone calling existing API action', $log);
                 break;
         }
         return $response;
