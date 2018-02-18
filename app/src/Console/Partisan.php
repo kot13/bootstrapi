@@ -15,6 +15,11 @@ class Partisan extends Application
     const COMMANDS_NAMESPACE = '\App\Console\Commands';
 
     /**
+     * @var Container
+     */
+    public $container;
+
+    /**
      * @var string
      */
     private $logo = '
@@ -24,13 +29,9 @@ class Partisan extends Application
  / ____/ /_/ / /  / /_/ (__  ) /_/ / / / /
 /_/    \__,_/_/   \__/_/____/\__,_/_/ /_/ 
                                           ';
-    /**
-     * @var Container
-     */
-    public $container;
 
     /**
-     * ApplicationExtra constructor.
+     * Partisan constructor.
      *
      * @param Container $container
      * @param string    $name      The name of the application
