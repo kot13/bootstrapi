@@ -49,7 +49,9 @@ class MigrateCommand extends Command
         $finder = new Finder();
         $finder->files()->name('*.php')->in(MIGRATIONS_PATH);
 
-        return $this->runActionFiles($finder, $output);
+        $this->runActionFiles($finder, $output);
+
+        return;
     }
 
     /**
@@ -64,20 +66,20 @@ class MigrateCommand extends Command
     {
         foreach ($files as $file) {
             $baseName = $file->getBasename('.php');
-
-            $class = $this->getMigrationClass($baseName);
+            $class    = $this->getMigrationClass($baseName);
 
             if ($this->isRowExist($baseName, self::MIGRATIONS_TABLE)) {
                 $output->writeln([sprintf('`%s` - already exists.', $baseName)]);
-            } else {
-                require_once($file);
-
-                $obj = new $class();
-                $obj->up();
-
-                $this->insertRow($baseName, self::MIGRATIONS_TABLE);
-                $output->writeln([sprintf('`%s` - done.', $baseName)]);
+                continue;
             }
+
+            require_once($file);
+
+            $obj = new $class();
+            $obj->up();
+
+            $this->insertRow($baseName, self::MIGRATIONS_TABLE);
+            $output->writeln([sprintf('`%s` - done.', $baseName)]);
         }
 
         $output->writeln(['<info>Completed.</info>']);
