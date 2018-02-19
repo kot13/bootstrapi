@@ -55,7 +55,8 @@ class Partisan extends Application
         foreach ($finder as $file) {
             $ns = self::COMMANDS_NAMESPACE;
             /* @var \Symfony\Component\Finder\SplFileInfo $file*/
-            if ($relativePath = $file->getRelativePath()) {
+            $relativePath = $file->getRelativePath();
+            if ($relativePath) {
                 $ns .= '\\'.strtr($relativePath, '/', '\\');
             }
 
@@ -80,15 +81,5 @@ class Partisan extends Application
         }
 
         return '<info>' . $this->logo . '</info>';
-    }
-
-    /**
-     * Gets the default commands that should always be available.
-     *
-     * @return array An array of default Command instances
-     */
-    protected function getDefaultCommands()
-    {
-        return parent::getDefaultCommands();
     }
 }

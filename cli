@@ -4,21 +4,7 @@ umask(0000);
 set_time_limit(0);
 date_default_timezone_set("Europe/Moscow");
 
-require_once __DIR__.'/vendor/autoload.php';
-require_once __DIR__.'/app.paths.conf.php';
-
-//FIXME: delete copy-paste from public/index.php
-$container = new \Slim\Container(App\Common\Config\Settings::build());
-
-// Register service providers & factories
-$container->register(new \App\Providers\LogServiceProvider());
-$container->register(new \App\Providers\RendererServiceProvider());
-$container->register(new \App\Providers\AclServiceProvider());
-$container->register(new \App\Providers\DatabaseServiceProvider());
-$container->register(new \App\Providers\ValidationServiceProvider());
-$container->register(new \App\Providers\MailerServiceProvider());
-$container->register(new \App\Providers\ErrorHandlerServiceProvider());
-$container->register(new \App\Providers\EncoderServiceProvider());
+require_once __DIR__.'/bootstrap/app.php';
 
 $application = new App\Console\Partisan($container);
 
