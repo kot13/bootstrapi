@@ -39,7 +39,7 @@ class GenerateCommandCommand extends Command
 
         $helper   = $this->getHelper('question');
         $question = new Question('<info>Please enter the name of the command class: </info>', 'DefaultCommand');
-        $question->setValidator(function ($answer) {
+        $question->setValidator(function($answer) {
             if ('Command' !== substr($answer, -7)) {
                 throw new \RunTimeException('The name of the command should be suffixed with \'Command\'');
             }
@@ -81,7 +81,7 @@ class GenerateCommandCommand extends Command
      */
     public function generateCode($placeHolders, $replacements, $templateName, $resultPath)
     {
-        $templatePath = CODE_TEMPLATE_PATH . '/' . $templateName;
+        $templatePath = CODE_TEMPLATE_PATH.'/'.$templateName;
         if (false === file_exists($templatePath)) {
             throw new \RunTimeException(sprintf('Not found template %s', $templatePath));
         }
@@ -105,7 +105,7 @@ class GenerateCommandCommand extends Command
             throw new \Exception(sprintf('Commands directory "%s" does not exist.', $dir));
         }
 
-        return $dir . '/'.$commandClass.'.php';
+        return $dir.'/'.$commandClass.'.php';
     }
 
     /**
@@ -118,8 +118,9 @@ class GenerateCommandCommand extends Command
     {
         $word = str_replace('Command', '', $word);
 
-        return  strtolower(preg_replace('/[^A-Z^a-z^0-9]+/',':',
-            preg_replace('/([a-zd])([A-Z])/','\1:\2',
-                preg_replace('/([A-Z]+)([A-Z][a-z])/','\1:\2',$word))));
+        return strtolower(preg_replace('/[^A-Z^a-z^0-9]+/', ':',
+            preg_replace('/([a-zd])([A-Z])/', '\1:\2',
+                preg_replace('/([A-Z]+)([A-Z][a-z])/', '\1:\2', $word)))
+        );
     }
 }

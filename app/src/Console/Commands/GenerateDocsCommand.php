@@ -3,9 +3,7 @@
 namespace App\Console\Commands;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -40,7 +38,7 @@ class GenerateDocsCommand extends Command
         $settings = $app->container->get('settings');
 
 
-        $apidocPath = CONFIG_PATH . '/apidoc.php';
+        $apidocPath = CONFIG_PATH.'/apidoc.php';
         if (false === file_exists($apidocPath)) {
             throw new \RunTimeException(sprintf('The apidoc file `%s` not found', $apidocPath));
         };
@@ -50,7 +48,7 @@ class GenerateDocsCommand extends Command
             throw new \RunTimeException(sprintf('The directory `%s` is not writeable', $path));
         }
 
-        $baseName = $path . '/apidoc.json';
+        $baseName = $path.'/apidoc.json';
         $content  = require($apidocPath);
 
         $content['url']       = $settings['params']['api'];

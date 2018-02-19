@@ -117,11 +117,9 @@ class MigrateCommand extends Command
 
         try {
             if (!Capsule::schema()->hasTable($tableName)) {
-                Capsule::schema()->create($tableName, function($table)
-                {
+                Capsule::schema()->create($tableName, function($table) {
                     $table->string('version');
                     $table->timestamp('apply_time')->useCurrent();
-
                     $table->primary('version');
                 });
             }

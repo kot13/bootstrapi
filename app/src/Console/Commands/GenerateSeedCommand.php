@@ -38,7 +38,7 @@ class GenerateSeedCommand extends Command
 
         $helper   = $this->getHelper('question');
         $question = new Question('<info>Please enter the name of the seed: </info>');
-        $question->setValidator(function ($answer) {
+        $question->setValidator(function($answer) {
             if (strlen(trim($answer)) === 0) {
                 throw new \RunTimeException('The name of the seed should be not empty');
             }
@@ -73,7 +73,7 @@ class GenerateSeedCommand extends Command
      */
     public function generateCode($placeHolders, $replacements, $templateName, $resultPath)
     {
-        $templatePath = CODE_TEMPLATE_PATH . '/' . $templateName;
+        $templatePath = CODE_TEMPLATE_PATH.'/'.$templateName;
         if (false === file_exists($templatePath)) {
             throw new \RunTimeException(sprintf('Not found template %s', $templatePath));
         }
@@ -97,8 +97,8 @@ class GenerateSeedCommand extends Command
             throw new \Exception(sprintf('Seed directory "%s" does not exist.', $dir));
         }
 
-        $baseName = date('YmdHis') . '_' . $seedName . '.php';
+        $baseName = date('YmdHis').'_'.$seedName.'.php';
 
-        return $dir . '/' . $baseName;
+        return $dir.'/'.$baseName;
     }
 }

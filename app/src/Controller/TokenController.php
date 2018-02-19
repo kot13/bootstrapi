@@ -7,10 +7,8 @@ use App\Requests\RefreshTokenRequest;
 use App\Model\User;
 use App\Model\AccessToken;
 use App\Model\RefreshToken;
-
 use Slim\Http\Request;
 use Slim\Http\Response;
-
 use App\Common\JsonException;
 
 class TokenController extends BaseController

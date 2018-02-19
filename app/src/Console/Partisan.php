@@ -80,6 +80,6 @@ class Partisan extends Application
             return sprintf('<info>%s</info> version <comment>%s</comment>', $this->getName(), $this->getVersion());
         }
 
-        return '<info>' . $this->logo . '</info>';
+        return '<info>'.$this->logo.'</info>';
     }
 }
