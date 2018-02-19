@@ -35,7 +35,7 @@
     "swiftmailer/swiftmailer": "^5.4",
     "symfony/config": "^3.3",
     "symfony/console": "^3.4",
-    "symfony/finder": "^4.0"
+    "symfony/finder": "^3.4"
   },
 
   "require-dev": {

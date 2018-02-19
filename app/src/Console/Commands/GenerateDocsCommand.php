@@ -37,7 +37,6 @@ class GenerateDocsCommand extends Command
         $app      = $this->getApplication();
         $settings = $app->container->get('settings');
 
-
         $apidocPath = CONFIG_PATH.'/apidoc.php';
         if (false === file_exists($apidocPath)) {
             throw new \RunTimeException(sprintf('The apidoc file `%s` not found', $apidocPath));
