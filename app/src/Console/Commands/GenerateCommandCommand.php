@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Console\Traits\CodeGenerate;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -12,6 +13,8 @@ use Symfony\Component\Console\Question\Question;
  */
 class GenerateCommandCommand extends Command
 {
+    use CodeGenerate;
+
     /**
      * Configuration of command
      */
@@ -44,7 +47,8 @@ class GenerateCommandCommand extends Command
                 throw new \RunTimeException('The name of the command should be suffixed with \'Command\'');
             }
 
-            if (true === file_exists($this->getPathForCommand($answer))) {
+            $baseName = $answer.'.php';
+            if (true === file_exists($this->getPath($baseName, COMMANDS_PATH))) {
                 throw new \RunTimeException('This command already exists');
             }
 
@@ -53,7 +57,8 @@ class GenerateCommandCommand extends Command
 
         $commandClass = $helper->ask($input, $output, $question);
         $commandName  = $this->colonize($commandClass);
-        $path         = $this->getPathForCommand($commandClass);
+        $baseName     = $commandClass.'.php';
+        $path         = $this->getPath($baseName, COMMANDS_PATH);
         $placeHolders = [
             '<class>',
             '<name>',
@@ -68,44 +73,6 @@ class GenerateCommandCommand extends Command
         $output->writeln(sprintf('Generated new command class to "<info>%s</info>"', realpath($path)));
 
         return;
-    }
-
-    /**
-     * Generate code
-     *
-     * @param array  $placeHolders
-     * @param array  $replacements
-     * @param string $templateName
-     * @param string $resultPath
-     * @return bool|int
-     */
-    public function generateCode($placeHolders, $replacements, $templateName, $resultPath)
-    {
-        $templatePath = CODE_TEMPLATE_PATH.'/'.$templateName;
-        if (false === file_exists($templatePath)) {
-            throw new \RunTimeException(sprintf('Not found template %s', $templatePath));
-        }
-
-        $template = file_get_contents($templatePath);
-
-        $code = str_replace($placeHolders, $replacements, $template);
-
-        return file_put_contents($resultPath, $code);
-    }
-
-    /**
-     * @param string $commandClass
-     * @return string
-     * @throws \Exception
-     */
-    private function getPathForCommand($commandClass)
-    {
-        $dir = rtrim(COMMANDS_PATH, '/');
-        if (!file_exists($dir)) {
-            throw new \Exception(sprintf('Commands directory "%s" does not exist.', $dir));
-        }
-
-        return $dir.'/'.$commandClass.'.php';
     }
 
     /**

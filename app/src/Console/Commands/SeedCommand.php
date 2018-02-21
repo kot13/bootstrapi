@@ -9,16 +9,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 
 /**
- * MigrateCommand
+ * SeedCommand
  */
-class MigrateCommand extends Command
+class SeedCommand extends Command
 {
     use DbHelper;
 
     /**
      * @var string Table name where migrations info is kept
      */
-    const MIGRATIONS_TABLE = 'migrations';
+    const SEEDS_TABLE = 'seeds';
 
     /**
      * Configuration of command
@@ -26,8 +26,8 @@ class MigrateCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('migrate')
-            ->setDescription('Command for run migration')
+            ->setName('seed')
+            ->setDescription('Command for run seed')
         ;
     }
 
@@ -37,32 +37,32 @@ class MigrateCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      *
-     * @return void
+     * @return int|null|void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!is_dir(MIGRATIONS_PATH) || !is_readable(MIGRATIONS_PATH)) {
-            throw new \RunTimeException(sprintf('Migrations path `%s` is not good', MIGRATIONS_PATH));
+        if (!is_dir(SEEDS_PATH) || !is_readable(SEEDS_PATH)) {
+            throw new \RunTimeException(sprintf('Seeds path `%s` is not good', SEEDS_PATH));
         }
 
         $output->writeln([
-            '<info>Run migrations</info>',
-            sprintf('Ensure table `%s` presence', self::MIGRATIONS_TABLE)
+            '<info>Run seeds</info>',
+            sprintf('Ensure table `%s` presence', self::SEEDS_TABLE)
         ]);
 
         try {
-            $this->safeCreateTable(self::MIGRATIONS_TABLE);
+            $this->safeCreateTable(self::SEEDS_TABLE);
         } catch (\Exception $e) {
             $output->writeln([
-                sprintf('Can\'t ensure table `%s` presence. Please verify DB connection params and presence of database named', self::MIGRATIONS_TABLE),
+                sprintf('Can\'t ensure table `%s` presence. Please verify DB connection params and presence of database named', self::SEEDS_TABLE),
                 sprintf('Error: `%s`', $e->getMessage()),
             ]);
         }
 
         $finder = new Finder();
-        $finder->files()->name('*.php')->in(MIGRATIONS_PATH);
+        $finder->files()->name('*.php')->in(SEEDS_PATH);
 
-        $this->runActions($finder, $output, self::MIGRATIONS_TABLE, 'up');
+        $this->runActions($finder, $output, self::SEEDS_TABLE, 'run');
 
         return;
     }
