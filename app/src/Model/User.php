@@ -51,18 +51,6 @@ final class User extends BaseModel
         'password_reset_token',
     ];
 
-    public static $rules = [
-        'create' => [
-            'email'    => 'required|email',
-            'role_id'  => 'required',
-            'password' => 'required',
-        ],
-        'update' => [
-            'email'   => 'required|email',
-            'role_id' => 'required',
-        ]
-    ];
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */

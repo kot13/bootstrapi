@@ -33,11 +33,4 @@ abstract class BaseModel extends Model
     {
         return $query;
     }
-
-    /**
-     * Model validation rules
-     * @var array
-     */
-    public static $rules = [];
-
 }
