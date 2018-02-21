@@ -28,12 +28,13 @@ class RunTestCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      *
-     * @return int|null|void
+     * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         exec('./vendor/bin/codecept run', $result);
-
-        $output->writeln($result);
+        if (is_array($result)) {
+            $output->writeln($result);
+        }
     }
 }

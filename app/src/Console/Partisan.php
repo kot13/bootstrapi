@@ -6,6 +6,13 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Finder\Finder;
 use Slim\Container;
 
+/**
+ * Class Partisan
+ *
+ * @property Container $container
+ *
+ * @package App\Console
+ */
 class Partisan extends Application
 {
     /**
