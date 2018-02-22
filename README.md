@@ -17,6 +17,7 @@ A better framework for building API with PHP. Built using Slim 3, Eloquent, Zend
 * CLI-tools
 * JSONAPI negotiation
 * Generated documentation
+* Code generator commands
 * Log
 
 ## Inside:
@@ -171,10 +172,15 @@ Example configuration for apache:
 
 4) migration
 ```
-$ php partisan migrate --seed
+$ php partisan migrate
 ```
 
-5) generate documentation (optional)
+5) migration
 ```
-$ php partisan generate docs
+$ php partisan seed
+```
+
+6) generate documentation (optional)
+```
+$ php partisan generate:docs
 ```

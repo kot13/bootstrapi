@@ -24,7 +24,7 @@ class GenerateModelCommand extends Command
     {
         $this
             ->setName('generate:model')
-            ->setDescription('Command generate:model')
+            ->setDescription('Command for generate model')
         ;
     }
 

@@ -4,17 +4,13 @@ namespace App\Schema;
 use \Carbon\Carbon;
 
 /**
- * @api {get} /user Список пользователей
+ * @api {get} /user List of user
  * @apiName GetUsers
  * @apiGroup User
  *
- * @apiDescription Метод для получения списка пользователей.
+ * @apiDescription Get list of user
  *
- * @apiPermission user
- *
- * @apiHeader {String} Authorization Bearer TOKEN
- *
- * @apiSuccessExample {json} Успешно (200)
+ * @apiSuccessExample {json} Success (200)
  *     HTTP/1.1 200 OK
  *     {
  *       "data": [
@@ -22,312 +18,238 @@ use \Carbon\Carbon;
  *           "type": "user",
  *           "id": "1",
  *           "attributes": {
- *             "full_name": "Тестовый пользователь",
- *             "email": "mail@example.com",
+ *             "email": "String",
+ *             "full_name": "String",
+ *             "password": "String",
+ *             "password_reset_token": "String",
  *             "role_id": 1,
+ *             "created_by": 1,
+ *             "updated_by": 1,
  *             "created_at": "2016-10-17T07:38:21+0000",
  *             "updated_at": "2016-10-17T07:38:21+0000",
- *             "created_by": 0,
- *             "updated_by": null,
- *             "status": 1,
- *           },
- *           "relationships": {
- *             "role": {
- *               "data": {
- *                 "type": "role",
- *                 "id": "1"
- *               }
- *             }
+ *             "deleted_at": "2016-10-17T07:38:21+0000",
+ *             "status": 1
  *           },
  *           "links": {
- *             "self": "http://bootstrapi.dev/api/user/1"
+ *             "self": "/user/1"
  *           }
  *         }
  *       ]
  *     }
  *
  * @apiUse StandardErrors
- * @apiUse UnauthorizedError
  */
 
 /**
- * @api {get} /user/:id?include=role&fields[role]=name Получить пользователя
+ * @api {get} /user/:id Get user
  * @apiName GetUser
  * @apiGroup User
  *
- * @apiDescription Метод для получения пользователя.
+ * @apiDescription Get user.
  *
- * @apiPermission user
+ * @apiParam {Number} id Id user
  *
- * @apiParam {Number} id Id пользователя
- *
- * @apiHeader {String} Authorization Bearer TOKEN
- *
- * @apiSuccessExample {json} Успешно (200)
+ * @apiSuccessExample {json} Success (200)
  *     HTTP/1.1 200 OK
  *     {
  *       "data": {
  *         "type": "user",
  *         "id": "1",
  *         "attributes": {
- *           "full_name": "Тестовый пользователь",
- *           "email": "mail@example.com",
- *           "role_id": 1,
- *           "created_at": "2016-10-17T07:38:21+0000",
- *           "updated_at": "2016-10-17T07:38:21+0000",
- *           "created_by": 0,
- *           "updated_by": null,
- *           "status": 1,
- *         },
- *         "relationships": {
- *           "role": {
- *             "data": {
- *               "type": "role",
- *               "id": "1"
- *             }
- *           }
+ *             "email": "String",
+ *             "full_name": "String",
+ *             "password": "String",
+ *             "password_reset_token": "String",
+ *             "role_id": 1,
+ *             "created_by": 1,
+ *             "updated_by": 1,
+ *             "created_at": "2016-10-17T07:38:21+0000",
+ *             "updated_at": "2016-10-17T07:38:21+0000",
+ *             "deleted_at": "2016-10-17T07:38:21+0000",
+ *             "status": 1
  *         },
  *         "links": {
- *           "self": "http://bootstrapi.dev/api/user/1"
+ *           "self": "/user/1"
  *         }
  *       }
  *     }
  *
  * @apiUse StandardErrors
- * @apiUse UnauthorizedError
  * @apiUse NotFoundError
  */
 
 /**
- * @api {delete} /user/:id Удаление пользователя
- * @apiName DeleteUser
- * @apiGroup User
- *
- * @apiDescription Метод для удаления пользователя.
- *
- * @apiPermission admin
- *
- * @apiParam {Number} id Id пользователя
- *
- * @apiHeader {String} Authorization Bearer TOKEN
- *
- * @apiSuccessExample {json} Успешно (204)
- *     HTTP/1.1 204 OK
- *
- * @apiUse UnauthorizedError
- * @apiUse StandardErrors
- * @apiUse NotFoundError
- */
-
-/**
- * @api {post} /user Создание пользователя
+ * @api {post} /user Create user
  * @apiName CreateUser
  * @apiGroup User
  *
- * @apiDescription Метод для создания нового пользователя.
+ * @apiDescription Create user.
  *
- * @apiPermission admin
+ * @apiParam {String} email
+ * @apiParam {String} full_name
+ * @apiParam {String} password
+ * @apiParam {String} password_reset_token
+ * @apiParam {Integer} role_id
+ * @apiParam {Integer} created_by
+ * @apiParam {Integer} updated_by
+ * @apiParam {Datetime} created_at
+ * @apiParam {Datetime} updated_at
+ * @apiParam {Datetime} deleted_at
+ * @apiParam {Integer} status
  *
- * @apiParam {String} full_name Полное имя пользователя
- * @apiParam {String} email Email пользователя (уникальный)
- * @apiParam {String} password Пароль
- * @apiParam {Number} role_id Id роли пользователя
- *
- * @apiParamExample {json} Пример запроса:
+ * @apiParamExample {json} Example request:
  *    {
- *      "data":{
- *        "attributes":{
- *          "full_name":"Тестовый пользователь",
- *          "email": "mail@example.com",
- *          "password": "qwerty",
- *          "role_id": 1,
- *          "status": 1
+ *      "data": {
+ *        "attributes": {
+ *             "email": "String",
+ *             "full_name": "String",
+ *             "password": "String",
+ *             "password_reset_token": "String",
+ *             "role_id": 1,
+ *             "created_by": 1,
+ *             "updated_by": 1,
+ *             "created_at": "2016-10-17T07:38:21+0000",
+ *             "updated_at": "2016-10-17T07:38:21+0000",
+ *             "deleted_at": "2016-10-17T07:38:21+0000",
+ *             "status": 1
  *        }
  *      }
  *    }
  *
- * @apiHeader {String} Authorization Bearer TOKEN
- *
- * @apiSuccessExample {json} Успешно (200)
+ * @apiSuccessExample {json} Success (200)
  *     HTTP/1.1 200 OK
  *     {
  *       "data": {
  *         "type": "user",
- *         "id": "2",
+ *         "id": "1",
  *         "attributes": {
- *           "full_name": "Тестовый пользователь",
- *           "email": "mail2@example.com",
- *           "role_id": 1,
- *           "created_at": "2016-10-17T07:38:21+0000",
- *           "updated_at": "2016-10-17T07:38:21+0000",
- *           "created_by": 1,
- *           "updated_by": null,
- *           "status": 1,
- *         },
- *         "relationships": {
- *            "role": {
- *             "data": {
- *               "type": "role",
- *               "id": "1"
- *             }
- *           }
+ *             "email": "String",
+ *             "full_name": "String",
+ *             "password": "String",
+ *             "password_reset_token": "String",
+ *             "role_id": 1,
+ *             "created_by": 1,
+ *             "updated_by": 1,
+ *             "created_at": "2016-10-17T07:38:21+0000",
+ *             "updated_at": "2016-10-17T07:38:21+0000",
+ *             "deleted_at": "2016-10-17T07:38:21+0000",
+ *             "status": 1
  *         },
  *         "links": {
- *           "self": "http://bootstrapi.dev/api/user/2"
+ *           "self": "/user/1"
  *         }
  *       }
  *     }
  *
  * @apiUse StandardErrors
- * @apiUse UnauthorizedError
  */
 
 /**
- * @api {patch} /user/:id Изменение пользователя
+ * @api {patch} /user/:id Update user
  * @apiName UpdateUser
  * @apiGroup User
  *
- * @apiDescription Метод для изменения пользователя.
+ * @apiDescription Update user.
  *
+ * @apiParam {String} email
+ * @apiParam {String} full_name
+ * @apiParam {String} password
+ * @apiParam {String} password_reset_token
+ * @apiParam {Integer} role_id
+ * @apiParam {Integer} created_by
+ * @apiParam {Integer} updated_by
+ * @apiParam {Datetime} created_at
+ * @apiParam {Datetime} updated_at
+ * @apiParam {Datetime} deleted_at
+ * @apiParam {Integer} status
  *
- * @apiPermission admin
- *
- * @apiParam {String} full_name Полное имя пользователя
- * @apiParam {String} email Email пользователя (уникальный)
- * @apiParam {String} password Пароль
- * @apiParam {Number} role_id Id роли пользователя
- *
- * @apiParamExample {json} Пример запроса:
+ * @apiParamExample {json} Example request:
  *    {
- *      "data":{
- *        "attributes":{
- *          "full_name":"Тестовый пользователь",
- *          "email": "mail@example.com",
- *          "password": "qwerty",
- *          "role_id": 1
+ *      "data": {
+ *        "attributes": {
+ *             "email": "String",
+ *             "full_name": "String",
+ *             "password": "String",
+ *             "password_reset_token": "String",
+ *             "role_id": 1,
+ *             "created_by": 1,
+ *             "updated_by": 1,
+ *             "created_at": "2016-10-17T07:38:21+0000",
+ *             "updated_at": "2016-10-17T07:38:21+0000",
+ *             "deleted_at": "2016-10-17T07:38:21+0000",
+ *             "status": 1
  *        }
  *      }
  *    }
  *
- * @apiSuccessExample {json} Успешно (200)
+ * @apiSuccessExample {json} Success (200)
  *     HTTP/1.1 200 OK
  *     {
  *       "data": {
  *         "type": "user",
- *         "id": 2,
+ *         "id": "1",
  *         "attributes": {
- *           "full_name": "Тестовый пользователь",
- *           "email": "mail1@example.com",
- *           "role_id": 1,
- *           "created_at": "2016-10-17T07:38:21+0000",
- *           "updated_at": "2016-10-17T07:38:21+0000",
- *           "created_by": null,
- *           "updated_by": null,
- *           "status": 1,
- *         },
- *         "relationships": {
- *           "role": {
- *             "data": {
- *               "type": "role",
- *               "id": "1"
- *             }
- *           }
+ *             "email": "String",
+ *             "full_name": "String",
+ *             "password": "String",
+ *             "password_reset_token": "String",
+ *             "role_id": 1,
+ *             "created_by": 1,
+ *             "updated_by": 1,
+ *             "created_at": "2016-10-17T07:38:21+0000",
+ *             "updated_at": "2016-10-17T07:38:21+0000",
+ *             "deleted_at": "2016-10-17T07:38:21+0000",
+ *             "status": 1
  *         },
  *         "links": {
- *           "self": "http://bootstrapi.dev/api/user/2"
+ *           "self": "/user/1"
  *         }
  *       }
  *     }
  *
- * @apiHeader {String} Authorization Bearer TOKEN
- *
  * @apiUse StandardErrors
- * @apiUse UnauthorizedError
  * @apiUse NotFoundError
  */
 
 /**
- * @api {post} /user/request-password-reset Запрос на сброс пароля
- * @apiName RequestPasswordReset
+ * @api {delete} /user/:id Delete user
+ * @apiName DeleteUser
  * @apiGroup User
  *
- * @apiDescription Метод высылающий на email пользователя письмо со ссылкой для изменения пароля.
+ * @apiDescription Delete user.
  *
- * В ссылке отправляется токен для сброса пароля. Его нужно отправить в методе /user/password-reset
+ * @apiParam {Number} id Id user
  *
- * @apiParam {String} email Email пользователя
- *
- * @apiParamExample {json} Пример запроса:
- *    {
- *      "data":{
- *        "attributes":{
- *          "email": "mail@example.com"
- *        }
- *      }
- *    }
- *
- * @apiSuccessExample {json} Успешно (204)
+ * @apiSuccessExample {json} Success (204)
  *     HTTP/1.1 204 OK
  *
  * @apiUse StandardErrors
- */
-
-/**
- * @api {post} /user/password-reset Сброс пароля
- * @apiName PasswordReset
- * @apiGroup User
- *
- * @apiDescription Метод для изменения пароля.
- *
- * Вместе с паролем нужно отправить токен, который был отправлен пользователю на почту.
- *
- * @apiParam {String} email Email пользователя
- *
- * @apiParamExample {json} Пример запроса:
- *    {
- *      "data":{
- *        "attributes":{
- *          "token": "f35v3g7h3frw24yi58cawo2e2kqhy3i5_1466085622",
- *          "password": "qwerty"
- *        }
- *      }
- *    }
- *
- * @apiSuccessExample {json} Успешно (204)
- *     HTTP/1.1 204 OK
- *
- * @apiUse StandardErrors
+ * @apiUse NotFoundError
  */
 
 final class UserSchema extends BaseSchema
 {
     protected $resourceType = 'user';
 
-    public function getId($user)
+    public function getId($entity)
     {
-        return $user->id;
+        return $entity->id;
     }
 
-    public function getAttributes($user)
+    public function getAttributes($entity)
     {
         return [
-            'full_name'  => $user->full_name,
-            'email'      => $user->email,
-            'role_id'    => (int)$user->role_id,
-            'created_at' => Carbon::parse($user->created_at)->setTimezone('UTC')->format(Carbon::ISO8601),
-            'updated_at' => Carbon::parse($user->updated_at)->setTimezone('UTC')->format(Carbon::ISO8601),
-            'created_by' => $user->created_by,
-            'updated_by' => $user->updated_by,
-            'status'     => $user->status,
-        ];
-    }
-
-    public function getRelationships($user, $isPrimary, array $includeList)
-    {
-        return [
-            'role' => [
-                self::DATA => $user->role,
-            ],
+			'email'	=> (string)$entity->email,
+			'full_name'	=> (string)$entity->full_name,
+			'password'	=> (string)$entity->password,
+			'password_reset_token'	=> (string)$entity->password_reset_token,
+			'role_id'	=> (integer)$entity->role_id,
+			'created_by'	=> (integer)$entity->created_by,
+			'updated_by'	=> (integer)$entity->updated_by,
+			'created_at'	=> Carbon::parse($entity->created_at)->setTimezone('UTC')->format(Carbon::ISO8601),
+			'updated_at'	=> Carbon::parse($entity->updated_at)->setTimezone('UTC')->format(Carbon::ISO8601),
+			'deleted_at'	=> Carbon::parse($entity->deleted_at)->setTimezone('UTC')->format(Carbon::ISO8601),
+			'status'	=> (integer)$entity->status,
         ];
     }
 }
