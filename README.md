@@ -172,12 +172,12 @@ Example configuration for apache:
 
 4) migration
 ```
-$ php partisan migrate
+$ php partisan migrate:up
 ```
 
 5) migration
 ```
-$ php partisan seed
+$ php partisan run:seed
 ```
 
 6) generate documentation (optional)

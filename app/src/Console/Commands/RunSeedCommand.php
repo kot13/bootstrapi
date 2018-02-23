@@ -11,14 +11,9 @@ use Symfony\Component\Finder\Finder;
 /**
  * SeedCommand
  */
-class SeedCommand extends Command
+class RunSeedCommand extends Command
 {
     use DbHelper;
-
-    /**
-     * @var string Table name where migrations info is kept
-     */
-    const SEEDS_TABLE = 'seeds';
 
     /**
      * Configuration of command
@@ -26,7 +21,7 @@ class SeedCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('seed')
+            ->setName('run:seed')
             ->setDescription('Command for run seed')
         ;
     }
@@ -47,14 +42,14 @@ class SeedCommand extends Command
 
         $output->writeln([
             '<info>Run seeds</info>',
-            sprintf('Ensure table `%s` presence', self::SEEDS_TABLE)
+            sprintf('Ensure table `%s` presence', $this->seedsTable)
         ]);
 
         try {
-            $this->safeCreateTable(self::SEEDS_TABLE);
+            $this->safeCreateTable($this->seedsTable);
         } catch (\Exception $e) {
             $output->writeln([
-                sprintf('Can\'t ensure table `%s` presence. Please verify DB connection params and presence of database named', self::SEEDS_TABLE),
+                sprintf('Can\'t ensure table `%s` presence. Please verify DB connection params and presence of database named', $this->seedsTable),
                 sprintf('Error: `%s`', $e->getMessage()),
             ]);
         }
@@ -62,7 +57,7 @@ class SeedCommand extends Command
         $finder = new Finder();
         $finder->files()->name('*.php')->in(SEEDS_PATH);
 
-        $this->runActions($finder, $output, self::SEEDS_TABLE, 'run');
+        $this->runActions($finder, $output, $this->seedsTable, 'run');
 
         return;
     }

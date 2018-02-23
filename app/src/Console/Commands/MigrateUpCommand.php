@@ -11,14 +11,9 @@ use Symfony\Component\Finder\Finder;
 /**
  * MigrateCommand
  */
-class MigrateCommand extends Command
+class MigrateUpCommand extends Command
 {
     use DbHelper;
-
-    /**
-     * @var string Table name where migrations info is kept
-     */
-    const MIGRATIONS_TABLE = 'migrations';
 
     /**
      * Configuration of command
@@ -26,7 +21,7 @@ class MigrateCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('migrate')
+            ->setName('migrate:up')
             ->setDescription('Command for run migration')
         ;
     }
@@ -47,14 +42,14 @@ class MigrateCommand extends Command
 
         $output->writeln([
             '<info>Run migrations</info>',
-            sprintf('Ensure table `%s` presence', self::MIGRATIONS_TABLE)
+            sprintf('Ensure table `%s` presence', $this->migrationsTable)
         ]);
 
         try {
-            $this->safeCreateTable(self::MIGRATIONS_TABLE);
+            $this->safeCreateTable($this->migrationsTable);
         } catch (\Exception $e) {
             $output->writeln([
-                sprintf('Can\'t ensure table `%s` presence. Please verify DB connection params and presence of database named', self::MIGRATIONS_TABLE),
+                sprintf('Can\'t ensure table `%s` presence. Please verify DB connection params and presence of database named', $this->migrationsTable),
                 sprintf('Error: `%s`', $e->getMessage()),
             ]);
         }
@@ -62,7 +57,7 @@ class MigrateCommand extends Command
         $finder = new Finder();
         $finder->files()->name('*.php')->in(MIGRATIONS_PATH);
 
-        $this->runActions($finder, $output, self::MIGRATIONS_TABLE, 'up');
+        $this->runActions($finder, $output, $this->migrationsTable, 'up');
 
         return;
     }

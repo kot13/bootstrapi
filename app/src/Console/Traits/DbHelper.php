@@ -9,6 +9,16 @@ use Symfony\Component\Finder\Finder;
 trait DbHelper
 {
     /**
+     * @var string Table name where migrations info is kept
+     */
+    private $migrationsTable = 'migrations';
+
+    /**
+     * @var string Table name where seeds info is kept
+     */
+    private $seedsTable = 'seeds';
+
+    /**
      * Return class name by file basename
      * @param string $baseName
      *
@@ -62,6 +72,17 @@ trait DbHelper
         Capsule::table($table)->insert([
             'version' => $name,
         ]);
+    }
+
+    /**
+     * @param $name
+     * @param $table
+     */
+    private function deleteRow($name, $table)
+    {
+        Capsule::table($table)->where([
+            'version' => $name,
+        ])->delete();
     }
 
     /**
