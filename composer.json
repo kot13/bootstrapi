@@ -35,7 +35,8 @@
     "swiftmailer/swiftmailer": "^5.4",
     "symfony/config": "^3.3",
     "symfony/console": "^3.4",
-    "symfony/finder": "^3.4"
+    "symfony/finder": "^3.4",
+    "akrabat/ip-address-middleware": "^1.0"
   },
 
   "require-dev": {
