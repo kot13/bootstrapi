@@ -36,7 +36,7 @@
     "symfony/config": "^3.3",
     "symfony/console": "^3.4",
     "symfony/finder": "^3.4",
-    "akrabat/ip-address-middleware": "^1.0"
+    "akrabat/ip-address-middleware": "^0.6"
   },
 
   "require-dev": {

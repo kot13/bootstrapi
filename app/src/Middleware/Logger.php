@@ -45,9 +45,11 @@ class Logger
             case 500:
                 $logger->addCritical('Oops!!! the server got 500 error', $log);
                 break;
+            case 405:
             case 404:
                 $logger->addWarning('Someone calling un-existing API action', $log);
                 break;
+            case 403:
             case 401:
                 $logger->addWarning('Someone calling API action without access', $log);
                 break;
@@ -55,6 +57,7 @@ class Logger
                 $logger->addInfo('Someone calling existing API action', $log);
                 break;
         }
+
         return $response;
     }
 }
