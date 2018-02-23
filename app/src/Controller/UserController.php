@@ -79,6 +79,8 @@ class UserController extends CrudController
      *
      * @return \Psr\Http\Message\ResponseInterface
      * @throws JsonException
+     * @throws \Exception
+     * @throws \Throwable
      */
     public function actionRequestPasswordReset(Request $request, Response $response, $args)
     {
