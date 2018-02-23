@@ -33,7 +33,7 @@ class GenerateDocsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /* @var \App\Console\Partisan $app*/
+        /* @var \App\Console\Partisan $app */
         $app      = $this->getApplication();
         $settings = $app->container->get('settings');
 

@@ -33,7 +33,7 @@ class MigrateDownCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      *
-     * @return int|null|void
+     * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -42,6 +42,10 @@ class MigrateDownCommand extends Command
         $file = MIGRATIONS_PATH.'/'.$migrationName.'.php';
         if (false === file_exists($file)) {
             throw new \RunTimeException('This migration not found');
+        }
+
+        if (!$this->isRowExist($migrationName, $this->migrationsTable)) {
+            throw new \RunTimeException('This migration not applied');
         }
 
         $fileNamePieces = explode('_', $migrationName);
@@ -62,6 +66,7 @@ class MigrateDownCommand extends Command
         $this->deleteRow($migrationName, $this->migrationsTable);
 
         $output->writeln([sprintf('<info>Rollback `%s` migration - done</info>', $migrationName)]);
+
         return;
     }
 }

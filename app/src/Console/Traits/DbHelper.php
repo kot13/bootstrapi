@@ -88,16 +88,37 @@ trait DbHelper
     /**
      * Run list of commands in files
      *
-     * @param Finder          $files list of files to run
+     * @param string          $path
      * @param OutputInterface $output
      * @param string          $tableName
      * @param string          $method
      *
      * @return void
      */
-    private function runActions(Finder $files, OutputInterface $output, $tableName, $method)
+    private function runAction($path, OutputInterface $output, $tableName, $method)
     {
-        foreach ($files as $file) {
+        if (!is_dir($path) || !is_readable($path)) {
+            throw new \RunTimeException(sprintf('Path `%s` is not good', $path));
+        }
+
+        $output->writeln([
+            '<info>Run command</info>',
+            sprintf('Ensure table `%s` presence', $tableName)
+        ]);
+
+        try {
+            $this->safeCreateTable($tableName);
+        } catch (\Exception $e) {
+            $output->writeln([
+                sprintf('Can\'t ensure table `%s` presence. Please verify DB connection params and presence of database named', $tableName),
+                sprintf('Error: `%s`', $e->getMessage()),
+            ]);
+        }
+
+        $finder = new Finder();
+        $finder->files()->name('*.php')->in($path);
+
+        foreach ($finder as $file) {
             $baseName = $file->getBasename('.php');
             $class    = $this->getClassName($baseName);
 
