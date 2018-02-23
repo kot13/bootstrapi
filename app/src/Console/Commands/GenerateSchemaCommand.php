@@ -16,6 +16,7 @@ use App\Console\Traits\CodeGenerate;
 class GenerateSchemaCommand extends Command
 {
     use CodeGenerate;
+
     /**
      * Configuration of command
      */
@@ -43,40 +44,12 @@ class GenerateSchemaCommand extends Command
         $helper    = $this->getHelper('question');
         $question  = new Question('<info>Please enter table name: </info>');
         $tableName = $helper->ask($input, $output, $question);
-
-        $table = Capsule::schema()->getColumnListing($tableName);
-        if (count($table) === 0) {
+        $tableInfo = Capsule::schema()->getColumnListing($tableName);
+        if (count($tableInfo) === 0) {
             $output->writeln([sprintf('<comment>Not found table %s</comment>', $tableName)]);
         }
 
-        $columns = [];
-        foreach ($table as $columnName) {
-            $columnType = Capsule::schema()->getColumnType($tableName, $columnName);
-
-            switch ($columnType) {
-                case 'string':
-                case 'text':
-                    $fake = '"String"';
-                    break;
-                case 'integer':
-                    $fake = '1';
-                    break;
-                case 'decimal':
-                    $fake = '1.0';
-                    break;
-                case 'datetime':
-                    $fake = '"2016-10-17T07:38:21+0000"';
-                    break;
-                default:
-                    $fake = '';
-            }
-
-            $columns[] = [
-                'name' => $columnName,
-                'type' => $columnType,
-                'fake' => $fake,
-            ];
-        }
+        $columns = $this->getColumnsInfo($tableInfo, $tableName);
 
         $modelName    = substr($tableName, 0, -1);
         $className    = Helper::underscoreToCamelCase($modelName, true).'Schema';
@@ -106,6 +79,45 @@ class GenerateSchemaCommand extends Command
         $output->writeln(sprintf('Generated new schema class to "<info>%s</info>"', realpath($path)));
 
         return;
+    }
+
+    /**
+     * @param array  $tableInfo
+     * @param string $tableName
+     * @return array
+     */
+    private function getColumnsInfo($tableInfo, $tableName)
+    {
+        $columns = [];
+        foreach ($tableInfo as $columnName) {
+            $columnType = Capsule::schema()->getColumnType($tableName, $columnName);
+
+            switch ($columnType) {
+                case 'string':
+                case 'text':
+                    $fake = '"String"';
+                    break;
+                case 'integer':
+                    $fake = '1';
+                    break;
+                case 'decimal':
+                    $fake = '1.0';
+                    break;
+                case 'datetime':
+                    $fake = '"2016-10-17T07:38:21+0000"';
+                    break;
+                default:
+                    $fake = '';
+            }
+
+            $columns[] = [
+                'name' => $columnName,
+                'type' => $columnType,
+                'fake' => $fake,
+            ];
+        }
+
+        return $columns;
     }
 
     /**
