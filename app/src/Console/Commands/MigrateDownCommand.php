@@ -39,7 +39,7 @@ class MigrateDownCommand extends Command
     {
         $migrationName = $input->getArgument('migration');
 
-        $file = MIGRATIONS_PATH . '/' . $migrationName.'.php';
+        $file = MIGRATIONS_PATH.'/'.$migrationName.'.php';
         if (false === file_exists($file)) {
             throw new \RunTimeException('This migration not found');
         }
@@ -49,7 +49,7 @@ class MigrateDownCommand extends Command
         require_once($file);
 
         $class = '';
-        foreach($fileNamePieces as $key => $item) {
+        foreach ($fileNamePieces as $key => $item) {
             if ($key == 0) {
                 continue;
             }

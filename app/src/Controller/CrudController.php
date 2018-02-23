@@ -27,46 +27,54 @@ class CrudController extends BaseController
             $query = $modelName::withTrashed();
         }
 
+        $filters = [];
         if (isset($params['filters'])) {
             $filters = json_decode($params['filters'], true);
-
-            foreach ($filters as $filter) {
-                $filter['operator']  = trim(strtolower($filter['operator']));
-                $filter['attribute'] = trim($filter['attribute']);
-
-                if (empty($filter['operator']) || empty($filter['attribute']) || empty($filter['value'])) {
-                    continue;
-                }
-
-                switch ($filter['operator']) {
-                    case 'in':
-                        $query = $query->whereIn($filter['attribute'], $filter['value']);
-                        break;
-                    case 'not in':
-                        $query = $query->whereNotIn($filter['attribute'], $filter['value']);
-                        break;
-                    case 'like':
-                        $query = $query->where($filter['attribute'], 'like', '%'.$filter['value'].'%');
-                        break;
-                    case '=':
-                    case '!=':
-                    case '>':
-                    case '>=':
-                    case '<':
-                    case '<=':
-                        $query = $query->where($filter['attribute'], $filter['operator'], $filter['value']);
-                        break;
-                }
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                $filters = [];
             }
         }
 
+        foreach ($filters as $filter) {
+            $filter['operator']  = trim(strtolower($filter['operator']));
+            $filter['attribute'] = trim($filter['attribute']);
+
+            if (empty($filter['operator']) || empty($filter['attribute']) || empty($filter['value'])) {
+                continue;
+            }
+
+            switch ($filter['operator']) {
+                case 'in':
+                    $query = $query->whereIn($filter['attribute'], $filter['value']);
+                    break;
+                case 'not in':
+                    $query = $query->whereNotIn($filter['attribute'], $filter['value']);
+                    break;
+                case 'like':
+                    $query = $query->where($filter['attribute'], 'like', '%'.$filter['value'].'%');
+                    break;
+                case '=':
+                case '!=':
+                case '>':
+                case '>=':
+                case '<':
+                case '<=':
+                    $query = $query->where($filter['attribute'], $filter['operator'], $filter['value']);
+                    break;
+            }
+        }
+
+        $sorters = [];
         if (isset($params['sort'])) {
             $sorters = json_decode($params['sort'], true);
-
-            foreach ($sorters as $sorter) {
-                $sorter['direction'] = trim(strtolower($sorter['direction'])) == 'asc' ? 'asc' : 'desc';
-                $query->orderBy(trim($sorter['attribute']), $sorter['direction']);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                $sorters = [];
             }
+        }
+
+        foreach ($sorters as $sorter) {
+            $sorter['direction'] = trim(strtolower($sorter['direction'])) == 'asc' ? 'asc' : 'desc';
+            $query->orderBy(trim($sorter['attribute']), $sorter['direction']);
         }
 
         $pageNumber = null;

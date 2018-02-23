@@ -10,7 +10,7 @@ return [
     'accessToken' => [
         'ttl'        => 3600,
         'iss'        => null,
-        'secret_key' => 'secret key',
+        'secretKey'  => 'secret key',
         'allowHosts' => [
             '127.0.0.1',
         ],

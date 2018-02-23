@@ -53,11 +53,12 @@ class GenerateMigrationCommand extends Command
         $migrationName = $helper->ask($input, $output, $question);
         $baseName      = date('YmdHis').'_'.$migrationName.'.php';
         $path          = $this->getPath($baseName, MIGRATIONS_PATH);
-        $placeHolders  = [
+
+        $placeHolders = [
             '<class>',
             '<tableName>',
         ];
-        $replacements  = [
+        $replacements = [
             Helper::underscoreToCamelCase($migrationName, true),
             strtolower($migrationName),
         ];
