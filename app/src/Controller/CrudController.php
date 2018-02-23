@@ -27,14 +27,7 @@ class CrudController extends BaseController
             $query = $modelName::withTrashed();
         }
 
-        $filters = [];
-        if (isset($params['filters'])) {
-            $filters = json_decode($params['filters'], true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                $filters = [];
-            }
-        }
-
+        $filters = $this->getDecodedParams($params, 'filters');
         foreach ($filters as $filter) {
             $filter['operator']  = trim(strtolower($filter['operator']));
             $filter['attribute'] = trim($filter['attribute']);
@@ -64,14 +57,7 @@ class CrudController extends BaseController
             }
         }
 
-        $sorters = [];
-        if (isset($params['sort'])) {
-            $sorters = json_decode($params['sort'], true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                $sorters = [];
-            }
-        }
-
+        $sorters = $this->getDecodedParams($params, 'sort');
         foreach ($sorters as $sorter) {
             $sorter['direction'] = trim(strtolower($sorter['direction'])) == 'asc' ? 'asc' : 'desc';
             $query->orderBy(trim($sorter['attribute']), $sorter['direction']);
@@ -187,8 +173,24 @@ class CrudController extends BaseController
 
         $entity->delete();
 
-        // return 204 No Content as successful result
         return $this->apiRenderer->jsonResponse($response, 204);
     }
 
+    /**
+     * @param array  $params
+     * @param string $key
+     * @return array|mixed
+     */
+    private function getDecodedParams($params, $key)
+    {
+        $decoded = [];
+        if (isset($params[$key])) {
+            $decoded = json_decode($params[$key], true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                $decoded = [];
+            }
+        }
+
+        return $decoded;
+    }
 }
