@@ -45,7 +45,7 @@
   },
 
   "scripts": {
-    "post-create-project-cmd": "bash -c 'chmod 777 ./log && mv ./config/db.php.sample ./config/db.php && mv ./config/params.php.sample ./config/params.php'",
+    "post-create-project-cmd": "bash -c 'chmod 777 ./log && chmod 777 ./public/uploads && mv ./config/db.php.sample ./config/db.php && mv ./config/params.php.sample ./config/params.php'",
     "post-update-cmd": "bash -c 'chmod 0755 ./version.sh; ./version.sh ${JOB_NAME} ${BUILD_NUMBER} ${GIT_BRANCH} > ./version.json'",
     "post-install-cmd": "bash -c 'chmod 0755 ./version.sh; ./version.sh ${JOB_NAME} ${BUILD_NUMBER} ${GIT_BRANCH} > ./version.json'"
   }

@@ -48,8 +48,9 @@ return [
              */
             Acl::GUARD_TYPE_ROUTE => [
                 // resource, [roles as array], [privileges as array]
-                ['/api/token', ['guest'], [Acl::PRIVILEGE_POST]],
-                ['/api/user',  ['user'],  [Acl::PRIVILEGE_GET]],
+                ['/api/token',  ['guest'], [Acl::PRIVILEGE_POST]],
+                ['/api/user',   ['user'],  [Acl::PRIVILEGE_GET]],
+                ['/api/upload', ['user'],  [Acl::PRIVILEGE_POST]],
             ],
 
             /**
@@ -67,6 +68,8 @@ return [
                 ['App\Controller\CrudController:actionCreate', ['user']],
                 ['App\Controller\CrudController:actionUpdate', ['user']],
                 ['App\Controller\CrudController:actionDelete', ['user']],
+
+                ['App\Controller\UploadController:actionUpload', ['user']],
 
                 ['App\Controller\UserController:actionIndex',  ['user']],
                 ['App\Controller\UserController:actionGet',    ['user']],

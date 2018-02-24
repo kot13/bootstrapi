@@ -11,8 +11,6 @@ class Settings
      */
     public static function build()
     {
-        // Build application settings
-
         // Load settings from files
         try {
             // Directories list where config files located

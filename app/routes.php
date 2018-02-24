@@ -36,4 +36,13 @@ $app->group('/api', function() {
         $this->get('', 'App\Controller\CrudController:actionIndex');
         $this->get('/{id:[0-9]+}', 'App\Controller\CrudController:actionGet');
     })->add(new \App\Middleware\Authentication($this->getContainer()->get('acl'), $this->getContainer()->get('settings')));
+
+    $this->group('/{entity:media-file}', function() {
+        $this->get('', 'App\Controller\CrudController:actionIndex');
+        $this->get('/{id:[0-9]+}', 'App\Controller\CrudController:actionGet');
+        $this->delete('/{id:[0-9]+}', 'App\Controller\CrudController:actionDelete');
+    })->add(new \App\Middleware\Authentication($this->getContainer()->get('acl'), $this->getContainer()->get('settings')));
+
+    $this->post('/upload', 'App\Controller\UploadController:upload')
+        ->add(new \App\Middleware\Authentication($this->getContainer()->get('acl'), $this->getContainer()->get('settings')));
 });

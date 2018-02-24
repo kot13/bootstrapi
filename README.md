@@ -22,7 +22,7 @@ A better framework for building API with PHP. Built using Slim 3, Eloquent, Zend
 
 ## Inside:
 * Slim3 http://www.slimframework.com/
-* ORM Eloquent http://laravel.su/docs/5.2/eloquent
+* ORM Eloquent https://laravel.com/docs/5.5/eloquent
 * Zend ACL https://zendframework.github.io/zend-permissions-acl/
 * JsonApi https://github.com/neomerx/json-api
 * JWT https://github.com/firebase/php-jwt
@@ -39,6 +39,7 @@ A better framework for building API with PHP. Built using Slim 3, Eloquent, Zend
 ## Requirements
 * PHP >= 5.6
 * Composer
+* Nginx / Apache
 * MySQL / PostgreSQL
 * NodeJs && NPM && ApiDocJs (for docs generate)
 
@@ -114,6 +115,23 @@ server {
     }
 
     location ~* (.+\.(js|css|png|jpg|gif|swf|ico|pdf|mov|fla|zip|rar|woff|woff2|ttf|eot|svg))$ {
+        try_files $uri =404;
+    }
+}
+
+server {
+    listen 80 ;
+    server_name     static.hostname;
+    error_log       /path/to/nginx/logs/hostname.error.log;
+    access_log      /path/to/nginx/logs/hostname.access.log;
+
+    root            /path/to/projects/hostname/public/uploads;
+
+    location ~* (.+\.(js|css|png|jpg|gif|swf|ico|pdf|mov|fla|zip|rar|woff|woff2|ttf|eot|svg))$ {
+        add_header 'Access-Control-Allow-Origin' '*';
+        add_header 'Access-Control-Allow-Credentials' 'true';
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, PATCH, DELETE, OPTIONS';
+        add_header 'Access-Control-Allow-Headers' 'Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Cont$
         try_files $uri =404;
     }
 }
