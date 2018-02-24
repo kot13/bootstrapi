@@ -106,7 +106,7 @@ class GenerateModelCommand extends Command
     {
         $fillable = [];
         foreach ($columns as $column) {
-            $fillable[] = sprintf("\t\t'%s',", $column['name']);
+            $fillable[] = sprintf("        '%s',", $column['name']);
         };
 
         return implode("\n", $fillable);

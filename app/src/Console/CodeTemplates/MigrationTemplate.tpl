@@ -9,8 +9,7 @@ class <class>
      */
     public function up()
     {
-        Capsule::schema()->create('<tableName>', function($table)
-        {
+        Capsule::schema()->create('<tableName>', function($table) {
             $table->timestamps();
         });
     }

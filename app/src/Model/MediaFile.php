@@ -22,12 +22,12 @@ final class MediaFile extends BaseModel
     protected $table = 'media_files';
 
     protected $fillable = [
-		'file',
-		'file_info',
-		'created_by',
-		'updated_by',
-		'created_at',
-		'updated_at',
+        'file',
+        'file_info',
+        'created_by',
+        'updated_by',
+        'created_at',
+        'updated_at',
     ];
 
     private static $allowedMimeTypes = [

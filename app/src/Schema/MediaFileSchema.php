@@ -108,12 +108,12 @@ final class MediaFileSchema extends BaseSchema
     public function getAttributes($entity)
     {
         return [
-			'file'	     => (string)$entity->file,
-			'file_info'	 => json_decode($entity->file_info),
-			'created_by' => (integer)$entity->created_by,
-			'updated_by' => (integer)$entity->updated_by,
-			'created_at' => Carbon::parse($entity->created_at)->setTimezone('UTC')->format(Carbon::ISO8601),
-			'updated_at' => Carbon::parse($entity->updated_at)->setTimezone('UTC')->format(Carbon::ISO8601),
+            'file'       => (string)$entity->file,
+            'file_info'  => json_decode($entity->file_info),
+            'created_by' => (integer)$entity->created_by,
+            'updated_by' => (integer)$entity->updated_by,
+            'created_at' => Carbon::parse($entity->created_at)->setTimezone('UTC')->format(Carbon::ISO8601),
+            'updated_at' => Carbon::parse($entity->updated_at)->setTimezone('UTC')->format(Carbon::ISO8601),
         ];
     }
 }

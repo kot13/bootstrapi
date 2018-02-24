@@ -9,8 +9,7 @@ class CreateMediaFilesTable
      */
     public function up()
     {
-        Capsule::schema()->create('media_files', function($table)
-        {
+        Capsule::schema()->create('media_files', function($table) {
             $table->increments('id');
             $table->string('file');
             $table->string('file_info');

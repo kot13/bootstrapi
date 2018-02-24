@@ -173,9 +173,9 @@ class GenerateSchemaCommand extends Command
                 continue;
             }
             if ($column['type'] === 'datetime') {
-                $attributes[] = sprintf("\t\t\t'%s'\t=> Carbon::parse(\$entity->%s)->setTimezone('UTC')->format(Carbon::ISO8601),", $column['name'], $column['name']);
+                $attributes[] = sprintf("            '%s'\t=> Carbon::parse(\$entity->%s)->setTimezone('UTC')->format(Carbon::ISO8601),", $column['name'], $column['name']);
             } else {
-                $attributes[] = sprintf("\t\t\t'%s'\t=> (%s)\$entity->%s,", $column['name'], $column['type'], $column['name']);
+                $attributes[] = sprintf("            '%s'\t=> (%s)\$entity->%s,", $column['name'], $column['type'], $column['name']);
             }
         };
 

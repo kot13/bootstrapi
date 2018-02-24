@@ -53,8 +53,8 @@ trait DbHelper
     }
 
     /**
-     * @param $name
-     * @param $table
+     * @param string $name
+     * @param string $table
      * @return bool
      */
     private function isRowExist($name, $table)
@@ -64,8 +64,8 @@ trait DbHelper
     }
 
     /**
-     * @param $name
-     * @param $table
+     * @param string $name
+     * @param string $table
      */
     private function insertRow($name, $table)
     {
@@ -75,8 +75,8 @@ trait DbHelper
     }
 
     /**
-     * @param $name
-     * @param $table
+     * @param string $name
+     * @param string $table
      */
     private function deleteRow($name, $table)
     {
