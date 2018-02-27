@@ -40,5 +40,9 @@ return [
         'Log',
         'GetLogs',
         'GetLog',
+        'MediaFile',
+        'GetMediaFiles',
+        'GetMediaFile',
+        'Upload',
     ],
 ];

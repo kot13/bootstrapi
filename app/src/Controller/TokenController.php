@@ -7,10 +7,8 @@ use App\Requests\RefreshTokenRequest;
 use App\Model\User;
 use App\Model\AccessToken;
 use App\Model\RefreshToken;
-
 use Slim\Http\Request;
 use Slim\Http\Response;
-
 use App\Common\JsonException;
 
 class TokenController extends BaseController
@@ -65,9 +63,8 @@ class TokenController extends BaseController
         $this->validateRequestParams($params, 'token', new GetTokenRequest());
 
         $user = User::findUserByEmail($params['data']['attributes']['username']);
-        // ensure user and password are good
         if (!$user || !password_verify($params['data']['attributes']['password'], $user->password)) {
-            $this->failUnknownUser();
+            throw new JsonException('token', 400, 'Invalid Attribute', 'Invalid password or username');
         }
 
         return $this->buildTokens($request, $response, $user);
@@ -117,9 +114,8 @@ class TokenController extends BaseController
         $this->validateRequestParams($params, 'token', new RefreshTokenRequest());
 
         $user = RefreshToken::getUserByToken($params['data']['attributes']['refresh_token']);
-        // ensure user is good
         if (!$user) {
-            $this->failUnknownToken();
+            throw new JsonException('token', 400, 'Invalid Attribute', 'Invalid refresh_token');
         }
 
         return $this->buildTokens($request, $response, $user);
@@ -133,7 +129,6 @@ class TokenController extends BaseController
      */
     protected function buildTokens(Request $request, Response $response, User $user)
     {
-        // build tokens
         $accessToken = AccessToken::createToken(
             $user,
             $request->getUri()->getHost(),
@@ -141,7 +136,6 @@ class TokenController extends BaseController
         );
         $refreshToken = RefreshToken::createToken($user);
 
-        // prepare response structure
         $result = [
             'token_type'    => self::TOKEN_TYPE,
             'access_token'  => $accessToken,
@@ -149,23 +143,6 @@ class TokenController extends BaseController
             'expires_in'    => $this->settings['accessToken']['ttl'],
         ];
 
-        // render response
         return $this->apiRenderer->jsonResponse($response, 200, json_encode($result));
-    }
-
-    /**
-     * @throws JsonException
-     */
-    protected function failUnknownUser()
-    {
-        throw new JsonException('token', 400, 'Invalid Attribute', 'Invalid password or username');
-    }
-
-    /**
-     * @throws JsonException
-     */
-    protected function failUnknownToken()
-    {
-        throw new JsonException('token', 400, 'Invalid Attribute', 'Invalid refresh_token');
     }
 }

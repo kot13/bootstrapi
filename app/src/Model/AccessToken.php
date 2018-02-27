@@ -59,7 +59,7 @@ final class AccessToken extends BaseModel
     public static function validateToken($token, array $settings)
     {
         try {
-            $payload = JWT::decode($token, $settings['secret_key'], ['HS256']);
+            $payload = JWT::decode($token, $settings['secretKey'], ['HS256']);
             return in_array($payload->aud, $settings['allowHosts']);
         } catch (\Exception $e) {
             return false;
@@ -82,7 +82,7 @@ final class AccessToken extends BaseModel
             'exp' => time() + $settings['ttl'],
         ];
 
-        $jwt = JWT::encode($token, $settings['secret_key']);
+        $jwt = JWT::encode($token, $settings['secretKey']);
 
         $user->accessTokens()->create([
             'access_token' => md5($jwt),

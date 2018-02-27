@@ -33,7 +33,10 @@
     "neomerx/json-api": "^0.8.2",
     "doctrine/dbal": "^2.5",
     "swiftmailer/swiftmailer": "^5.4",
-    "symfony/config": "^3.3"
+    "symfony/config": "^3.3",
+    "symfony/console": "^3.4",
+    "symfony/finder": "^3.4",
+    "akrabat/ip-address-middleware": "^0.6"
   },
 
   "require-dev": {
@@ -42,7 +45,7 @@
   },
 
   "scripts": {
-    "post-create-project-cmd": "bash -c 'chmod 777 ./log && mv ./config/db.php.sample ./config/db.php && mv ./config/params.php.sample ./config/params.php'",
+    "post-create-project-cmd": "bash -c 'chmod 777 ./log && chmod 777 ./public/uploads && mv ./config/db.php.sample ./config/db.php && mv ./config/params.php.sample ./config/params.php'",
     "post-update-cmd": "bash -c 'chmod 0755 ./version.sh; ./version.sh ${JOB_NAME} ${BUILD_NUMBER} ${GIT_BRANCH} > ./version.json'",
     "post-install-cmd": "bash -c 'chmod 0755 ./version.sh; ./version.sh ${JOB_NAME} ${BUILD_NUMBER} ${GIT_BRANCH} > ./version.json'"
   }

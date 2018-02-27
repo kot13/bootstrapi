@@ -11,8 +11,6 @@ class Settings
      */
     public static function build()
     {
-        // Build application settings
-
         // Load settings from files
         try {
             // Directories list where config files located
@@ -29,13 +27,13 @@ class Settings
             // Import all config sections
             $settings = $loader->importAll();
 
-        } catch (Exception $ex) {
-            die($ex->getMessage());
+        } catch (Exception $e) {
+            die($e->getMessage());
         }
 
         // Load settings from ENV vars
         $settings['params']['env'] = @getenv('APPLICATION_ENV');
-        $settings['accessToken']['secret_key'] = php_sapi_name() == 'cli-server' ? 'test-key' : @getenv('SECRET_KEY');
+        $settings['accessToken']['secretKey'] = php_sapi_name() == 'cli-server' ? 'test-key' : @getenv('SECRET_KEY');
         $settings['accessToken']['iss'] = @getenv('AUTH_ISS');
 
         // Adjust error reporting

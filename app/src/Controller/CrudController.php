@@ -27,46 +27,40 @@ class CrudController extends BaseController
             $query = $modelName::withTrashed();
         }
 
-        if (isset($params['filters'])) {
-            $filters = json_decode($params['filters'], true);
+        $filters = $this->getDecodedParams($params, 'filters');
+        foreach ($filters as $filter) {
+            $filter['operator']  = trim(strtolower($filter['operator']));
+            $filter['attribute'] = trim($filter['attribute']);
 
-            foreach ($filters as $filter) {
-                $filter['operator']  = trim(strtolower($filter['operator']));
-                $filter['attribute'] = trim($filter['attribute']);
+            if (empty($filter['operator']) || empty($filter['attribute']) || empty($filter['value'])) {
+                continue;
+            }
 
-                if (empty($filter['operator']) || empty($filter['attribute']) || empty($filter['value'])) {
-                    continue;
-                }
-
-                switch ($filter['operator']) {
-                    case 'in':
-                        $query = $query->whereIn($filter['attribute'], $filter['value']);
-                        break;
-                    case 'not in':
-                        $query = $query->whereNotIn($filter['attribute'], $filter['value']);
-                        break;
-                    case 'like':
-                        $query = $query->where($filter['attribute'], 'like', '%'.$filter['value'].'%');
-                        break;
-                    case '=':
-                    case '!=':
-                    case '>':
-                    case '>=':
-                    case '<':
-                    case '<=':
-                        $query = $query->where($filter['attribute'], $filter['operator'], $filter['value']);
-                        break;
-                }
+            switch ($filter['operator']) {
+                case 'in':
+                    $query = $query->whereIn($filter['attribute'], $filter['value']);
+                    break;
+                case 'not in':
+                    $query = $query->whereNotIn($filter['attribute'], $filter['value']);
+                    break;
+                case 'like':
+                    $query = $query->where($filter['attribute'], 'like', '%'.$filter['value'].'%');
+                    break;
+                case '=':
+                case '!=':
+                case '>':
+                case '>=':
+                case '<':
+                case '<=':
+                    $query = $query->where($filter['attribute'], $filter['operator'], $filter['value']);
+                    break;
             }
         }
 
-        if (isset($params['sort'])) {
-            $sorters = json_decode($params['sort'], true);
-
-            foreach ($sorters as $sorter) {
-                $sorter['direction'] = trim(strtolower($sorter['direction'])) == 'asc' ? 'asc' : 'desc';
-                $query->orderBy(trim($sorter['attribute']), $sorter['direction']);
-            }
+        $sorters = $this->getDecodedParams($params, 'sort');
+        foreach ($sorters as $sorter) {
+            $sorter['direction'] = trim(strtolower($sorter['direction'])) == 'asc' ? 'asc' : 'desc';
+            $query->orderBy(trim($sorter['attribute']), $sorter['direction']);
         }
 
         $pageNumber = null;
@@ -179,8 +173,24 @@ class CrudController extends BaseController
 
         $entity->delete();
 
-        // return 204 No Content as successful result
         return $this->apiRenderer->jsonResponse($response, 204);
     }
 
+    /**
+     * @param array  $params
+     * @param string $key
+     * @return array|mixed
+     */
+    private function getDecodedParams($params, $key)
+    {
+        $decoded = [];
+        if (isset($params[$key])) {
+            $decoded = json_decode($params[$key], true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                $decoded = [];
+            }
+        }
+
+        return $decoded;
+    }
 }

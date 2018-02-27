@@ -99,12 +99,14 @@ abstract class BaseController
                 Model\Right::class,
                 Model\Role::class,
                 Model\User::class,
+                Model\MediaFile::class,
             ],
 
             Observers\LoggerObserver::class => [
                 Model\Right::class,
                 Model\Role::class,
                 Model\User::class,
+                Model\MediaFile::class,
             ]
         ];
 

@@ -9,6 +9,10 @@ use App\Scopes\MaxPerPageScope;
  *
  * @property integer $id
  *
+ * @method static find($id)
+ * @method static where($filed, $value)
+ * @method static create($attributes)
+ *
  * @package App\Model
  */
 abstract class BaseModel extends Model
@@ -33,11 +37,4 @@ abstract class BaseModel extends Model
     {
         return $query;
     }
-
-    /**
-     * Model validation rules
-     * @var array
-     */
-    public static $rules = [];
-
 }

@@ -1,9 +1,0 @@
-<?= "<?php";?>
-
-class <?= $className.PHP_EOL; ?>
-{
-    public function run()
-    {
-
-    }
-}
