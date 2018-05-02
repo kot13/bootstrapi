@@ -2,19 +2,17 @@
 
 return [
     'params' => [
-        'host'      => 'http://127.0.0.1:8888',
-        'api'       => 'http://127.0.0.1:8888/api',
-        'env'       => 'dev',
+        'host'      => getenv('APP_HOST'),
+        'api'       => getenv('APP_API_HOST'),
+        'env'       => getenv('APP_ENV'),
         'uploadDir' => __DIR__ . '/../public/uploads/',
     ],
 
     'accessToken' => [
         'ttl'        => 3600,
         'iss'        => null,
-        'secretKey'  => 'secret key',
-        'allowHosts' => [
-            '127.0.0.1',
-        ],
+        'secretKey'  => getenv('AUTH_SECRET_KEY'),
+        'allowHosts' => getenv('AUTH_ALLOW_HOSTS'),
     ],
 
     'refreshToken' => [

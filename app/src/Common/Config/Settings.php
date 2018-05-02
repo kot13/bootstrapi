@@ -2,6 +2,7 @@
 
 namespace App\Common\Config;
 
+use Dotenv\Dotenv;
 use Exception;
 
 class Settings
@@ -11,6 +12,9 @@ class Settings
      */
     public static function build()
     {
+        $dotenv = new Dotenv(ROOT_PATH);
+        $dotenv->load();
+
         // Load settings from files
         try {
             // Directories list where config files located
@@ -31,26 +35,14 @@ class Settings
             die($e->getMessage());
         }
 
-        // Load settings from ENV vars
-        $settings['params']['env'] = @getenv('APPLICATION_ENV');
-        $settings['accessToken']['secretKey'] = php_sapi_name() == 'cli-server' ? 'test-key' : @getenv('SECRET_KEY');
-        $settings['accessToken']['iss'] = @getenv('AUTH_ISS');
-
         // Adjust error reporting
-        if (@stripos($settings['params']['env'], 'dev') !== false) {
+        if (stripos($settings['params']['env'], 'dev') !== false) {
             $settings['displayErrorDetails'] = true;
-        }
-
-        if ($settings['displayErrorDetails']) {
             error_reporting(E_ALL);
         }
 
-        // Adjust settings as Slim wants to have it - inside ['settings'] section
-        $settings = [
+        return [
             'settings' => $settings,
         ];
-
-        // Settings are ready
-        return $settings;
     }
 }
