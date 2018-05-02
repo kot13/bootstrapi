@@ -28,6 +28,7 @@ A better framework for building API with PHP. Built using Slim 3, Eloquent, Zend
 * JWT https://github.com/firebase/php-jwt
 * SwiftMailer http://swiftmailer.org/
 * ApiDocJS http://apidocjs.com/
+* PHP dotenv https://github.com/vlucas/phpdotenv
 
 ## Demo
 [Example documentation](http://docs.bootstrapi.demostage.ru/)
@@ -54,19 +55,12 @@ $ composer create-project -n -s dev pmurkin/bootstrapi my-api
 
 2) change config files:
 ```
-$ nano config/db.php
-$ nano config/params.php
+$ nano .env
 $ nano config/apidoc.php
 $ nano version.sh
 ```
 
 3) configure server
-
-Be sure to define environment variables:
-```
-APPLICATION_ENV
-SECRET_KEY
-```
 
 Example configuration for nginx:
 ```
@@ -92,8 +86,6 @@ server {
         try_files $uri =404;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
-        fastcgi_param APPLICATION_ENV develop;
-        fastcgi_param SECRET_KEY mysecretkey;
         fastcgi_pass   127.0.0.1:9000;
     }
 

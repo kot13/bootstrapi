@@ -5,7 +5,7 @@ return [
         'host'      => getenv('APP_HOST'),
         'api'       => getenv('APP_API_HOST'),
         'env'       => getenv('APP_ENV'),
-        'uploadDir' => __DIR__ . '/../public/uploads/',
+        'uploadDir' => __DIR__.'/../public/uploads/',
     ],
 
     'accessToken' => [

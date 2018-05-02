@@ -3,7 +3,11 @@ require_once __DIR__.'/../vendor/autoload.php';
 require_once __DIR__.'/../app.paths.conf.php';
 
 // Create container for application based on settings
-$settings = App\Common\Config\Settings::build();
+try {
+    $settings = App\Common\Config\Settings::build();
+} catch (Exception $e) {
+    exit($e->getMessage().PHP_EOL);
+}
 $container = new \Slim\Container($settings);
 
 // Register service providers & factories
