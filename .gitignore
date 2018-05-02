@@ -16,8 +16,7 @@ composer.lock
 version.json
 
 # config file
-config/db.php
-config/params.php
+.env
 
 # apidoc
 /docs

@@ -1,7 +1,12 @@
 <?php
 
 require_once __DIR__.'/../app.paths.conf.php';
-$settings = App\Common\Config\Settings::build();
+
+try {
+    $settings = App\Common\Config\Settings::build();
+} catch (Exception $e) {
+    exit($e->getMessage().PHP_EOL);
+}
 
 \Codeception\Configuration::append([
     'modules' => [
