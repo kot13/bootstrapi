@@ -120,6 +120,7 @@ final class Acl extends ZendAcl
      * @param $guardType
      * @param $rule
      * @return array
+     * @throws \Exception
      */
     protected function parseRule($guardType, $rule)
     {

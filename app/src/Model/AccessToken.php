@@ -60,7 +60,7 @@ final class AccessToken extends BaseModel
     {
         try {
             $payload = JWT::decode($token, $settings['secretKey'], ['HS256']);
-            return in_array($payload->aud, $settings['allowHosts']);
+            return in_array($payload->aud, explode(',', $settings['allowHosts']));
         } catch (\Exception $e) {
             return false;
         }
