@@ -11,6 +11,11 @@ use Slim\Http\Response;
 class CrudController extends BaseController
 {
     /**
+     * Default page size
+     */
+    const DEFAULT_PAGE_SIZE = 15;
+
+    /**
      * @param Request  $request
      * @param Response $response
      * @param array    $args
@@ -27,51 +32,15 @@ class CrudController extends BaseController
             $query = $modelName::withTrashed();
         }
 
-        $filters = $this->getDecodedParams($params, 'filters');
-        foreach ($filters as $filter) {
-            $filter['operator']  = trim(strtolower($filter['operator']));
-            $filter['attribute'] = trim($filter['attribute']);
-
-            if (
-                empty($filter['operator'])
-                || empty($filter['attribute'])
-                || !isset($filter['value'])
-            ) {
-                continue;
-            }
-
-            switch ($filter['operator']) {
-                case 'in':
-                    $query = $query->whereIn($filter['attribute'], $filter['value']);
-                    break;
-                case 'not in':
-                    $query = $query->whereNotIn($filter['attribute'], $filter['value']);
-                    break;
-                case 'like':
-                    $query = $query->where($filter['attribute'], 'like', '%'.$filter['value'].'%');
-                    break;
-                case '=':
-                case '!=':
-                case '>':
-                case '>=':
-                case '<':
-                case '<=':
-                    $query = $query->where($filter['attribute'], $filter['operator'], $filter['value']);
-                    break;
-            }
-        }
-
-        $sorters = $this->getDecodedParams($params, 'sort');
-        foreach ($sorters as $sorter) {
-            $sorter['direction'] = trim(strtolower($sorter['direction'])) == 'asc' ? 'asc' : 'desc';
-            $query->orderBy(trim($sorter['attribute']), $sorter['direction']);
-        }
+        $this->applyFilters($query, $params)
+            ->applySorters($query, $params)
+        ;
 
         $pageNumber = null;
         $pageSize   = null;
         if (isset($params['page']['number'])) {
-            $pageNumber = $params['page']['number'];
-            $pageSize   = (isset($params['page']['size']) && $params['page']['size'] <= 100) ? $params['page']['size'] : 15;
+            $pageNumber = $params['page']['number'] > 0 ? $params['page']['number'] : 1;
+            $pageSize   = (isset($params['page']['size']) && $params['page']['size'] <= 100) ? $params['page']['size'] : self::DEFAULT_PAGE_SIZE;
             $entities   = $query->withoutGlobalScopes([MaxPerPageScope::class])->paginate($pageSize, ['*'], 'page', $pageNumber);
         } else {
             $entities = $query->get();
@@ -196,5 +165,65 @@ class CrudController extends BaseController
         }
 
         return $decoded;
+    }
+
+    /**
+     * @param $query
+     * @param $params
+     * @return $this
+     */
+    private function applyFilters($query, $params)
+    {
+        $filters = $this->getDecodedParams($params, 'filters');
+        foreach ($filters as $filter) {
+            $filter['operator']  = trim(strtolower($filter['operator']));
+            $filter['attribute'] = trim($filter['attribute']);
+
+            if (
+                empty($filter['operator'])
+                || empty($filter['attribute'])
+                || !isset($filter['value'])
+            ) {
+                continue;
+            }
+
+            switch ($filter['operator']) {
+                case 'in':
+                    $query = $query->whereIn($filter['attribute'], $filter['value']);
+                    break;
+                case 'not in':
+                    $query = $query->whereNotIn($filter['attribute'], $filter['value']);
+                    break;
+                case 'like':
+                    $query = $query->where($filter['attribute'], 'like', '%'.$filter['value'].'%');
+                    break;
+                case '=':
+                case '!=':
+                case '>':
+                case '>=':
+                case '<':
+                case '<=':
+                    $query = $query->where($filter['attribute'], $filter['operator'], $filter['value']);
+                    break;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param $query
+     * @param $params
+     * @return $this
+     */
+    private function applySorters($query, $params)
+    {
+        $sorters = $this->getDecodedParams($params, 'sort');
+        foreach ($sorters as $sorter) {
+            $sorter['direction'] = trim(strtolower($sorter['direction'])) == 'asc' ? 'asc' : 'desc';
+            $query->orderBy(trim($sorter['attribute']), $sorter['direction']);
+        }
+
+        return $this;
     }
 }

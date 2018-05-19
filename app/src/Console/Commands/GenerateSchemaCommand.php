@@ -93,32 +93,42 @@ class GenerateSchemaCommand extends Command
         foreach ($tableInfo as $columnName) {
             $columnType = Capsule::schema()->getColumnType($tableName, $columnName);
 
-            switch ($columnType) {
-                case 'string':
-                case 'text':
-                    $fake = '"String"';
-                    break;
-                case 'integer':
-                    $fake = '1';
-                    break;
-                case 'decimal':
-                    $fake = '1.0';
-                    break;
-                case 'datetime':
-                    $fake = '"2016-10-17T07:38:21+0000"';
-                    break;
-                default:
-                    $fake = '';
-            }
-
             $columns[] = [
                 'name' => $columnName,
                 'type' => $columnType,
-                'fake' => $fake,
+                'fake' => $this->getFakeData($columnType),
             ];
         }
 
         return $columns;
+    }
+
+    /**
+     * Return fake data for examples
+     * @param $columnType
+     * @return string
+     */
+    private function getFakeData($columnType)
+    {
+        switch ($columnType) {
+            case 'string':
+            case 'text':
+                $fake = '"String"';
+                break;
+            case 'integer':
+                $fake = '1';
+                break;
+            case 'decimal':
+                $fake = '1.0';
+                break;
+            case 'datetime':
+                $fake = '"2016-10-17T07:38:21+0000"';
+                break;
+            default:
+                $fake = '';
+        }
+
+        return $fake;
     }
 
     /**

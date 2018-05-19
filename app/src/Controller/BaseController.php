@@ -62,7 +62,7 @@ abstract class BaseController
         $this->mailRenderer = $container['mailRenderer'];
         $this->encoder      = $container['encoder'];
 
-        $this->registerModelObservers();
+        $this->registerModelObservers($this->settings['observers']);
     }
 
     /**
@@ -91,25 +91,10 @@ abstract class BaseController
 
     /**
      * Register model observers
+     * @param $observers
      */
-    private function registerModelObservers()
+    private function registerModelObservers($observers)
     {
-        $observers = [
-            Observers\CreatedByAndUpdatedByObserver::class => [
-                Model\Right::class,
-                Model\Role::class,
-                Model\User::class,
-                Model\MediaFile::class,
-            ],
-
-            Observers\LoggerObserver::class => [
-                Model\Right::class,
-                Model\Role::class,
-                Model\User::class,
-                Model\MediaFile::class,
-            ]
-        ];
-
         foreach ($observers as $observer => $models) {
             foreach ($models as $model) {
                 call_user_func($model.'::observe', $observer);

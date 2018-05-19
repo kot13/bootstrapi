@@ -18,4 +18,20 @@ return [
     'refreshToken' => [
         'ttl' => 3600 * 24 * 7,
     ],
+
+    'observers' => [
+        \App\Observers\CreatedByAndUpdatedByObserver::class => [
+            \App\Model\Right::class,
+            \App\Model\Role::class,
+            \App\Model\User::class,
+            \App\Model\MediaFile::class,
+        ],
+
+        \App\Observers\LoggerObserver::class => [
+            \App\Model\Right::class,
+            \App\Model\Role::class,
+            \App\Model\User::class,
+            \App\Model\MediaFile::class,
+        ],
+    ],
 ];

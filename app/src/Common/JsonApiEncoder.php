@@ -52,15 +52,15 @@ final class JsonApiEncoder
         );
 
         if (isset($pageNumber) && isset($pageSize)) {
+            $encoder->withMeta([
+                'total' => $entities->total(),
+                'count' => $entities->count(),
+            ]);
+
             $links = [
                 LinkInterface::SELF  => new Link('?page[number]='.$pageNumber.'&page[size]='.$pageSize, null, false),
                 LinkInterface::FIRST => new Link('?page[number]=1&page[size]='.$pageSize, null, false),
                 LinkInterface::LAST  => new Link('?page[number]='.$entities->lastPage().'&page[size]='.$pageSize, null, false),
-            ];
-
-            $meta = [
-                'total' => $entities->total(),
-                'count' => $entities->count(),
             ];
 
             if (($entities->lastPage() - ($pageNumber + 1)) >= 0) {
@@ -69,14 +69,8 @@ final class JsonApiEncoder
             if (($pageNumber - 1) > 0) {
                 $links[LinkInterface::PREV] = new Link('?page[number]='.($pageNumber - 1).'&page[size]='.$pageSize, null, false);
             }
-        }
 
-        if (isset($links)) {
             $encoder->withLinks($links);
-        }
-
-        if (isset($meta)) {
-            $encoder->withMeta($meta);
         }
 
         return $encoder->encodeData($entities, $parameters);
