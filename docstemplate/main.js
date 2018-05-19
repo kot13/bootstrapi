@@ -332,6 +332,13 @@ require([
     // Bootstrap Scrollspy
     $(this).scrollspy({ target: '#scrollingNav', offset: 18 });
 
+    $(this).on('activate.bs.scrollspy', function () {
+        var group = $('.nav li.active').attr('data-group');
+
+        $('ul.sidenav li:not(.nav-header)').addClass('hide');
+        $('li[data-group='+group+']:not(.nav-header)').removeClass('hide');
+    });
+
     // Content-Scroll on Navigation click.
     $('.sidenav').find('a').on('click', function(e) {
         e.preventDefault();
@@ -339,6 +346,11 @@ require([
         if ($(id).length > 0)
             $('html,body').animate({ scrollTop: parseInt($(id).offset().top) }, 400);
         window.location.hash = $(this).attr('href');
+
+        var group = $(this).parent().attr('data-group');
+
+        $('ul.sidenav li:not(.nav-header)').addClass('hide');
+        $('li[data-group='+group+']:not(.nav-header)').removeClass('hide');
     });
 
     // Quickjump on Pageload to hash position.
@@ -403,11 +415,11 @@ require([
             $(this).parent().next(name).removeClass('hide');
         });
 
-        // call scrollspy refresh method
-        $(window).scrollspy('refresh');
-
         // init modules
         sampleRequest.initDynamic(jsonEditors);
+
+        // call scrollspy refresh method
+        $(window).scrollspy('refresh');
     }
     initDynamic(jsonEditors);
 
