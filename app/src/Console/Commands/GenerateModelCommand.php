@@ -47,7 +47,8 @@ class GenerateModelCommand extends Command
 
         $table = Capsule::schema()->getColumnListing($tableName);
         if (count($table) === 0) {
-            $output->writeln([sprintf('<comment>Not found table %s</comment>', $tableName)]);
+            $output->writeln([sprintf('<comment>Not found table `%s`</comment>', $tableName)]);
+            return;
         }
 
         $columns = [];
@@ -92,7 +93,7 @@ class GenerateModelCommand extends Command
     {
         $phpdoc = [];
         foreach ($columns as $column) {
-            $phpdoc[] = sprintf(" * @property %s\t$%s", $column['type'], $column['name']);
+            $phpdoc[] = sprintf(" * @property %s $%s", $column['type'], $column['name']);
         };
 
         return implode("\n", $phpdoc);

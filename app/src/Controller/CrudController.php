@@ -32,7 +32,11 @@ class CrudController extends BaseController
             $filter['operator']  = trim(strtolower($filter['operator']));
             $filter['attribute'] = trim($filter['attribute']);
 
-            if (empty($filter['operator']) || empty($filter['attribute']) || empty($filter['value'])) {
+            if (
+                empty($filter['operator'])
+                || empty($filter['attribute'])
+                || !isset($filter['value'])
+            ) {
                 continue;
             }
 

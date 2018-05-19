@@ -46,7 +46,8 @@ class GenerateSchemaCommand extends Command
         $tableName = $helper->ask($input, $output, $question);
         $tableInfo = Capsule::schema()->getColumnListing($tableName);
         if (count($tableInfo) === 0) {
-            $output->writeln([sprintf('<comment>Not found table %s</comment>', $tableName)]);
+            $output->writeln([sprintf('<comment>Not found table `%s`</comment>', $tableName)]);
+            return;
         }
 
         $columns = $this->getColumnsInfo($tableInfo, $tableName);
@@ -173,9 +174,9 @@ class GenerateSchemaCommand extends Command
                 continue;
             }
             if ($column['type'] === 'datetime') {
-                $attributes[] = sprintf("            '%s'\t=> Carbon::parse(\$entity->%s)->setTimezone('UTC')->format(Carbon::ISO8601),", $column['name'], $column['name']);
+                $attributes[] = sprintf("            '%s' => Carbon::parse(\$entity->%s)->setTimezone('UTC')->format(Carbon::ISO8601),", $column['name'], $column['name']);
             } else {
-                $attributes[] = sprintf("            '%s'\t=> (%s)\$entity->%s,", $column['name'], $column['type'], $column['name']);
+                $attributes[] = sprintf("            '%s' => (%s)\$entity->%s,", $column['name'], $column['type'], $column['name']);
             }
         };
 

@@ -11,7 +11,7 @@ return [
     ],
     'header'      => [
         'title'    => 'Начало',
-        'filename' => 'header.md',
+        'filename' => './apidoc/header.md',
     ],
     'order'       => [
         'Token',
